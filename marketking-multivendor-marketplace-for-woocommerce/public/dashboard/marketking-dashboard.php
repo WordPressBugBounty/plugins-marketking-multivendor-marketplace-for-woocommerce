@@ -1,3 +1,8 @@
+<?php
+
+if (!defined('ABSPATH')) { exit; }
+
+?>
 <body class="nk-body bg-lighter npc-general has-sidebar <?php
     $page = get_query_var('dashpage');
     if ($page === 'edit-product' || 'edit-booking-product'){

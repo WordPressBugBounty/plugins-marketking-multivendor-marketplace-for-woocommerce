@@ -205,6 +205,55 @@ div#marketking_admin_header_version2 {
     font-family: 'Lato','Helvetica Neue','Arial','Helvetica','sans-serif';
     letter-spacing: 0.8px;
 }
+#marketking_order_commission_metabox tr {
+    display: block;
+    padding: 8px 0px;
+}
+#marketking_order_commission_metabox .total {
+    font-weight:bold;
+    width: 17em;
+}
+#marketking_order_commission_metabox .label {
+    width: 8em;
+}
+
+input#marketking_add_commission {
+    margin-top: 12px;
+}
+input.marketking_custom_field_settings_metabox_top_column_sort_text {
+    background: #ECECEC;
+    border-radius: 3px;
+    margin-top: 12px;
+    justify-content: space-between;
+    display: flex;
+    margin-right: 30px;
+    width: 100%;
+    border: none;
+    align-items: center;
+    padding: 0px 15px;
+    min-height: 40px;
+    font-family: "Roboto Medium", Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
+    color: #252525;
+}
+div#marketking_add_new_commission {
+    padding-left: 5px;
+    padding-top: 10px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+.marketking_edit_icon, .marketking_main_edit_icon{
+    font-size:17px;
+    color: #999999;
+}
+.marketking_edit_icon:hover, .marketking_main_edit_icon:hover{
+
+    color:#333;
+    cursor:pointer;
+}
 .marketking_license_field{
     max-width: 500px;
 }
@@ -3306,12 +3355,12 @@ button.marketking_add_button:hover{
     justify-content: space-between;
 }
 select.marketking_user_settings_select{
-	background-color: #ECECEC;
+    background-color: #ECECEC;
     border-radius: 3px;
     height: 40px;
     border: none;
     padding: 0px 15px;
-    width: 100%;
+    width: 97.5%;
     max-width: 100%;
     font-family: "Roboto Medium", Roboto;
     font-style: normal;
@@ -3321,8 +3370,8 @@ select.marketking_user_settings_select{
     color: #252525;
 }
 select.marketking_user_settings_select:focus{
-	box-shadow: none;
-	color:#252525;
+    box-shadow: none;
+    color:#252525;
 }
 .marketking_user_settings_information_box{
 	background: #E0F3FE;

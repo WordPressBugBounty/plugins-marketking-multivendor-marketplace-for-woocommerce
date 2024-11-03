@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 class Marketkingcore_Activator {
 
 	public static function activate() {

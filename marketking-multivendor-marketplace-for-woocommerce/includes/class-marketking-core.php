@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 use Automattic\WooCommerce\Utilities\OrderUtil;
 
 
@@ -2636,7 +2638,9 @@ class Marketkingcore {
 		$bottom_host_name = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
 
 		if (strlen($host_names[count($host_names)-2]) <= 3){    // likely .com.au, .co.uk, .org.uk etc
-		    $bottom_host_name = $host_names[count($host_names)-3] . "." . $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+			if (isset($host_names[count($host_names)-3])){
+			    $bottom_host_name = $host_names[count($host_names)-3] . "." . $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+			}
 		}
 
 		// send activation request
@@ -3069,6 +3073,11 @@ class Marketkingcore {
 			$status = sanitize_text_field($_POST['marketking_edit_product_status']);
 		} else {
 			$status = '';
+		}
+
+		// extra check for non-standard statuses
+		if (!in_array($status, array('publish', 'draft', 'pending', 'new', ''))){
+			$status = 'pending';
 		}
 
 		// if status is published, check that the user didn't cheat and that they have permission
@@ -4132,7 +4141,7 @@ class Marketkingcore {
 		// add user to message email
 		$message = esc_html__('User:', 'marketking-multivendor-marketplace-for-woocommerce').' '.$user->first_name.' '.$user->last_name.' ('.$user->user_email.')<br>'.$message;
 
-		do_action('marketking_new_message', $support_email, $message, $vendor_id, 'support');
+		do_action('marketking_new_message', $support_email, apply_filters('marketking_filter_message_general',$message), $vendor_id, 'support');
 
 		if ($support_option === 'email'){
 			// in the case of email, there is no messaging conversation to redirect to, therefore we echo 0
@@ -4531,9 +4540,6 @@ class Marketkingcore {
 			// set user as b2b enabled
 			update_user_meta($user_id, 'marketking_b2buser', 'no');
 		}
-
-
-	
 
 		echo 'success';
 		exit();	

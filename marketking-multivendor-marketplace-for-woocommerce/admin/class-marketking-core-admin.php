@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 use Automattic\WooCommerce\Utilities\OrderUtil;
 
 class Marketkingcore_Admin{
@@ -124,6 +126,11 @@ class Marketkingcore_Admin{
 					add_filter('wc_order_statuses', array($this, 'lock_composite_status'), 10000, 1 );
 					// add suffix to composite orders in backend for clarity
 					add_filter( 'woocommerce_order_number', array($this,'add_suffix_composite_orders'), 1 );
+
+
+					add_action( 'add_meta_boxes', array($this, 'marketking_order_metaboxes') );
+					add_action('woocommerce_update_order', [$this, 'marketking_save_order_metaboxes'], 10, 2);
+
 										
 				}
 			});
@@ -131,6 +138,269 @@ class Marketkingcore_Admin{
 		}
 		
 	}
+
+		// Add Metaboxes to orders
+		function marketking_order_metaboxes($post_type) {
+			if (current_user_can( apply_filters('marketking_backend_commissions_capability_needed', 'manage_woocommerce') )){
+			    add_meta_box(
+	               'marketking_order_commission_metabox'
+	               ,esc_html__( 'Vendor Commissions', 'marketking' )
+	               ,array( $this, 'marketking_order_commission_metabox_content' )
+	               ,'woocommerce_page_wc-orders'
+	               ,'advanced'
+	               ,'high'
+	           );
+
+	            add_meta_box(
+	                'marketking_order_commission_metabox'
+	                ,esc_html__( 'Vendor Commissions', 'marketking' )
+	                ,array( $this, 'marketking_order_commission_metabox_content' )
+	                ,'shop_order'
+	                ,'advanced'
+	                ,'high'
+	            );
+
+		    }
+		}
+
+		function marketking_save_order_metaboxes($order_id, $order = array()) {
+
+			if (isset($_POST['_inline_edit'])){
+				if (wp_verify_nonce($_POST['_inline_edit'], 'inlineeditnonce')){
+				    return;
+				}
+			}
+			if (isset($_REQUEST['bulk_edit'])){
+			    return;
+			}
+
+			if (is_array($order)){
+				$order = wc_get_order($order_id);
+			}
+
+			static $marketking_has_run6 = false;
+			if ($marketking_has_run6 === false){
+				remove_action('woocommerce_update_order', [$this, 'marketking_save_order_metaboxes'], 10);
+
+				$post_id = $order_id;
+
+				// commission edits save
+				$earning_id = $order->get_meta('marketking_earning_id');
+				$vendor_id = get_post_meta($earning_id,'vendor_id', true);	
+				$agent_data = get_userdata($vendor_id);
+				$earnings_total = get_post_meta($earning_id, 'marketking_commission_total', true);
+				$earnings_status = get_post_meta($earning_id, 'order_status', true);
+				$delete_earning = false;
+
+				if (isset($_POST['marketking_main_commission_order_value_edited'])){
+					$edited_earnings = sanitize_text_field($_POST['marketking_main_commission_order_value_edited']);
+					if (!empty($edited_earnings) || intval($edited_earnings) === 0){
+
+						// update commission
+						update_post_meta($earning_id,'marketking_commission_total', $edited_earnings);
+
+						if (in_array($earnings_status,apply_filters('marketking_earning_completed_statuses', array('completed')))){
+
+							// update agent outstanding balance
+							$old_balance = get_user_meta($vendor_id,'marketking_outstanding_earnings', true);
+							$modification = floatval($earnings_total) - floatval($edited_earnings);
+							$new_balance = floatval($old_balance)-$modification;
+							
+							// user balance history start
+							$amount = 'MANUAL MODIFICATION';
+							$date = date_i18n( 'Y/m/d', time()+(get_option('gmt_offset')*3600) ); 
+							$note = 'MANUAL MODIFICATION';
+							$user_balance_history = sanitize_text_field(get_user_meta($vendor_id,'marketking_user_balance_history', true));
+							$new_entry = $date.':'.$amount.':'.$old_balance.':'.$new_balance.':'.$note;
+							update_user_meta($vendor_id,'marketking_user_balance_history', $user_balance_history.';'.$new_entry);
+							// user balance history end
+							update_user_meta($vendor_id,'marketking_outstanding_earnings', $new_balance);
+						}
+					}
+					if (floatval($edited_earnings) < 0.01){
+						// delete earning
+						$delete_earning = true;
+					}
+				}
+
+				if ($delete_earning === true){
+					wp_delete_post($earning_id);
+					$order->update_meta_data('marketking_earning_id','');
+				} else {
+					// check new commission
+					if (isset($_POST['marketking_group_agent'])){
+						$new_commission_agent = sanitize_text_field($_POST['marketking_group_agent']);
+						$commission_value = '';
+						if (isset($_POST['marketking_commission_value_new'])){
+							$commission_value = sanitize_text_field($_POST['marketking_commission_value_new']);
+						}
+
+						// set agent
+						if ($new_commission_agent !== 'none' && !empty($commission_value)){
+							$vendor_id = $new_commission_agent;
+							// if first commission
+							if (empty($earning_id) ){
+								// first commission for order
+								// Create transaction
+								$earning = array(
+								    'post_title' => sanitize_text_field(esc_html__('Earning','marketking')),
+								    'post_status' => 'publish',
+								    'post_type' => 'marketking_earning',
+								    'post_author' => 1,
+								);
+								$earning_post_id = wp_insert_post($earning);
+
+								// set meta
+								update_post_meta($earning_post_id, 'time', time());
+								update_post_meta($earning_post_id, 'order_id', $order_id);
+								update_post_meta($earning_post_id, 'customer_id', $order->get_customer_id());
+								update_post_meta($earning_post_id, 'order_status', $order->get_status());
+								update_post_meta($earning_post_id, 'created_in', 'admin_backend');
+
+								if ($vendor_id !== 0){
+									update_post_meta($earning_post_id, 'vendor_id', $vendor_id);
+								}
+
+								if ($commission_value > 0){
+									update_post_meta($earning_post_id, 'commission_rules_total', $commission_value);
+								}
+
+								$order->update_meta_data('marketking_earning_id', $earning_post_id);
+
+								update_post_meta($earning_post_id, 'marketking_commission_total', $commission_value);
+
+								// update agent outstanding balance
+								if (in_array($order->get_status(),apply_filters('marketking_earning_completed_statuses', array('completed')))){
+
+									$old_balance = get_user_meta($vendor_id,'marketking_outstanding_earnings', true);
+									$new_balance = floatval($old_balance)+$commission_value;
+
+									// user balance history start
+									$amount = 'MANUAL MODIFICATION';
+									$date = date_i18n( 'Y/m/d', time()+(get_option('gmt_offset')*3600) ); 
+									$note = 'MANUAL MODIFICATION';
+									$user_balance_history = sanitize_text_field(get_user_meta($vendor_id,'marketking_user_balance_history', true));
+									$new_entry = $date.':'.$amount.':'.$old_balance.':'.$new_balance.':'.$note;
+									update_user_meta($vendor_id,'marketking_user_balance_history', $user_balance_history.';'.$new_entry);
+									// user balance history end
+
+									update_user_meta($vendor_id,'marketking_outstanding_earnings', $new_balance);
+								}
+							}
+						}
+						
+					}
+				}
+
+				$order->save();
+				$marketking_has_run6 = true;
+
+				add_action('woocommerce_update_order', [$this, 'marketking_save_order_metaboxes'], 10, 2);
+			}
+
+		}
+
+
+		function marketking_order_commission_metabox_content(){
+			global $post;
+
+			if (isset($post->ID)){
+				$order_id = $post->ID;
+			}
+			if (isset($_GET['page'])){
+				if ($_GET['page'] === 'wc-orders'){
+					if (isset($_GET['id'])){
+						$order_id = sanitize_text_field($_GET['id']);
+					}
+				}
+			}
+
+			if (isset($order_id)){
+				$order = wc_get_order($order_id);
+				if ($order){
+					$earning_id = $order->get_meta('marketking_earning_id');
+
+					if (!empty($earning_id)){
+
+						$vendor_id = get_post_meta($earning_id,'vendor_id', true);	
+						$vendor_name = marketking()->get_store_name_display($vendor_id);
+
+						$earnings_total = get_post_meta($earning_id, 'marketking_commission_total', true);
+						?>
+						<table class="wc-order-totals">
+							<tbody>
+								<tr>
+									<td class="label"><?php esc_html_e('Vendor:','marketking');?></td>
+									<td width="1%"></td>
+									<td class="total">
+										<span class="woocommerce-Price-amount amount"><bdi><?php echo esc_html($vendor_name);?></bdi>
+									</td>
+									<td><span class="dashicons dashicons-edit marketking_main_edit_icon" data-edit="commissions"></span></td>
+								</tr>
+									
+							
+								<tr>
+									<td class="label"><?php esc_html_e('Commission:','marketking');?></td>
+									<td width="1%"></td>
+									<td class="total">
+										<span class="woocommerce-Price-amount amount marketking_main_commission_order"><?php 
+
+										if (!defined('WOOCS_VERSION')) {
+											echo wc_price($earnings_total);
+										} else {
+											// base woocs currency
+											global $WOOCS;
+											echo $WOOCS->default_currency.' '.$earnings_total;
+										}
+
+									?></span>
+										<input type="hidden" id="marketking_main_commission_order_value" value="<?php echo esc_attr($earnings_total);?>">	
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<?php
+
+					} else {
+						?>
+						
+						<div id="marketking_add_new_commission"><?php esc_html_e('Add New Commission','marketking');?></div>
+						<?php
+
+						?>
+						<select name="marketking_group_agent" id="marketking_group_agent" class="marketking_user_settings_select">
+						<?php
+						 	echo '<option value="none">'.esc_html__('- Choose Vendor -', 'marketking').'</option>'; 
+
+						 	$vendors = get_users(array(
+							    'meta_key'     => 'marketking_group',
+							    'meta_value'   => 'none',
+							    'meta_compare' => '!=',
+							    'fields'	   => 'ids',
+							));
+						 	?>
+							<optgroup label="<?php esc_html_e('Vendors', 'marketking'); ?>">
+							
+							<?php
+								foreach ($vendors as $vendor_id){
+
+									$store_name = marketking()->get_store_name_display($vendor_id);
+
+									echo '<option value="'.esc_attr($vendor_id).'">'.esc_html($store_name).'</option>';
+								}
+							?>
+							</optgroup>
+						</select>
+						<input type="number" step="0.01" name="marketking_commission_value_new" class="marketking_custom_field_settings_metabox_top_column_sort_text marketking_975" placeholder="<?php esc_html_e('Enter commission value...', 'marketking'); ?>">
+						<?php
+					}
+
+				}	
+			}
+			
+			
+			
+		}
 
 	function marketking_reviews_custom_column($column, $comment_ID){
 		if(get_current_screen()->id === 'marketking_page_marketking_reviews'){
@@ -729,6 +999,11 @@ class Marketkingcore_Admin{
 	    		$output = sprintf( '<a href="%s">%s</a>', esc_url( $link ), esc_html( $vendor_name ) );
 	    	} else {
 	    		$output = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'edit.php?post_type=shop_order&author=' . $vendor_id ) ), esc_html( $vendor_name ) );
+	    	}
+
+	    	// if composite order for any reason, show "Composite order
+	    	if (marketking()->is_multivendor_order($order_id)){
+	    		$output = esc_html__('Composite order ','marketking-multivendor-marketplace-for-woocommerce');
 	    	}
 
 	    }
@@ -1933,7 +2208,7 @@ class Marketkingcore_Admin{
 				        	$method .= ' ('.esc_html__('not connected yet','marketking-multivendor-marketplace-for-woocommerce').')';
 				        }
 				    } else if ($method === 'custom'){
-				        $method = get_option( 'marketking_enable_custom_payouts_title_setting', '' );
+				        $method = esc_html(get_option( 'marketking_enable_custom_payouts_title_setting', '' ));
 				    }
 				    if (empty($method)){
 				    	$method = esc_html__('The vendor has not configured a payout method yet', 'marketking-multivendor-marketplace-for-woocommerce');
@@ -2111,7 +2386,7 @@ class Marketkingcore_Admin{
 			        	} else if ($method === 'custom'){
 			        	    $method = get_option( 'marketking_enable_custom_payouts_title_setting', '' );
 			        	}
-			        	echo $method;
+			        	echo esc_html($method);
 			        	?>"
 			        	<?php			        
 			        }
@@ -2933,7 +3208,7 @@ class Marketkingcore_Admin{
 				        		    	} else if ($method === 'stripe'){
 				        		    	    $methodstring = 'Stripe';
 				        		    	} else if ($method === 'custom'){
-				        		    	    $methodstring = get_option( 'marketking_enable_custom_payouts_title_setting', '' );
+				        		    	    $methodstring = esc_html(get_option( 'marketking_enable_custom_payouts_title_setting', '' ));
 				        		    	}
 				        		    	if (empty($method)){
 				        		    		$methodstring = esc_html__('The vendor has not configured a payout method yet', 'marketking-multivendor-marketplace-for-woocommerce');
@@ -5223,14 +5498,18 @@ class Marketkingcore_Admin{
 		    	$host = $info['host'];
 		    	$host_names = explode(".", $host);
 
-		    	if (isset($host_names[count($host_names)-2])){ // e.g. if not on localhost, xampp etc
+		    	if (isset($host_names[count($host_names)-2])){ // e.g. if not on localhost, xampp et
 		    		$bottom_host_name = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
-		    		if (strlen($host_names[count($host_names)-2]) <= 3){    // likely .com.au, .co.uk, .org.uk etc
-		    		    $bottom_host_name_new = $host_names[count($host_names)-3] . "." . $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
-		    		    // new, overwrite legacy, just use new one
-		    		    $bottom_host_name = $bottom_host_name_new;
 
+		    		if (strlen($host_names[count($host_names)-2]) <= 3){    // likely .com.au, .co.uk, .org.uk etc
+		    			if (isset($host_names[count($host_names)-3])){
+
+			    		    $bottom_host_name_new = $host_names[count($host_names)-3] . "." . $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+			    		    // new, overwrite legacy, just use new one
+			    		    $bottom_host_name = $bottom_host_name_new;
+			    		}
 		    		}
+		    		
 		    		$activation = get_option('pluginactivation_'.$email.'_'.$license.'_'.$bottom_host_name);
 
 		    		if ($activation == 'active'){
@@ -5314,7 +5593,7 @@ class Marketkingcore_Admin{
 			if ($hook === 'marketking_page_marketking_dashboard' || $hook === 'marketking_page_marketking_reports'){
 				wp_enqueue_style( 'marketking_admin_dashboard', plugins_url('assets/dashboard/cssjs/dashboardstyle.min.css', __FILE__));
 			}
-			if (substr( $hook, 0, 10 ) === "marketking" || substr( $hook, 0, 21 ) === "admin_page_marketking" || substr($type, 0, 10) === 'marketking' || substr($post_type, 0, 10) === 'marketking' || $hook === 'toplevel_page_marketking'){
+			if (substr( $hook, 0, 10 ) === "marketking" || substr( $hook, 0, 21 ) === "admin_page_marketking" || substr($type, 0, 10) === 'marketking' || substr($post_type, 0, 10) === 'marketking' || $hook === 'toplevel_page_marketking' || strpos($hook, 'marketking') !== false){
 
 				wp_enqueue_script('dataTables', plugins_url('../includes/assets/lib/dataTables/jquery.dataTables.min.js', __FILE__), $deps = array(), $ver = false, $in_footer =true);
 				wp_enqueue_style( 'dataTables', plugins_url('../includes/assets/lib/dataTables/jquery.dataTables.min.css', __FILE__));
@@ -5371,6 +5650,7 @@ class Marketkingcore_Admin{
 			    'dashboardstyleurl' => plugins_url('assets/dashboard/cssjs/dashboardstyle.min.css', __FILE__),
 			    'username_already_list' => esc_html__('Username already in the list!', 'marketking-multivendor-marketplace-for-woocommerce'),
 			    'add_user' => esc_html__('Add user', 'marketking-multivendor-marketplace-for-woocommerce'),
+			    'product_sub_message' => esc_html__('Message regarding product submission #','marketking-multivendor-marketplace-for-woocommerce'),
 			    'group_rules_link' => admin_url( 'edit.php?post_type=marketking_grule'),
 			    'group_rules_text' => esc_html__('Set up group rules (optional)', 'marketking-multivendor-marketplace-for-woocommerce'),
 			    'go_back_text' => esc_html__('Go back', 'marketking-multivendor-marketplace-for-woocommerce'),

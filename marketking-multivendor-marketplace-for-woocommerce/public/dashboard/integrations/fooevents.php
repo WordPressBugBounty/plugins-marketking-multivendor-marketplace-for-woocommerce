@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 class Marketking_Foo{
 
     // Woo_Vou PDF Vouchers

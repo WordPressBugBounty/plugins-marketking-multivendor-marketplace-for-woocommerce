@@ -1,5 +1,5 @@
 <?php
-
+if (!defined('ABSPATH')) { exit; }
 /*
 
 Orders View Dashboard Page

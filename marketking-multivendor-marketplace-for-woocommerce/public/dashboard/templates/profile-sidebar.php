@@ -1,4 +1,7 @@
 <?php
+
+if (!defined('ABSPATH')) { exit; }
+
 /*
 
 Profile Sidebar Page
@@ -176,8 +179,7 @@ For example, if your theme is storefront, you can copy this file under wp-conten
                 do_action('marketking_after_settings_sidebar', $page);
 
 
-                // TEMPORARILY DISABLED UNTIL PERFECTLY IMPLEMENTED false === true
-                if (defined('MARKETKINGPRO_DIR') && false === true){
+                if (defined('MARKETKINGPRO_DIR') && apply_filters('marketking_enable_google_cal_integration', false) ) {
                     if (intval(get_option( 'marketking_enable_bookings_setting', 0 )) === 1){
                         if(class_exists('WC_Bookings')){ 
                             if(marketking()->vendor_has_panel('bookings')){

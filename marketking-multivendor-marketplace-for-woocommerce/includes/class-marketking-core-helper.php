@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 use Automattic\WooCommerce\Utilities\OrderUtil;
 
 class Marketkingcore_Helper{
@@ -19,7 +21,7 @@ class Marketkingcore_Helper{
 	}
 
 	public static function social_site_active($site){
-	    $active_sites = get_option('marketking_social_sites_setting', array('facebook', 'twitter', 'youtube', 'instagram', 'linkedin', 'pinterest'));
+	    $active_sites = get_option('marketking_social_sites_setting', array('facebook', 'twitter', 'youtube', 'instagram', 'linkedin', 'pinterest', 'tiktok'));
 	    if (!is_array($active_sites)){
 	    	$active_sites = array();
 	    }
@@ -1694,6 +1696,27 @@ class Marketkingcore_Helper{
 				$vendor_commission = $vendor_commission / $rate;
 			}
 		}
+
+
+		// curcy start integration
+		/*
+		if ( class_exists('WOOMULTI_CURRENCY_Data') && !$is_flat ){ {
+			$rate = 1;
+			$order_currency = $order->get_currency();
+
+			$base_currency = get_woocommerce_currency();
+
+			if ($order_currency !== $base_currency){
+				$multiCurrencySettings = WOOMULTI_CURRENCY_Data::get_ins();
+				$wmcCurrencies = $multiCurrencySettings->get_list_currencies();
+
+				$rate = floatval( $wmcCurrencies[ $order_currency ]['rate'] );
+
+			//	$vendor_commission = $vendor_commission / $rate;
+
+			}
+		}
+		*/
 		
 		$order->update_meta_data('marketking_vendor_commission_original', $vendor_commission_original);
 		update_option('marketking_last_vendor_commission_original', $vendor_commission_original);

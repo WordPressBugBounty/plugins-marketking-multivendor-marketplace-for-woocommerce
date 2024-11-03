@@ -108,7 +108,7 @@
 		if (parseInt(marketking.pro) === 1){
 
 			if (typeof $('#marketking_admin_payouts_table').DataTable === "function") { 
-			$('#marketking_admin_payouts_table').DataTable({
+				$('#marketking_admin_payouts_table').DataTable({
 				"language": {
 				    "url": marketking.datatables_folder+marketking.tables_language_option+'.json'
 				},
@@ -118,7 +118,7 @@
 	            dom: 'Bfrtip',
 	            columnDefs: [
 	                {
-	                  targets: 6, 
+	                  targets: -1, 
 	                  visible: false,
 	                  render: function(data, type, row, meta) {
                           if (type === 'display') {
@@ -202,8 +202,8 @@
 	                { extend: 'colvis', className: buttonclass, text: marketking.edit_columns },
 	              ]
 
-			});
-		}
+				});
+			}
 		} else {
 			if (typeof $('#marketking_admin_payouts_table').DataTable === "function") { 
 				$('#marketking_admin_payouts_table').DataTable({
@@ -284,6 +284,14 @@
 					jQuery('#toplevel_page_marketking a[href$="'+page+'"]').parent().addClass('current');
 				}				
 			}
+		});
+
+		/* Orders */
+		// On Order commissions click
+		$('.marketking_main_edit_icon').on('click', function(){
+			var commissions_value = $('#marketking_main_commission_order_value').val();
+			$('.marketking_main_commission_order').html('<input type="number" name="marketking_main_commission_order_value_edited" step="0.01" value="'+commissions_value+'"></input>');
+			$(this).remove();
 		});
 
 		$('body').on('click','.marketking_go_groups', function(e){

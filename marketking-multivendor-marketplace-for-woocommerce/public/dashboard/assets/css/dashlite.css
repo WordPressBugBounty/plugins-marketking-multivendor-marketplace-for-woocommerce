@@ -229,6 +229,9 @@ th.titledesc {
 ._enr_subscription_plans_field .button-primary{
     display: none !important;
 }
+.table_grid{
+    overflow: scroll;
+}
 
 .components-modal__header h2 {
     font-size: 17px;
@@ -289,7 +292,13 @@ th.titledesc {
 #marketking_configure_method_details_content{
     display: block !important;
 }
-
+.b2bking_small_icon{
+    width:20px;
+    height:20px;
+    position: relative;
+    left: 4px;
+    top: 2px;
+}
 .btn.view_product_button{
     position: absolute;
     right: 20px;
@@ -8464,6 +8473,8 @@ input[type="radio"]:checked ~ label { cursor: default; }
 .ni-pinterest-round:before { content: ""; }
 
 .ni-pinterest-circle:before { content: ""; }
+
+.ni-tiktok:before { content: "♪"; }
 
 .ni-tumblr:before { content: ""; }
 
@@ -17470,6 +17481,10 @@ span.dashicons.marketking_vendor_icon {
   }
   #marketking_manage_order_form h3.nk-block-title.page-title {
       font-size: 1.3rem;
+  }
+  .marketking_importexport_buttons_container {
+      position: initial !important;
+      margin-top: 20px;
   }
 }
 

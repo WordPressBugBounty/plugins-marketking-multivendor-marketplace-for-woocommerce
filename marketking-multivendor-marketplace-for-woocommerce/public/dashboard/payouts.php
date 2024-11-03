@@ -1,5 +1,5 @@
 <?php
-
+if (!defined('ABSPATH')) { exit; }
 /*
 
 Payouts Dashboard Page
@@ -25,6 +25,10 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                             <?php
 
                             $settings = get_option('woocommerce_marketking_stripe_gateway_settings');
+
+                            if (!is_array($settings)){
+                                $settings = array();
+                            }
 
                             $testmode = false;
 
@@ -503,13 +507,13 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                                     <div class="form-group marketking_bank_info">
                                         <label class="form-label" for="full-name"><?php esc_html_e('Full Name','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="full-name" name="full-name" value="<?php echo esc_attr($info[2]);?>">
+                                            <input type="text" class="form-control" id="full-name" name="full-name" value="<?php echo esc_attr($info[2]);?>" required>
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info">
                                         <label class="form-label" for="billing-address-1"><?php esc_html_e('Billing Address Line 1','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="billing-address-1" name="billing-address-1" value="<?php echo esc_attr($info[3]);?>">
+                                            <input type="text" class="form-control" id="billing-address-1" name="billing-address-1" value="<?php echo esc_attr($info[3]);?>" required>
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info">
@@ -521,19 +525,19 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                                     <div class="form-group marketking_bank_info">
                                         <label class="form-label" for="city"><?php esc_html_e('City','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="city" name="city" value="<?php echo esc_attr($info[5]);?>">
+                                            <input type="text" class="form-control" id="city" name="city" value="<?php echo esc_attr($info[5]);?>" required>
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info">
                                         <label class="form-label" for="state"><?php esc_html_e('State','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="state" name="state" value="<?php echo esc_attr($info[6]);?>">
+                                            <input type="text" class="form-control" id="state" name="state" value="<?php echo esc_attr($info[6]);?>" required>
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info">
                                         <label class="form-label" for="postcode"><?php esc_html_e('Postcode','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="postcode" name="postcode" value="<?php echo esc_attr($info[7]);?>">
+                                            <input type="text" class="form-control" id="postcode" name="postcode" value="<?php echo esc_attr($info[7]);?>" required>
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info">
@@ -545,27 +549,27 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                                     <hr class="marketking_bank_info">
                                     <h6 class="marketking_bank_info"><?php esc_html_e('Bank / Wire Transfer Details','marketking-multivendor-marketplace-for-woocommerce'); ?></h6><br class="marketking_bank_info">
                                     <div class="form-group marketking_bank_info">
-                                        <label class="form-label" for="bank-account-holder-name"><?php esc_html_e('Account Holder Name','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
+                                        <label class="form-label" for="bank-account-holder-name"><?php esc_html_e('Account Holder Name','marketking-multivendor-marketplace-for-woocommerce'); ?></label> <?php if (apply_filters('marketking_bank_required_holder_name', true)) { echo '(*)'; } ?>
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="bank-account-holder-name" name="bank-account-holder-name" value="<?php echo esc_attr($info[9]);?>">
+                                            <input type="text" class="form-control" id="bank-account-holder-name" name="bank-account-holder-name" value="<?php echo esc_attr($info[9]);?>" <?php if (apply_filters('marketking_bank_required_holder_name', true)) { echo 'required'; } ?>>
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info">
-                                        <label class="form-label" for="bank-account-holder-name"><?php esc_html_e('Bank Name','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
+                                        <label class="form-label" for="bankname"><?php esc_html_e('Bank Name','marketking-multivendor-marketplace-for-woocommerce'); ?></label> <?php if (apply_filters('marketking_bank_required_bank_name', true)) { echo '(*)'; } ?>
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="bankname" name="bankname" value="<?php echo esc_attr($info[17]);?>">
+                                            <input type="text" class="form-control" id="bankname" name="bankname" value="<?php echo esc_attr($info[17]);?>" <?php if (apply_filters('marketking_bank_required_bank_name', true)) { echo 'required'; } ?>>
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info">
-                                        <label class="form-label" for="bank-account-holder-name"><?php esc_html_e('BIC / SWIFT','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
+                                        <label class="form-label" for="bankswift"><?php esc_html_e('BIC / SWIFT','marketking-multivendor-marketplace-for-woocommerce'); ?></label> <?php if (apply_filters('marketking_bank_required_swift', true)) { echo '(*)'; } ?>
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="bankswift" name="bankswift" value="<?php echo esc_attr($info[18]);?>">
+                                            <input type="text" class="form-control" id="bankswift" name="bankswift" value="<?php echo esc_attr($info[18]);?>" <?php if (apply_filters('marketking_bank_required_swift', true)) { echo 'required'; } ?>>
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info">
-                                        <label class="form-label" for="bank-account-number"><?php esc_html_e('Bank Account Number/IBAN','marketking-multivendor-marketplace-for-woocommerce'); ?></label> (*)
+                                        <label class="form-label" for="bank-account-number"><?php esc_html_e('Bank Account Number/IBAN','marketking-multivendor-marketplace-for-woocommerce'); ?></label> <?php if (apply_filters('marketking_bank_required_iban', true)) { echo '(*)'; } ?>
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="bank-account-number" name="bank-account-number" required value="<?php echo esc_attr($info[10]);?>">
+                                            <input type="text" class="form-control" id="bank-account-number" name="bank-account-number" <?php if (apply_filters('marketking_bank_required_iban', true)) { echo 'required'; } ?> value="<?php echo esc_attr($info[10]);?>">
                                         </div>
                                     </div>
                                     <div class="form-group marketking_bank_info marketking_bank_branch_city_field">

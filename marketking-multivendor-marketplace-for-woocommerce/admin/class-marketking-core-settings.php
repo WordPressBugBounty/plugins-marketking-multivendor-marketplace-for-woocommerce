@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 /**
 *
 * PHP File that handles Settings management
@@ -306,17 +308,6 @@ class Marketkingcore_Settings {
 			<i class="question circle icon"></i>
 		</div>', array($this,'marketking_offers_shown_default_number_setting_content'), 'marketking', 'marketking_spmv_setings_section');
 
-		/* Other Settings */
-		add_settings_section('marketking_other_settings_section', '',	'',	'marketking');
-		/*
-		register_setting('marketking', 'marketking_require_vendor_save_product_first_setting');
-		add_settings_field('marketking_require_vendor_save_product_first_setting', esc_html__('Vendors must save products first (enhances compatibility).', 'marketking-multivendor-marketplace-for-woocommerce').'<div class="marketking_tooltip" data-tooltip="'.esc_html__('When adding new products, vendors must first save them before being able to enter product details. This enhances 3rd party plugin compatibility and prevents errors when adding new products.','marketking-multivendor-marketplace-for-woocommerce').'" >
-			<i class="question circle icon"></i>
-		</div>', array($this,'marketking_require_vendor_save_product_first_setting_content'), 'marketking', 'marketking_other_settings_section');
-		*/
-
-		// for future use of this section settings
-
 		/* Vendor Capabilities */
 		add_settings_section('marketking_vendor_capabilities_settings_section', '',	'',	'marketking');
 		add_settings_section('marketking_vendor_capabilities_shipping_settings_section', '',	'',	'marketking');
@@ -557,7 +548,7 @@ class Marketkingcore_Settings {
 		</div>
 		<br>
 		<div id="marketking_custom_method_container">
-			<input type="text" name="marketking_enable_custom_payouts_title_setting" value="'.get_option( 'marketking_enable_custom_payouts_title_setting', '' ).'" placeholder="'.esc_html__('Enter method title here...','marketking-multivendor-marketplace-for-woocommerce').'" id="marketking_custom_method_title"><br >
+			<input type="text" name="marketking_enable_custom_payouts_title_setting" value="'.esc_html(get_option( 'marketking_enable_custom_payouts_title_setting', '' )).'" placeholder="'.esc_html__('Enter method title here...','marketking-multivendor-marketplace-for-woocommerce').'" id="marketking_custom_method_title"><br >
 			<textarea name="marketking_enable_custom_payouts_description_setting" placeholder="'.esc_html__('Enter method description / instructions here...','marketking-multivendor-marketplace-for-woocommerce').'" id="marketking_custom_method_description">'.esc_html(get_option( 'marketking_enable_custom_payouts_description_setting', '' )).'</textarea>
 		</div>
 		';
@@ -1053,7 +1044,7 @@ class Marketkingcore_Settings {
 
 
 	function marketking_social_sites_setting_content(){
-		$selected = get_option('marketking_social_sites_setting', array('facebook', 'twitter', 'youtube', 'instagram', 'linkedin', 'pinterest'));
+		$selected = get_option('marketking_social_sites_setting', array('facebook', 'twitter', 'youtube', 'instagram', 'linkedin', 'pinterest', 'tiktok'));
 		
 		if (!is_array($selected)){
 			$selected = array();
@@ -1062,7 +1053,7 @@ class Marketkingcore_Settings {
 		<select name="marketking_social_sites_setting[]" class="ui fluid search dropdown" multiple="">
 			<?php
 			if (defined('MARKETKINGPRO_DIR')){
-				$providers = array('facebook', 'twitter', 'youtube', 'instagram', 'linkedin', 'pinterest');
+				$providers = array('facebook', 'twitter', 'youtube', 'instagram', 'linkedin', 'pinterest', 'tiktok');
 				foreach ($providers as $provider){
 					?>
 					<option value="<?php echo esc_attr($provider); ?>" <?php
@@ -1264,11 +1255,7 @@ class Marketkingcore_Settings {
 		</div>
 		<?php
 	}
-
-
-
 	
-
 
 	function marketking_commission_value_setting_content(){
 		echo '
@@ -1517,15 +1504,6 @@ class Marketkingcore_Settings {
 						</a>
 						<?php
 					}
-
-					/*
-					?>
-					<a class="green item <?php echo $this->marketking_isactivetab('other'); ?>" data-tab="other">
-						<i class="cog icon"></i>
-						<div class="header"><?php esc_html_e('Other & Advanced','marketking-multivendor-marketplace-for-woocommerce'); ?></div>
-					</a>
-					<?php
-					*/
 
 					do_action('marketking_settings_panel_end_items');
 					?>
@@ -2092,16 +2070,12 @@ class Marketkingcore_Settings {
 							$bottom_host_name = $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
 
 							if (strlen($host_names[count($host_names)-2]) <= 3){    // likely .com.au, .co.uk, .org.uk etc
-							    $bottom_host_name_new = $host_names[count($host_names)-3] . "." . $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
-							    // legacy, do not deactivate existing sites
-							    /*
-							    if (get_option('pluginactivation_'.$email.'_'.$license.'_'.$bottom_host_name) === 'active'){
-							        // old activation active, proceed with old activation
-							    } else {
-							        $bottom_host_name = $bottom_host_name_new;
-							    }
-							    */
-							    $bottom_host_name = $bottom_host_name_new;
+								if (isset($host_names[count($host_names)-3])){
+
+								    $bottom_host_name_new = $host_names[count($host_names)-3] . "." . $host_names[count($host_names)-2] . "." . $host_names[count($host_names)-1];
+								    
+								    $bottom_host_name = $bottom_host_name_new;
+								}
 
 							}
 
@@ -2174,26 +2148,6 @@ class Marketkingcore_Settings {
 							
 						</div>
 					</div>
-
-
-					<!-- Other Tab--> 
-					<div class="ui bottom attached tab segment <?php echo $this->marketking_isactivetab('other'); ?>" data-tab="other">
-						<div class="marketking_attached_content_wrapper">
-							<h2 class="ui block header">
-								<i class="cog icon"></i>
-								<div class="content">
-									<?php esc_html_e('Other & Advanced Settings','marketking-multivendor-marketplace-for-woocommerce'); ?>
-								</div>
-							</h2>
-							
-								<table class="form-table marketking_other_section_table">
-									<?php do_settings_fields( 'marketking', 'marketking_other_settings_section' ); ?>
-								</table>
-
-						</div>
-					</div>
-					
-
 					<?php
 
 						do_action('marketking_settings_panel_end_items_tabs');

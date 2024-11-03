@@ -16,7 +16,7 @@ class Marketking_New_Refund_Email extends WC_Email {
         $this->description = esc_html__('This email is sent to vendors when a new refund request is received (marketking)', 'marketking-multivendor-marketplace-for-woocommerce');
 
         // these are the default heading and subject lines that can be overridden using the settings
-        $this->heading = esc_html__('New Refund Requst', 'marketking-multivendor-marketplace-for-woocommerce');
+        $this->heading = esc_html__('New Refund Request', 'marketking-multivendor-marketplace-for-woocommerce');
         $this->subject = esc_html__('New Refund Request', 'marketking-multivendor-marketplace-for-woocommerce');
 
         $this->template_base  = MARKETKINGCORE_DIR . 'public/emails/templates/';

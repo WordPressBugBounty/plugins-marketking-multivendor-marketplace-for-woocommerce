@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 use Automattic\WooCommerce\Utilities\OrderUtil;
 
 class Marketking_Order_Splitter{
@@ -424,7 +426,7 @@ class Marketking_Order_Splitter{
 			$this->create_fees($order, $parent_order, $vendor_id, $fees);
 
 			// save other details
-			$order->set_created_via( 'marketking-multivendor-marketplace-for-woocommerce' );
+			$order->set_created_via( apply_filters('marketking_order_split_created_via', 'marketking-multivendor-marketplace-for-woocommerce', $parent_order) );
 			$order->set_cart_hash( $parent_order->get_cart_hash() );
 			$order->set_customer_id( $parent_order->get_customer_id() );
 			$order->set_currency( $parent_order->get_currency() );

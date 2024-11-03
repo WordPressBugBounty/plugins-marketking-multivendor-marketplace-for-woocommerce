@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 	class WP_Comments_List_Table_Reviews extends WP_Comments_List_Table {
 		public function get_columns() {
 	        global $post_id;

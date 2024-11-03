@@ -1,5 +1,5 @@
 <?php
-
+if (!defined('ABSPATH')) { exit; }
 /*
 
 Profile Dashboard Page

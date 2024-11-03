@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 class Marketking_Woo_Vou{
 
     function __construct() {

@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 /*
 
 Dashboard Order Page
@@ -10,7 +12,6 @@ This template file can be edited and overwritten with your own custom template. 
 For example, if your theme is storefront, you can copy this file under wp-content/themes/storefront/marketking/ and then edit it with your own custom content and changes.
 
 */
-
 
 ?>
 <?php

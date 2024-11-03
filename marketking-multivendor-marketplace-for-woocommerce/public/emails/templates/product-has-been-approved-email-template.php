@@ -9,8 +9,17 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 $product = wc_get_product($product_id);
 $vendor_id = marketking()->get_product_vendor($product_id);
 $vendor_name = marketking()->get_store_name_display($vendor_id);
-$product_name = $product->get_title();
-$product_link = $product->get_permalink();
+
+if ($product){
+    $product_name = $product->get_title();
+    $product_link = $product->get_permalink();
+
+} else {
+    $product_name = 'Product name';
+    $product_link = '#';
+
+}
+
 ?>
 
 <p>

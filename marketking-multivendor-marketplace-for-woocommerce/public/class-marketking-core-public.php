@@ -1,5 +1,7 @@
 <?php
 
+if (!defined('ABSPATH')) { exit; }
+
 class Marketkingcore_Public{
 
 	function __construct() {
@@ -39,6 +41,11 @@ class Marketkingcore_Public{
 						// Custom user registration fields
 						add_action( 'woocommerce_register_form', array($this,'marketking_custom_registration_fields'), 9 );
 					}
+
+					// file type validation
+					add_filter( 'woocommerce_process_registration_errors', array($this,'marketking_custom_registration_fields_check_errors'), 10, 3 );
+
+
 					// use user_register hook as well, seems to fix issues in certain installations
 					add_action('woocommerce_created_customer', array($this,'marketking_save_custom_registration_fields') );
 					add_action('user_register', array($this,'marketking_save_custom_registration_fields') );
@@ -94,10 +101,20 @@ class Marketkingcore_Public{
 					// Products in the vendor page filters
 			
 					add_filter( 'woocommerce_shortcode_products_query', [$this, 'marketking_filter_products_author'], 10, 2 );
+					// woof filter author
+					add_filter('woof_dynamic_count_attr', function($args, $type){
+					    if (marketking()->is_vendor_store_page()){
+					        $author = marketking()->get_vendor_id_in_store_url();
+					        $args['author'] = $author;
+					    }
+					    return $args;
+					}, 10, 2);
+
 					// Empty (no products) in vendor page
 					add_action( 'woocommerce_shortcode_products_loop_no_results', [$this, 'action_woocommerce_shortcode_products_loop_no_results'], 10, 1 );
 					// Modify stores list page title					
 					add_filter( 'the_title', [$this, 'store_list_modify_title'], 10, 2 );
+
 
 
 					// Add 'author attribute' to products shortcode
@@ -265,6 +282,132 @@ class Marketkingcore_Public{
 	    
 	}
 
+	function marketking_custom_registration_fields_check_errors( $errors, $username, $email ) {
+		// get all enabled file upload custom fields
+		$file_upload_fields = get_posts([
+			    		'post_type' => 'marketking_field',
+			    	  	'post_status' => 'publish',
+			    	  	'numberposts' => -1,
+			    	  	'meta_query'=> array(
+			    	  		'relation' => 'AND',
+			                array(
+		                        'key' => 'marketking_field_field_type',
+		                        'value' => 'file'
+			                ),
+		            	)
+			    	]);
+
+		foreach($file_upload_fields as $file_upload_field){
+			// get field and check if set
+			$field_value = sanitize_text_field(filter_input(INPUT_POST, 'marketking_field_'.$file_upload_field->ID)); 
+			if ($field_value !== NULL){
+
+				// Allowed file types
+				$allowed_file_types = apply_filters('marketking_allowed_file_types', array( "image/jpeg", "image/jpg", "image/png", "text/plain", "application/pdf", "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/octet-stream" ));
+				$allowed_file_types_text = apply_filters('marketking_allowed_file_types_text', 'jpg, jpeg, png, txt, pdf, doc, docx');
+				// Allowed file size -> 50MB
+				$allowed_file_size = apply_filters('marketking_allowed_file_types_size', 50000000);
+				$upload_errors = '';
+
+				if ( ! empty( $_FILES['marketking_field_'.$file_upload_field->ID]['name'] ) ) {
+				    // Check file type
+				    if ( ! in_array( $_FILES['marketking_field_'.$file_upload_field->ID]['type'], $allowed_file_types ) ) {
+				        $upload_errors .= esc_html__('Invalid file type','marketking-multivendor-marketplace-for-woocommerce').': ' . 
+				                          $_FILES['marketking_field_'.$file_upload_field->ID]['type'] . 
+				                          '. '.esc_html__('Supported file types','marketking-multivendor-marketplace-for-woocommerce').': '.$allowed_file_types_text;
+				    }
+				    // Check file size
+				    if ( $_FILES['marketking_field_'.$file_upload_field->ID]['size'] > $allowed_file_size ) {
+				        $upload_errors .= '<p>'.esc_html__('File is too large. Max. upload file size is','marketking-multivendor-marketplace-for-woocommerce').' 50MB</p>';
+				    }
+				    // If errors, show errors
+				    if (! empty( $upload_errors ) ) {
+				    	$errors->add( 'username_error', esc_html($upload_errors) );
+				    }
+				}
+			
+				
+			}
+		}
+
+		// Check normal fields to add some extra checks
+		if (isset($_POST['marketking_registration_options_dropdown'])){
+			$role_selected = sanitize_text_field($_POST['marketking_registration_options_dropdown']);
+			// get fields that are enabled, and required for this role
+			$custom_fields = get_posts([
+	    		'post_type' => 'marketking_field',
+	    	  	'post_status' => 'publish',
+	    	  	'numberposts' => -1,
+    	  	    'orderby' => 'menu_order',
+    	  	    'order' => 'ASC',
+    	  	    'fields' => 'ids',
+	    	  	'meta_query'=> array(
+	    	  		'relation' => 'AND',
+	                array(
+                        'key' => 'marketking_field_status',
+                        'value' => 1
+	                ),
+	                array(
+                        'key' => 'marketking_field_required',
+                        'value' => 1
+	                ),
+            	)
+	    	]);
+
+	    	// remove VAT fields (because those have extra country based validation)
+	    	foreach ($custom_fields as $index => $field_id){
+	    		$billing_connection = get_post_meta($field_id,'marketking_field_billing_connection', true);
+	    		if ($billing_connection === 'billing_vat'){
+	    			unset($custom_fields[$index]);
+	    		}
+	    	}
+
+	    	// remove file, select, checkbox, radio fields
+	    	foreach ($custom_fields as $index => $field_id){
+	    		$field_type = get_post_meta($field_id,'marketking_field_field_type', true);
+				if ($field_type === 'file' || $field_type === 'checkbox' || $field_type === 'radio' || $field_type === 'select'){
+		    		unset($custom_fields[$index]);
+		    	}
+		    }
+
+		    // remove fields which do not belong to the role selected
+        	foreach ($custom_fields as $index => $field_id){
+        		$role_applies = false;
+        		$field_role = get_post_meta($field_id,'marketking_field_registration_option', true); // e.g role_123
+        		if ($field_role === 'alloptions'){
+        			$role_applies = true;
+        		}
+        		if ($field_role === $role_selected){
+        			$role_applies = true;
+        		}
+        		if ($field_role === 'multipleoptions'){
+        			$field_roles = get_post_meta($field_id, 'marketking_field_multiple_options', true);
+        			$field_roles = explode(',', $field_roles);
+        			if (in_array($role_selected, $field_roles)){
+        				$role_applies = true;
+        			}
+        		}
+
+        		if ($role_applies === false){
+        			unset($custom_fields[$index]);
+        		}
+    	    }
+
+    	    // now finally check that fields are not empty
+    	    foreach ($custom_fields as $field_id){
+    	    	$value = trim(sanitize_text_field($_POST['marketking_field_'.$field_id]));
+    	    	if (empty($value)){
+    	    		$label = get_post_meta(apply_filters( 'wpml_object_id', $field_id, 'post', true ), 'marketking_field_field_label', true);
+    	    		$errors->add( 'marketking_error_'.$field_id, $label.' '.esc_html__('is a required field.', 'b2bking') );
+    	    	}
+    	    }
+
+		}
+
+
+		return $errors;
+	}
+
 	function marketking_set_order_status_parent($order_id, $posted_data = array(), $order = array()){
 
 		$orderobj = wc_get_order($order_id);
@@ -339,7 +482,7 @@ class Marketkingcore_Public{
 		if (count($vendorsincart) > 1){
 			if (marketking()->get_number_of_subscription_vendors_cart() < 2){
 				if (!empty(apply_filters('marketking_cart_multiple_vendors_message', get_option('marketking_cart_vendors_text_setting', esc_html__('The products in your cart are sold by multiple different vendor partners. The order will be placed simultaneously with all vendors and you will receive a package from each of them.','marketking-multivendor-marketplace-for-woocommerce'))))){
-					wc_print_notice( apply_filters('marketking_cart_multiple_vendors_message', get_option('marketking_cart_vendors_text_setting', esc_html__('The products in your cart are sold by multiple different vendor partners. The order will be placed simultaneously with all vendors and you will receive a package from each of them.','marketking-multivendor-marketplace-for-woocommerce'))), 'notice' );
+					wc_print_notice( apply_filters('marketking_cart_multiple_vendors_message', esc_html(get_option('marketking_cart_vendors_text_setting', esc_html__('The products in your cart are sold by multiple different vendor partners. The order will be placed simultaneously with all vendors and you will receive a package from each of them.','marketking-multivendor-marketplace-for-woocommerce')))), 'notice' );
 				}
 			}
 		} else if (count($vendorsincart) === 1){
@@ -2176,10 +2319,6 @@ class Marketkingcore_Public{
 
     		wp_enqueue_style('marketkingpro_b2bkingintegrationcss', plugins_url('dashboard/assets/b2bkingintegration/b2bkingintegration.css', __FILE__), $deps = array(), MARKETKINGCORE_VERSION);
     		wp_enqueue_script('marketkingpro_b2bkingintegrationjs', plugins_url('dashboard/assets/b2bkingintegration/b2bkingintegration.js', __FILE__), $deps = array(), MARKETKINGCORE_VERSION);
-
-    			// scripts and styles already registered by default
-				wp_enqueue_script('dataTables', plugins_url('dashboard/assets/b2bkingintegration/dataTables/jquery.dataTables.min.js', __FILE__), $deps = array(), $ver = false, $in_footer =true);
-				wp_enqueue_style( 'dataTables', plugins_url('dashboard/assets/b2bkingintegration/dataTables/jquery.dataTables.min.css', __FILE__));
 
 				wp_enqueue_script('jquerymodalzz', plugins_url('dashboard/assets/b2bkingintegration/jquerymodal/jquery.modal.min.js', __FILE__), $deps = array(), $ver = false, $in_footer =true);
 				wp_enqueue_style('jquerymodalzz', plugins_url('dashboard/assets/b2bkingintegration/jquerymodal/jquery.modal.min.css', __FILE__));

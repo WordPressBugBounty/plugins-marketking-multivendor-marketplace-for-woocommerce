@@ -1,6 +1,6 @@
 <?php
 
-
+if (!defined('ABSPATH')) { exit; }
 
 class Elementor_Store_Title_Widget extends \Elementor\Widget_Base {
 

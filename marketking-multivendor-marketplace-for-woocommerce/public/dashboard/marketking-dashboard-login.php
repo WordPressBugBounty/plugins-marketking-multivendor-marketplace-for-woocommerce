@@ -1,6 +1,6 @@
 <?php 
 
-defined( 'ABSPATH' ) || exit; 
+if (!defined('ABSPATH')) { exit; }
 
 ?>
 <html>
@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
         $marketking_is_dashboard = true;
 
         ?>
-        <link rel="shortcut icon" href="<?php echo apply_filters('marketking_favicon_url', $favicon_setting);?>"/>
+        <link rel="shortcut icon" href="<?php echo esc_url(apply_filters('marketking_favicon_url', $favicon_setting));?>"/>
         <title><?php 
 
         // esc_html_e('Vendor Dashboard','marketking-multivendor-marketplace-for-woocommerce');
@@ -703,92 +703,95 @@ defined( 'ABSPATH' ) || exit;
         /* Germanized */
         if ( class_exists( 'WC_Germanized_Meta_Box_Product_Data' ) ) {
 
-            include_once WC_GERMANIZED_ABSPATH . 'includes/export/class-wc-gzd-product-export.php';
-            include_once WC_GERMANIZED_ABSPATH . 'includes/import/class-wc-gzd-product-import.php';
+            if (apply_filters('marketking_allow_germanized_vendor_dashboard', true)){
 
-            add_action( 'woocommerce_product_options_general_product_data', array( 'WC_Germanized_Meta_Box_Product_Data', 'output' ) );
-            add_action( 'woocommerce_product_options_shipping', array( 'WC_Germanized_Meta_Box_Product_Data', 'output_shipping' ) );
+                include_once WC_GERMANIZED_ABSPATH . 'includes/export/class-wc-gzd-product-export.php';
+                include_once WC_GERMANIZED_ABSPATH . 'includes/import/class-wc-gzd-product-import.php';
 
-            add_action( 'woocommerce_admin_process_product_object', array( 'WC_Germanized_Meta_Box_Product_Data', 'save' ), 10, 1 );
-            add_filter( 'product_type_options', array( 'WC_Germanized_Meta_Box_Product_Data', 'product_types' ), 10, 1 );
+                add_action( 'woocommerce_product_options_general_product_data', array( 'WC_Germanized_Meta_Box_Product_Data', 'output' ) );
+                add_action( 'woocommerce_product_options_shipping', array( 'WC_Germanized_Meta_Box_Product_Data', 'output_shipping' ) );
 
-
-            add_action('wp_print_styles', function(){
-                $suffix            = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-                $assets_path       = WC_germanized()->plugin_url() . '/assets/';
-                $admin_script_path = $assets_path . 'js/admin/';
-
-                wp_register_style( 'woocommerce-gzd-admin', $assets_path . 'css/admin' . $suffix . '.css', false, WC_GERMANIZED_VERSION );
-                wp_enqueue_style( 'woocommerce-gzd-admin' );
-
-                wp_register_style(
-                    'woocommerce-gzd-admin-settings',
-                    $assets_path . 'css/admin-settings' . $suffix . '.css',
-                    array(
-                        'woocommerce_admin_styles',
-                        'woocommerce-gzd-admin',
-                    ),
-                    WC_GERMANIZED_VERSION
-                );
-            });
+                add_action( 'woocommerce_admin_process_product_object', array( 'WC_Germanized_Meta_Box_Product_Data', 'save' ), 10, 1 );
+                add_filter( 'product_type_options', array( 'WC_Germanized_Meta_Box_Product_Data', 'product_types' ), 10, 1 );
 
 
-            add_action('wp_print_scripts', function(){
-                $suffix            = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-                $assets_path       = WC_germanized()->plugin_url() . '/assets/';
-                $admin_script_path = $assets_path . 'js/admin/';
+                add_action('wp_print_styles', function(){
+                    $suffix            = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+                    $assets_path       = WC_germanized()->plugin_url() . '/assets/';
+                    $admin_script_path = $assets_path . 'js/admin/';
 
-                wp_register_script( 'wc-gzd-admin-product', $admin_script_path . 'product' . $suffix . '.js', array( 'wc-admin-product-meta-boxes', 'media-models' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
+                    wp_register_style( 'woocommerce-gzd-admin', $assets_path . 'css/admin' . $suffix . '.css', false, WC_GERMANIZED_VERSION );
+                    wp_enqueue_style( 'woocommerce-gzd-admin' );
 
-                wp_register_script( 'wc-gzd-admin-product-variations', $admin_script_path . 'product-variations' . $suffix . '.js', array( 'wc-gzd-admin-product', 'wc-admin-variation-meta-boxes' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
+                    wp_register_style(
+                        'woocommerce-gzd-admin-settings',
+                        $assets_path . 'css/admin-settings' . $suffix . '.css',
+                        array(
+                            'woocommerce_admin_styles',
+                            'woocommerce-gzd-admin',
+                        ),
+                        WC_GERMANIZED_VERSION
+                    );
+                });
 
-                wp_localize_script(
-                    'wc-gzd-admin-product-variations',
-                    'wc_gzd_admin_product_variations_params',
-                    array(
-                        'i18n_set_delivery_time' => __( 'Insert delivery time name, slug or id.', 'woocommerce-germanized' ),
-                        'i18n_set_product_unit'  => __( 'Insert product units amount.', 'woocommerce-germanized' ),
-                    )
-                );
 
-                wp_register_script( // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
-                    'wc-gzd-admin-legal-checkboxes',
-                    $admin_script_path . 'legal-checkboxes' . $suffix . '.js',
-                    array(
-                        'jquery',
-                        'wp-util',
-                        'underscore',
-                        'backbone',
-                        'jquery-ui-sortable',
-                        'wc-enhanced-select',
-                    ),
-                    WC_GERMANIZED_VERSION
-                );
+                add_action('wp_print_scripts', function(){
+                    $suffix            = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+                    $assets_path       = WC_germanized()->plugin_url() . '/assets/';
+                    $admin_script_path = $assets_path . 'js/admin/';
 
-                wp_register_script( // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
-                    'wc-gzd-admin-settings',
-                    $assets_path . 'js/admin/settings' . $suffix . '.js',
-                    array(
-                        'jquery',
-                        'woocommerce_admin',
-                    ),
-                    WC_GERMANIZED_VERSION
-                );
+                    wp_register_script( 'wc-gzd-admin-product', $admin_script_path . 'product' . $suffix . '.js', array( 'wc-admin-product-meta-boxes', 'media-models' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 
-                wp_localize_script(
-                    'wc-gzd-admin-settings',
-                    'wc_gzd_admin_settings_params',
-                    array(
-                        'tab_toggle_nonce'        => wp_create_nonce( 'wc_gzd_tab_toggle_nonce' ),
-                        'install_extension_nonce' => wp_create_nonce( 'wc_gzd_install_extension_nonce' ),
-                        'ajax_url'                => admin_url( 'admin-ajax.php' ),
-                        'search_term_nonce'       => wp_create_nonce( 'search-taxonomy-terms' ),
-                    )
-                );
+                    wp_register_script( 'wc-gzd-admin-product-variations', $admin_script_path . 'product-variations' . $suffix . '.js', array( 'wc-gzd-admin-product', 'wc-admin-variation-meta-boxes' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 
-                wp_enqueue_script( 'wc-gzd-admin-product' );
-                wp_enqueue_script( 'wc-gzd-admin-product-variations' );
-            });
+                    wp_localize_script(
+                        'wc-gzd-admin-product-variations',
+                        'wc_gzd_admin_product_variations_params',
+                        array(
+                            'i18n_set_delivery_time' => __( 'Insert delivery time name, slug or id.', 'woocommerce-germanized' ),
+                            'i18n_set_product_unit'  => __( 'Insert product units amount.', 'woocommerce-germanized' ),
+                        )
+                    );
+
+                    wp_register_script( // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
+                        'wc-gzd-admin-legal-checkboxes',
+                        $admin_script_path . 'legal-checkboxes' . $suffix . '.js',
+                        array(
+                            'jquery',
+                            'wp-util',
+                            'underscore',
+                            'backbone',
+                            'jquery-ui-sortable',
+                            'wc-enhanced-select',
+                        ),
+                        WC_GERMANIZED_VERSION
+                    );
+
+                    wp_register_script( // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
+                        'wc-gzd-admin-settings',
+                        $assets_path . 'js/admin/settings' . $suffix . '.js',
+                        array(
+                            'jquery',
+                            'woocommerce_admin',
+                        ),
+                        WC_GERMANIZED_VERSION
+                    );
+
+                    wp_localize_script(
+                        'wc-gzd-admin-settings',
+                        'wc_gzd_admin_settings_params',
+                        array(
+                            'tab_toggle_nonce'        => wp_create_nonce( 'wc_gzd_tab_toggle_nonce' ),
+                            'install_extension_nonce' => wp_create_nonce( 'wc_gzd_install_extension_nonce' ),
+                            'ajax_url'                => admin_url( 'admin-ajax.php' ),
+                            'search_term_nonce'       => wp_create_nonce( 'search-taxonomy-terms' ),
+                        )
+                    );
+
+                    wp_enqueue_script( 'wc-gzd-admin-product' );
+                    wp_enqueue_script( 'wc-gzd-admin-product-variations' );
+                });
+            }
             
         }
 
@@ -960,7 +963,7 @@ defined( 'ABSPATH' ) || exit;
                             <?php endif; ?>
                             <?php
                             // temp disabled
-                            if (false === true) {
+                            if (apply_filters('marketking_enable_google_cal_integration', false)) {
 
                                 if ( get_query_var( 'dashpage' ) === 'booking-calendar' ):
                                     ?>
@@ -2323,17 +2326,14 @@ defined( 'ABSPATH' ) || exit;
                                         <?php 
                                         if (isset($_GET['reason'])){
                                             $reason = sanitize_text_field($_GET['reason']);
-                                            if ($reason === 'invalid_username'){
-                                                $reason = esc_html__('Username is invalid','marketking-multivendor-marketplace-for-woocommerce');
-                                            }
                                             if ($reason === 'empty_username'){
                                                 $reason = esc_html__('Username is empty','marketking-multivendor-marketplace-for-woocommerce');
                                             }
-                                            if ($reason === 'incorrect_password'){
-                                                $reason = esc_html__('Password is incorrect','marketking-multivendor-marketplace-for-woocommerce');
-                                            }
                                             if ($reason === 'empty_password'){
                                                 $reason = esc_html__('Password is empty','marketking-multivendor-marketplace-for-woocommerce');
+                                            }
+                                            if ($reason === 'invalid_username' || $reason === 'incorrect_password'){
+                                                $reason = esc_html__('Incorrect user or password','marketking-multivendor-marketplace-for-woocommerce');
                                             }
 
                                             ?>                                        
@@ -2352,33 +2352,39 @@ defined( 'ABSPATH' ) || exit;
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <form name="loginform" id="loginform" action="<?php echo site_url( '/wp-login.php' ); ?>" method="post">
-                                            <div class="form-group">
-                                                <div class="form-label-group">
-                                                    <label class="form-label" for="default-01"><?php esc_html_e('Email or Username','marketking-multivendor-marketplace-for-woocommerce');?></label>
+                                        <?php 
+                                        ob_start();
+                                            ?>
+                                            <form name="loginform" id="loginform" action="<?php echo site_url( '/wp-login.php' ); ?>" method="post">
+                                                <div class="form-group">
+                                                    <div class="form-label-group">
+                                                        <label class="form-label" for="default-01"><?php esc_html_e('Email or Username','marketking-multivendor-marketplace-for-woocommerce');?></label>
+                                                    </div>
+                                                    <input type="text" class="form-control form-control-lg" id="user_login" placeholder="<?php esc_attr_e('Enter your email address or username','marketking-multivendor-marketplace-for-woocommerce');?>" name="log" value="<?php echo apply_filters('marketking_default_vendor_username', '');?>">
                                                 </div>
-                                                <input type="text" class="form-control form-control-lg" id="user_login" placeholder="<?php esc_attr_e('Enter your email address or username','marketking-multivendor-marketplace-for-woocommerce');?>" name="log" value="<?php echo apply_filters('marketking_default_vendor_username', '');?>">
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="form-label-group">
-                                                    <label class="form-label" for="password"><?php esc_html_e('Password','marketking-multivendor-marketplace-for-woocommerce');?></label>
-                                                    <a class="link link-primary link-sm" href="<?php echo wp_lostpassword_url(); ?>"><?php esc_html_e('Forgot password?','marketking-multivendor-marketplace-for-woocommerce');?></a>
+                                                <div class="form-group">
+                                                    <div class="form-label-group">
+                                                        <label class="form-label" for="password"><?php esc_html_e('Password','marketking-multivendor-marketplace-for-woocommerce');?></label>
+                                                        <a class="link link-primary link-sm" href="<?php echo wp_lostpassword_url(); ?>"><?php esc_html_e('Forgot password?','marketking-multivendor-marketplace-for-woocommerce');?></a>
+                                                    </div>
+                                                    <div class="form-control-wrap">
+                                                        <a href="#" class="form-icon form-icon-right passcode-switch" data-target="user_pass">
+                                                            <em class="passcode-icon icon-show icon ni ni-eye"></em>
+                                                            <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
+                                                        </a>
+                                                        <input type="password" class="form-control form-control-lg" id="user_pass" placeholder="<?php esc_attr_e('Enter your password','marketking-multivendor-marketplace-for-woocommerce');?>" name="pwd" value="<?php echo apply_filters('marketking_default_vendor_password', '');?>">
+                                                        <input type="hidden" name="marketking_dashboard_login" value="1">
+                                                        <input type="hidden" value="<?php echo esc_attr( trailingslashit(get_page_link(apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true))) ); ?>" name="redirect_to">
+                                                    </div>
                                                 </div>
-                                                <div class="form-control-wrap">
-                                                    <a href="#" class="form-icon form-icon-right passcode-switch" data-target="user_pass">
-                                                        <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                                                        <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                                                    </a>
-                                                    <input type="password" class="form-control form-control-lg" id="user_pass" placeholder="<?php esc_attr_e('Enter your password','marketking-multivendor-marketplace-for-woocommerce');?>" name="pwd" value="<?php echo apply_filters('marketking_default_vendor_password', '');?>">
-                                                    <input type="hidden" name="marketking_dashboard_login" value="1">
-                                                    <input type="hidden" value="<?php echo esc_attr( trailingslashit(get_page_link(apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true))) ); ?>" name="redirect_to">
+                                                <div class="form-group">
+                                                    <button id="wp-submit" type="submit" value="Login" name="wp-submit" class="btn btn-lg btn-primary btn-block"><?php esc_html_e('Sign in','marketking-multivendor-marketplace-for-woocommerce');?></button>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <button id="wp-submit" type="submit" value="Login" name="wp-submit" class="btn btn-lg btn-primary btn-block"><?php esc_html_e('Sign in','marketking-multivendor-marketplace-for-woocommerce');?></button>
-                                            </div>
-                                        </form>
+                                            </form>
+                                            <?php
+                                            $form_content = ob_get_clean();
+                                            echo apply_filters('marketking_dashboard_login_form', $form_content);
+                                            ?>
                                         <div class="form-note-s2 text-center pt-4"> <?php esc_html_e('New on our platform?','marketking-multivendor-marketplace-for-woocommerce');?> <a href="<?php 
                                             if (get_option( 'marketking_vendor_registration_setting', 'myaccount' ) === 'separate'){
                                                 $page = get_option('marketking_vendor_registration_page_setting');

@@ -990,7 +990,7 @@
         // Load Bookingorders Table
     	if (typeof $('#marketking_dashboard_bookingsorders_table').DataTable === "function") {  
     		
-    		var abbatablez = $('#marketking_dashboard_bookingsorders_table').DataTable({
+    		var abbatablezp = $('#marketking_dashboard_bookingsorders_table').DataTable({
     			"language": {
     			    "url": marketking_display_settings.datatables_folder+marketking_display_settings.tables_language_option+'.json'
     			},
@@ -1021,8 +1021,8 @@
     		        var title = $(this).text();
     		        $(this).html( '<input type="text" class="marketking_search_column" placeholder="'+marketking_display_settings.searchtext+title+'..." />' );
     		        $( 'input', this ).on( 'keyup change', function () {
-    		            if ( abbatablez.column(i).search() !== this.value ) {
-    		                abbatablez
+    		            if ( abbatablezp.column(i).search() !== this.value ) {
+    		                abbatablezp
     		                    .column(i)
     		                    .search( this.value )
     		                    .draw();
@@ -1038,7 +1038,7 @@
     		
 
     		$('#marketking_bookingsorders_search').keyup(function(){
-    		      abbatablez.search($(this).val()).draw() ;
+    		      abbatablezp.search($(this).val()).draw() ;
     		});
 
     	}
@@ -1075,6 +1075,23 @@
 
 			$('#marketking_bookings_search').keyup(function(){
 			      abbatablez.search($(this).val()).draw() ;
+			});
+
+		}
+
+		if (typeof $('#marketking_dashboard_teams_table').DataTable === "function") {  
+			
+			var teamtable = $('#marketking_dashboard_teams_table').DataTable({
+				"language": {
+				    "url": marketking_display_settings.datatables_folder+marketking_display_settings.tables_language_option+'.json'
+				},
+				oLanguage: {
+	                sSearch: ""
+	            },
+			});
+
+			$('#marketking_teams_search').keyup(function(){
+			      teamtable.search($(this).val()).draw() ;
 			});
 
 		}
@@ -1875,12 +1892,12 @@
 				required = ['paypal-email'];
 			}
 			if (chosen === 'bank'){
-				required = ['full-name','billing-address-1','city','state','postcode','bank-account-holder-name','bank-account-number'];
+				required = ['full-name','billing-address-1','city','state','postcode','bank-account-holder-name', 'bankname', 'bankswift', 'bank-account-number'];
 			}
 
 			let isvalid = true;
 			required.forEach( function (i) { 
-				if ($('#'+i).val() === ''){
+				if ($('#'+i).val() === '' && $('#'+i).prop('required') === true){
 					isvalid = false;
 				}
 			});
@@ -2715,6 +2732,7 @@
 		        instagram: $('#instagram').val(),
 		        linkedin: $('#linkedin').val(),
 		        pinterest: $('#pinterest').val(),
+		        tiktok: $('#tiktok').val(),
 		    };
 
 		    $.post(marketking_display_settings.ajaxurl, datavar, function(response){
