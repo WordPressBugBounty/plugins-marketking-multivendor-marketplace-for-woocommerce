@@ -1480,6 +1480,11 @@ class Marketkingcore_Admin{
 													echo '<option value="nogroup">'.esc_html__('No group is set up. Please create a customer group', 'marketking-multivendor-marketplace-for-woocommerce').'</option>';
 												}
 
+												if (apply_filters('marketking_enable_approve_as_customer', false)){
+													echo '<option value="b2c">'.esc_html__('Approve as regular customer','marketking-multivendor-marketplace-for-woocommerce').'</option>';
+
+												}
+
 
 
 												?>
@@ -3060,7 +3065,11 @@ class Marketkingcore_Admin{
 		        		    	}
 		        		    	?>
 		        		    	<a class="marketking_vendor_link" href="<?php echo esc_attr(admin_url('admin.php?page=marketking_view_payouts').'&user='.$original_user_id);?>"><button class="marketking-btn marketking-btn-outline-light marketking-btn-sm marketking_manage_payouts_button" value="<?php echo esc_attr($original_user_id); ?>"><em class="icon marketking-ni marketking-ni-wallet-out"></em><span><?php esc_html_e('Payouts','marketking-multivendor-marketplace-for-woocommerce');?></span></button></a>
-		        		    	<a class="marketking_vendor_link" href="<?php echo esc_attr(get_edit_user_link($original_user_id));?>#marketking_user_vendor_profile"> <button class="marketking-btn marketking-btn-light-blue marketking-btn-sm marketking_manage_vendors_button"><em class="icon marketking-ni marketking-ni-user-fill-c"></em><span><?php esc_html_e('Profile','marketking-multivendor-marketplace-for-woocommerce');?></span></button></a>
+		        		    	<a class="marketking_vendor_link" href="<?php echo esc_attr(get_edit_user_link($original_user_id));?>#marketking_user_vendor_profile"> <button class="marketking-btn marketking-btn-light-blue marketking-btn-sm marketking_manage_vendors_button"><em class="icon marketking-ni marketking-ni-user-fill-c"></em><span><?php esc_html_e('Profile','marketking-multivendor-marketplace-for-woocommerce');?></span></button></a><?php
+
+		        		    	do_action('marketking_admin_action_buttons', $original_user_id);
+		        		    	
+		        		    	?>
 		        		    </td>
 		        		    <?php
 		        		echo '</tr>';
@@ -5603,9 +5612,7 @@ class Marketkingcore_Admin{
 				wp_enqueue_style ('marketking_chartist', plugins_url('assets/dashboard/chartist/chartist.min.css', __FILE__));
 				wp_enqueue_script('marketking_chartist', plugins_url('assets/dashboard/chartist/chartist.min.js', __FILE__), $deps = array(), $ver = MARKETKINGCORE_VERSION, $in_footer =true);
 				wp_enqueue_script('marketking_chartist-plugin-tooltip', plugins_url('assets/dashboard/chartist/chartist-plugin-tooltip.min.js', __FILE__), $deps = array(), $ver = MARKETKINGCORE_VERSION, $in_footer =true);
-			}
 
-			if ($hook === 'marketking_page_marketking_payouts'){
 
 				wp_enqueue_script('dataTablesButtons', plugins_url('../includes/assets/lib/dataTables/dataTables.buttons.min.js', __FILE__), $deps = array(), $ver = false, $in_footer =true);
 				wp_enqueue_script('dataTablesButtonsHTML', plugins_url('../includes/assets/lib/dataTables/buttons.html5.min.js', __FILE__), $deps = array(), $ver = false, $in_footer =true);
@@ -5617,6 +5624,7 @@ class Marketkingcore_Admin{
 				wp_enqueue_script('vfsfonts', plugins_url('../includes/assets/lib/dataTables/vfs_fonts.js', __FILE__), $deps = array(), $ver = false, $in_footer =true);
 
 			}
+
 
 			$pageslug = '';
 			if (isset($_GET['page'])){
@@ -5671,7 +5679,7 @@ class Marketkingcore_Admin{
 			    'sure_create_shipment' => esc_html__('Are you sure you want to create this shipment?', 'marketking-multivendor-marketplace-for-woocommerce'),
 			    'print' => esc_html__('Print', 'marketking-multivendor-marketplace-for-woocommerce'), 
 			    'edit_columns' => esc_html__('Edit Columns', 'marketking-multivendor-marketplace-for-woocommerce'), 
-
+			    'download_go_to_file' => intval(apply_filters('marketking_download_file_go_to', 0)),
 
 			);
 

@@ -37,6 +37,22 @@ For example, if your theme is storefront, you can copy this file under wp-conten
                 'show_option_all' => esc_html__('All Categories','marketking-multivendor-marketplace-for-woocommerce'),
             );
 
+            if (apply_filters('marketking_store_categories_hide_empty', false)){
+                $users = marketking()->get_all_vendors();
+
+                // Get all categories that are actually used by vendors
+                $used_categories = array();
+                foreach ($users as $user) {
+                    $user_categories = get_user_meta($user->ID, 'marketking_store_categories', true);
+                    if (!empty($user_categories) && is_array($user_categories)) {
+                        $used_categories = array_merge($used_categories, $user_categories);
+                    }
+                }
+                // Remove duplicates
+                $used_categories = array_unique($used_categories);
+                $args['include'] = $used_categories;
+            }
+
             if ($hidecat === 'no'){
                 ?>
                 <div class="marketking_frontend_store_categories_select_container">
@@ -49,6 +65,8 @@ For example, if your theme is storefront, you can copy this file under wp-conten
                 </div>
                 <?php
             }
+
+
 
         }
     }

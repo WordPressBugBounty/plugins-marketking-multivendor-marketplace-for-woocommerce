@@ -418,55 +418,51 @@ class Marketkingcore {
 			// modify categories dropdown in edit product page
 			add_filter( 'wp_dropdown_cats', [$this, 'wp_dropdown_cats_multiple'], 10, 2 );
 
-
-			// custom URLs for vendor store pages
 			function prefix_rewrite_rules(){
+			    // Only flush rewrite rules if they haven't been flushed recently
+			    $last_flush = get_option('marketking_last_rewrite_flush', 0);
+			    $flush_interval = 3600; // Only flush once per hour max
 
-				// get all vendors with base store URLs
-				$vendors = marketking()->get_all_vendors();
+			    // Your existing vendors code...
+			    $vendors = marketking()->get_all_vendors();
+			    if (!empty($vendors)){
+			        $stores_page = intval(apply_filters( 'wpml_object_id', get_option( 'marketking_stores_page_setting', 'none' )));
+			        $stores_post = get_post($stores_page);
+			        if ($stores_post){
+			            $stores_slug = $stores_post->post_name;
+			        }
+			    }
+			    
+			    foreach ($vendors as $vendor){
+			        // Your existing vendor rules...
+			        if (isset($vendor->ID)){
+			            $vendor_id = $vendor->ID;
+			            $baseurl = get_user_meta($vendor_id,'marketking_vendor_store_url_base',true);
+			            if (!empty($baseurl)){
+			                if (intval($baseurl) === 1){
+			                    $store_url = get_user_meta($vendor_id,'marketking_store_url', true);
+			                    add_rewrite_rule(
+			                        '^'.$store_url.'$',
+			                        'index.php?pagename='.$stores_slug.'&vendorid='.$store_url,
+			                        'top'
+			                    );
+			                    add_rewrite_rule(
+			                        '^'.$store_url.'/([^/]*)/?([^/]*)/?([^/]*)/?',
+			                        'index.php?pagename='.$stores_slug.'&vendorid='.$store_url.'&pagenr=$matches[1]&pagenr2=$matches[2]',
+			                        'top'
+			                    );
+			                }
+			            }
+			        }
+			    }
 
-				if (!empty($vendors)){
-					$stores_page = intval(apply_filters( 'wpml_object_id', get_option( 'marketking_stores_page_setting', 'none' )));
-					$stores_post = get_post($stores_page);
-					if ($stores_post){
-						$stores_slug = $stores_post->post_name;
-					}
-				}
-
-				foreach ($vendors as $vendor){
-					if (isset($vendor->ID)){
-						$vendor_id = $vendor->ID;
-
-						// check if vendor has its own base url
-						$baseurl = get_user_meta($vendor_id,'marketking_vendor_store_url_base',true);
-						if (!empty($baseurl)){
-							if (intval($baseurl) === 1){
-
-								$store_url = get_user_meta($vendor_id,'marketking_store_url', true);
-
-								add_rewrite_rule(
-								    '^'.$store_url.'$',
-								    'index.php?pagename='.$stores_slug.'&vendorid='.$store_url,
-								    'top' //Places it as the prioritary rewrite rule
-								  );
-
-								add_rewrite_rule(
-								    '^'.$store_url.'/([^/]*)/?([^/]*)/?([^/]*)/?',
-								    'index.php?pagename='.$stores_slug.'&vendorid='.$store_url.'&pagenr=$matches[1]&pagenr2=$matches[2]',
-								    'top' //Places it as the prioritary rewrite rule
-								  );
-								
-							}
-						}
-					}
-					
-				}			    
-			  	
-			  	if (apply_filters('marketking_flush_permalinks', true)){
-			  		// Flush rewrite rules
-			  		flush_rewrite_rules();
-			  	}
-
+			    if (apply_filters('marketking_flush_permalinks', true)){
+			        // Only flush if it's been longer than the interval
+			        if (time() - $last_flush > $flush_interval) {
+			            flush_rewrite_rules();
+			            update_option('marketking_last_rewrite_flush', time());
+			        }
+			    }
 			}
 			  
 			add_action( 'init', 'prefix_rewrite_rules' );
@@ -484,6 +480,15 @@ class Marketkingcore {
 			$marketking_public = new Marketkingcore_Public();
 		}	
 		
+
+		//Force a flush when vendor URLs are updated
+		function marketking_handle_vendor_url_update($meta_id, $object_id, $meta_key, $_meta_value) {
+		    if (in_array($meta_key, ['marketking_vendor_store_url_base', 'marketking_store_url'])) {
+		        delete_option('marketking_last_rewrite_flush'); // Force next flush
+		        flush_rewrite_rules();
+		    }
+		}
+		add_action('update_user_meta', 'marketking_handle_vendor_url_update', 10, 4);
 		
 
 		// Add email classes
@@ -564,7 +569,7 @@ class Marketkingcore {
 		add_action( 'transition_post_status', array($this,'marketking_pending_to_published'), 10, 3 );
 
 		// Filter edit order url
-		add_filter('woocommerce_get_edit_order_url', array($this,'marketking_filter_edit_order_url'), 10, 2);
+		add_filter('woocommerce_get_edit_order_url', array($this,'marketking_filter_edit_order_url'), 10000, 2);
 
 		// commission invoices backend
 		add_filter('wpo_wcpdf_meta_box_actions', function($meta_box_actions, $post_id){
@@ -638,6 +643,11 @@ class Marketkingcore {
 		add_filter('woocommerce_email_recipient_cancelled_subscription', array($this, 'filter_new_order_email_recipient'), 10, 2);
 		// Modify order received email template to show multiple vendors
 		add_filter('wc_get_template', [$this, 'marketking_template_order_received'], 1000, 5);
+
+
+		// fix for extra shipping order items with multiple vendors
+		add_action('woocommerce_checkout_subscription_created', array($this, 'validate_subscription_shipping_methods'), 20, 1);
+
 		
 	}
 
@@ -842,46 +852,29 @@ class Marketkingcore {
     }
 
     function marketking_rewrite_dashboard_url2() {
+        // Only flush rewrite rules if they haven't been flushed recently
+        $last_flush = get_option('marketking_last_rewrite_flush', 0);
+        $flush_interval = 3600; // Only flush once per hour max
+
         $pageid = apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true);
         $slug = get_page_uri($pageid);
-
         // Optional language prefix
         $lang_prefix = '([^/]*)/?';
-
+        
         add_rewrite_rule(
             '^' . $lang_prefix . $slug . '/([^/]*)/?([^/]*)/?([^/]*)/?',
             'index.php?lang=$matches[1]&pagename='.$slug.'&dashpage=$matches[2]'.'&pagenr=$matches[3]'.'&pagenr2=$matches[4]',
             'top'
         );
-
+        
         if (apply_filters('marketking_flush_permalinks', true)){
-            // Flush rewrite rules
-            flush_rewrite_rules();
+            // Only flush if it's been longer than the interval
+            if (time() - $last_flush > $flush_interval) {
+                flush_rewrite_rules();
+                update_option('marketking_last_rewrite_flush', time());
+            }
         }
     }
-
-    /*
-
-	function marketking_rewrite_dashboard_url() {
-
-		$pageid = apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true);
-		//$slug = get_post_field( 'post_name', $pageid );
-		$slug = get_page_uri($pageid);
-
-	    add_rewrite_rule(
-	        '^'.$slug.'/([^/]*)/?([^/]*)/?([^/]*)/?',
-	        'index.php?pagename='.$slug.'&dashpage=$matches[1]'.'&pagenr=$matches[2]'.'&pagenr2=$matches[3]',
-	        'top'
-	    );
-
-	    if (apply_filters('marketking_flush_permalinks', true)){
-	    	// Flush rewrite rules
-	    	flush_rewrite_rules();
-	    }
-
-	}
-
-	*/
 
 	function price_based_country_stop_switch($val){
 		if (marketking()->is_vendor_dashboard()){
@@ -894,6 +887,73 @@ class Marketkingcore {
 		$statuses[] = 'composite';
 		$statuses[] = 'wc-composite';
 		return $statuses;
+	}
+
+	
+	function validate_subscription_shipping_methods($subscription) {
+	    if (!$subscription instanceof WC_Subscription) {
+	        return;
+	    }
+
+	    // Force reload the subscription
+	    $subscription_id = $subscription->get_id();
+	    $subscription = wcs_get_subscription($subscription_id);
+	    
+	    // Get shipping items after reload
+	    $shipping_items = $subscription->get_items('shipping');
+	    
+	    if (empty($shipping_items)) {
+	        return;
+	    }
+
+	    // Track if we make any changes
+	    $changes_made = false;
+
+	    // Collect all product authors (vendors) from order items
+	    $product_vendors = array();
+	    foreach ($subscription->get_items() as $item) {
+	        $product = $item->get_product();
+	        if ($product) {
+	            $product_id = $product->get_id();
+	            $post = get_post($product_id);
+	            if ($post) {
+	                $product_vendors[] = $post->post_author;
+	            }
+	        }
+	    }
+
+	    // Check each shipping method
+	    foreach ($shipping_items as $shipping_item_id => $shipping_item) {
+	        $vendor_id = $shipping_item->get_meta('vendor_id');
+	        
+	        if ($vendor_id && !in_array($vendor_id, $product_vendors)) {
+	            // Remove shipping method if no matching products found
+	            $subscription->remove_item($shipping_item_id);
+	            $changes_made = true;
+	        }
+	    }
+
+	    // If we made changes, recalculate totals and save
+	    if ($changes_made) {
+	        // Clear cached totals
+	        $subscription->calculate_shipping();
+	        $subscription->calculate_totals();
+	        
+	        // Force WC to recalculate totals from scratch
+	        delete_post_meta($subscription_id, '_order_shipping');
+	        delete_post_meta($subscription_id, '_order_total');
+	        
+	        // Recalculate one more time to be sure
+	        $subscription->calculate_totals(true);
+	        
+	        // Save the changes
+	        $subscription->save();
+	        
+	        // Add a note to the subscription
+	        $subscription->add_order_note(
+	            __('Removed shipping methods that did not match order item vendors and recalculated totals.', 'your-text-domain')
+	        );
+	    }
 	}
 
 	function marketking_filter_avatar_url( $url, $id_or_email, $args ){
@@ -991,18 +1051,15 @@ class Marketkingcore {
 
 	function marketking_filter_edit_order_url($url, $order){
 
-		if (!current_user_can('manage_woocommerce')){
-			$order_id = $order->get_id();
-			$vendor_id = marketking()->get_order_vendor($order_id);
-			$admin_user_id = apply_filters('marketking_admin_user_id', 1);
+		$order_id = $order->get_id();
+		$vendor_id = marketking()->get_order_vendor($order_id);
+		$admin_user_id = apply_filters('marketking_admin_user_id', 1);
 
-			if ($vendor_id !== $admin_user_id && !user_can($vendor_id,'manage_woocommerce')){
-				// modify to go to vendor dashboard
-				$url = trailingslashit(get_page_link(get_option( 'marketking_vendordash_page_setting', 'disabled' ))).'manage-order/'.$order_id;
-			}
+		if ($vendor_id !== $admin_user_id && !user_can($vendor_id,'manage_woocommerce')){
+			// modify to go to vendor dashboard
+			$url = trailingslashit(get_page_link(get_option( 'marketking_vendordash_page_setting', 'disabled' ))).'manage-order/'.$order_id;
 		}
-		
-
+	
 		return $url;
 	}
 
@@ -2352,7 +2409,11 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
-		$user_id = sanitize_text_field($_POST['userid']);
+		$user_id = get_current_user_id();
+
+		if (!marketking()->is_vendor($user_id) and !marketking()->is_vendor_team_member()){
+			wp_die();
+		}
 
 		$ann = sanitize_text_field($_POST['announcementsemails']);
 		$ann = filter_var($ann,FILTER_VALIDATE_BOOLEAN);
@@ -2395,12 +2456,12 @@ class Marketkingcore {
 		}
 
 		if ($ajax === true){
-			update_user_meta(get_current_user_id(),'marketking_vendor_load_tables_ajax', 'yes');
+			update_user_meta($user_id,'marketking_vendor_load_tables_ajax', 'yes');
 		} else {
-			update_user_meta(get_current_user_id(),'marketking_vendor_load_tables_ajax', 'no');
+			update_user_meta($user_id,'marketking_vendor_load_tables_ajax', 'no');
 		}
 
-		do_action('marketking_after_save_profile', get_current_user_id());
+		do_action('marketking_after_save_profile', $user_id);
 
 		echo 'success';
 		exit();
@@ -2608,6 +2669,11 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
+		}
 
 		$vreqid = sanitize_text_field($_POST['vreqid']);
 		update_post_meta($vreqid,'status','approved');
@@ -2626,6 +2692,11 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
 		}
 		// If nonce verification didn't fail, run further
 
@@ -2696,6 +2767,11 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
+		}
 
 		$vreqid = sanitize_text_field($_POST['vreqid']);
 		$reason = sanitize_text_field($_POST['reason']);
@@ -2717,6 +2793,11 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
+		}
 
 		$refundid = sanitize_text_field($_POST['refundvalue']);
 		update_post_meta($refundid,'completion_status','completed');
@@ -2728,6 +2809,11 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
 		}
 
 		$refundid = sanitize_text_field($_POST['refundvalue']);
@@ -2820,14 +2906,18 @@ class Marketkingcore {
 		
 		$parent = get_user_meta($team_member_id,'marketking_parent_vendor', true);
 
-		if (intval($parent) === get_current_user_id()){
-			// delete user
-			wp_delete_user($team_member_id);
-
+		if (is_user_logged_in()){
+			if (!empty($team_member_id)){
+				if (marketking()->is_vendor(get_current_user_id())){
+					if (intval($parent) === intval(get_current_user_id())){
+						// delete user
+						wp_delete_user($team_member_id);
+					}
+				}
+			}
 		}
 
 		exit();
-
 	}
 
 	function marketking_save_team_member(){
@@ -2844,7 +2934,12 @@ class Marketkingcore {
 
 		$parent = get_user_meta($team_member_id,'marketking_parent_vendor', true);
 
-		if (intval($parent) === get_current_user_id()){
+		if (empty($team_member_id)){
+			return; 
+			wp_die();
+		}
+
+		if (intval($parent) === intval(get_current_user_id())){
 			foreach ($panel_slugs as $panel){
 				$value = sanitize_text_field($_POST[$panel]);
 				$value = filter_var($value,FILTER_VALIDATE_BOOLEAN);
@@ -3592,7 +3687,7 @@ class Marketkingcore {
 			$current_id = marketking()->get_team_member_parent();
 		}
 
-		$itemnr = marketking()->get_vendor_order_number($current_id);
+		$itemnr = marketking()->get_vendor_order_number($current_id, $search);
 
 		$data = array(
 			'length'=> $length,
@@ -3610,6 +3705,12 @@ class Marketkingcore {
 		    'meta_compare' => '=',
 		    'return' => 'ids',
 		);
+
+		// Add search parameters if search term exists
+		if (!empty($search)) {
+		    $args['s'] = $search;
+		}
+
 
 		$args = apply_filters('marketking_get_vendors_orders_args', $args);
 
@@ -3692,7 +3793,17 @@ class Marketkingcore {
 		                } else if ($status === 'failed'){
 		                    $badge = 'badge-danger';
 		                    $statustext = esc_html__('Failed','marketking-multivendor-marketplace-for-woocommerce');
-		                }
+		                } else {
+                            // custom status
+                            $badge = apply_filters('marketking_custom_status_badge', 'badge-gray', $status);
+                            $wcstatuses = wc_get_order_statuses();
+                            if (isset($wcstatuses['wc-'.$status])){
+                                $statustext = $wcstatuses['wc-'.$status];
+                            } else {
+                                $statustext = '';
+                            }
+                            $statustext = apply_filters('marketking_custom_status_text', $statustext, $status);
+                        }
 		                ?>
 		                <span class="badge badge-sm badge-dot has-bg <?php echo esc_attr($badge);?> d-none d-mb-inline-flex"><?php
 		                echo esc_html($statustext);
@@ -3985,6 +4096,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
 		}
 
 		$sluglist = sanitize_text_field($_POST['sluglist']);
@@ -4429,6 +4546,11 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
+		}
 
 		$user_id = sanitize_text_field($_POST['userid']);
 		$fields_string = sanitize_text_field($_POST['field_strings']);
@@ -4499,6 +4621,11 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
+		}
 		// If nonce verification didn't fail, run further
 
 		$user_id = sanitize_text_field($_POST['user']);
@@ -4539,6 +4666,12 @@ class Marketkingcore {
 			}
 			// set user as b2b enabled
 			update_user_meta($user_id, 'marketking_b2buser', 'no');
+			update_user_meta($user_id, 'marketking_group', 'none');
+			update_user_meta($user_id, 'marketking_user_choice', 'customer');
+
+			do_action( 'marketking_account_approved_as_customer_finish', $email_address );
+
+
 		}
 
 		echo 'success';
@@ -4552,6 +4685,11 @@ class Marketkingcore {
 		    wp_die();
 		}
 		// If nonce verification didn't fail, run further
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
+		}
 
 		$user_id = sanitize_text_field($_POST['user']);
 
@@ -4568,6 +4706,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
 		}
 
 		// If nonce verification didn't fail, run further
@@ -4611,6 +4755,11 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
 		}
 		
 		$vendorid = sanitize_text_field($_GET['userid']);
@@ -4729,6 +4878,11 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
+		}
 		
 		$requested_file = $_REQUEST['attachment'];
 		// If nonce verification didn't fail, run further
@@ -4738,19 +4892,24 @@ class Marketkingcore {
 			return;
 		}
 
-		//clean the fileurl
-		$file_url  = stripslashes( trim( $file ) );
-		//get filename
-		$file_name = basename( $file );
+		if (intval(apply_filters('marketking_download_file_go_to', 0)) === 1){
+			echo $file;
+		} else {
+			//clean the fileurl
+			$file_url  = stripslashes( trim( $file ) );
+			//get filename
+			$file_name = basename( $file );
 
-		header("Expires: 0");
-		header("Cache-Control: no-cache, no-store, must-revalidate"); 
-		header('Cache-Control: pre-check=0, post-check=0, max-age=0', false); 
-		header("Pragma: no-cache");	
-		header("Content-Disposition:attachment; filename={$file_name}");
-		header("Content-Type: application/force-download");
+			header("Expires: 0");
+			header("Cache-Control: no-cache, no-store, must-revalidate"); 
+			header('Cache-Control: pre-check=0, post-check=0, max-age=0', false); 
+			header("Pragma: no-cache");	
+			header("Content-Disposition:attachment; filename={$file_name}");
+			header("Content-Type: application/force-download");
 
-		readfile("{$file_url}");
+			readfile("{$file_url}");
+		}
+
 		exit();
 
 	}
@@ -4906,6 +5065,11 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
+		}
 
 		$amount = sanitize_text_field($_POST['pamount']);
 		$note = '(MANUAL ADJUSTMENT) '.sanitize_text_field($_POST['pnote']);
@@ -4939,6 +5103,11 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+		// Capability check
+		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
+			wp_send_json_error( 'Failed capability check.' );
+			wp_die();
 		}
 
 		$amount = sanitize_text_field($_POST['pamount']);
@@ -5054,6 +5223,8 @@ class Marketkingcore {
 		$becomepage = get_option('marketking_vendor_registration_page_setting');
 
 		do_action( 'marketking_new_user_requires_approval', get_current_user_id(), '','');
+
+		do_action( 'marketking_existing_user_vendor_application', get_current_user_id());
 
 		wp_redirect(get_permalink($becomepage));
 

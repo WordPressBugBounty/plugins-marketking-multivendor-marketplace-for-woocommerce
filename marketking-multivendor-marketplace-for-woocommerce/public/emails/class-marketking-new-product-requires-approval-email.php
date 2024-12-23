@@ -42,6 +42,7 @@ class Marketking_New_Product_Requires_Approval_Email extends WC_Email {
         if ( ! $this->is_enabled() || ! $this->get_recipient() ){
            return;
         }
+
         $this->product_id = $product_id;
         $this->subject = apply_filters('marketking_product_requires_approval_email_heading', $this->subject);
 

@@ -616,7 +616,7 @@
 
 		function initialize_elements(){
 			/* Payouts */
-	
+			console.log('init');
 			if (parseInt(marketking.pro) === 1){
 
 				if (typeof $('#marketking_admin_payouts_table').DataTable === "function") { 
@@ -631,7 +631,13 @@
 		            dom: 'Bfrtip',
 		            columnDefs: [
 		                {
-		                  targets: 6, 
+		                  targets: function() {
+                          // Get the number of columns in the table
+                          var columnCount = $('#marketking_admin_payouts_table thead th').length;
+                          // If column count is less than 7, target the last column
+                          // Otherwise, target column 6 (zero-based index)
+                          return columnCount < 7 ? columnCount - 1 : 6;
+                      }(),
 		                  visible: false,
 		                  render: function(data, type, row, meta) {
 	                          if (type === 'display') {
@@ -1188,8 +1194,34 @@
 	    // Download registration files
 	    $('.marketking_user_registration_user_data_container_element_download').on('click', function(){
 	    	let attachment = $(this).val();
-	    	window.location = ajaxurl + '?action=marketkinghandledownloadrequest&attachment='+attachment+'&security=' + marketking.security;
+	    	if (parseInt(marketking.download_go_to_file) === 1){
+	    		var datavar = {
+	                action: 'marketkinghandledownloadrequest',
+	                security: marketking.security,
+	                attachment: attachment,
+	            };
+
+	    		$.post(ajaxurl, datavar, function(response){
+
+	    			let url = response;
+	    			var a = document.createElement("a");
+	    			a.href = url;
+	    			let fileName = url.split("/").pop();
+	    			a.download = fileName;
+	    			document.body.appendChild(a);
+	    			a.click();
+	    			window.URL.revokeObjectURL(url);
+	    			a.remove();
+
+	    		});
+	    	} else if (parseInt(marketking.download_go_to_file) === 2){
+	    		window.location = marketking.admin_url+'upload.php?item='+attachment;
+	    	} else {
+	    		window.location = ajaxurl + '?action=marketkinghandledownloadrequest&attachment='+attachment+'&security=' + marketking.security;
+	    	}
+
 	    });
+	    
 
 	         // On clicking update marketking user data (registration data)
         $('#marketking_update_registration_data_button').on('click', function(){

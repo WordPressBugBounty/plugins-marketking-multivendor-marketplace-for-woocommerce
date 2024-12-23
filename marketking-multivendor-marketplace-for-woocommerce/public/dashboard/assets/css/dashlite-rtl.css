@@ -784,7 +784,7 @@ a.marketking-order-back-button {
     padding-left: 0px !important;
 }
 .marketking_storecat_tab .select2-container .selection .select2-selection {
-    height: 44px;
+    min-height: 44px;
 }
 
 .marketking_storecat_tab .select2-container--default .select2-selection--single .select2-selection__arrow {

@@ -8,8 +8,8 @@ Author: WebWizards
 Requires at least: 4.8
 Tested up to: 6.7
 Requires PHP: 5.6.20
-Stable tag: 2.0.00
-Version: 2.0.00
+Stable tag: 2.0.25
+Version: 2.0.25
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 MarketKing is the modern, **next-gen multivendor marketplace platform.** Build your dream markeplace with stunning UX and powerful features.

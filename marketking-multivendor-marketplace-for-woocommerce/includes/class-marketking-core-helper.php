@@ -945,7 +945,7 @@ class Marketkingcore_Helper{
 	}
 
 	// get all orders of vendor
-	public static function get_vendor_orders($vendor_id, $ids = false, $statuses = 'all', $type = 'shop_order'){
+	public static function get_vendor_orders($vendor_id, $ids = false, $statuses = 'all', $type = 'shop_order', $search = false){
 
 		// the first time this function runs for this vendor, try to set the meta for all order orders
 		if (intval(get_user_meta($vendor_id, 'updated_orders_hpos', true)) !== 1){
@@ -975,6 +975,10 @@ class Marketkingcore_Helper{
 		    'meta_value' => $vendor_id,
 		    'meta_compare' => '=',
 		);
+
+		if ($search){
+			$args['s'] = $search;
+		}
 
 		if ($ids){
 			$args['return'] = 'ids';
@@ -1212,7 +1216,7 @@ class Marketkingcore_Helper{
 
 		$users = array_merge($vendors_active, $vendors_inactive);
 
-		return $users;
+		return apply_filters('marketking_get_all_vendors_list', $users);
 	}
 
 	public static function vendor_is_inactive($vendor_id){
@@ -2265,8 +2269,8 @@ class Marketkingcore_Helper{
 		return 0;
 	}
 
-	public static function get_vendor_order_number($vendor_id){
-		$vendor_orders = marketking()->get_vendor_orders($vendor_id, true);
+	public static function get_vendor_order_number($vendor_id, $search = false){
+		$vendor_orders = marketking()->get_vendor_orders($vendor_id, true, 'all', 'shop_order', $search);
 		return count($vendor_orders);
 	}
 

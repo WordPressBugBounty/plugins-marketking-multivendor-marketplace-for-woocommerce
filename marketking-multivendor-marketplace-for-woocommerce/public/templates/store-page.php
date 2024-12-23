@@ -305,6 +305,8 @@ if ($store_style === 3){
   	}
    	
   	echo do_shortcode(apply_filters('marketking_products_shortcode','[products limit="'.apply_filters('marketking_default_products_number',12).'" paginate="true" visibility="visible "cache="false"]'));	
+
+  	do_action('marketking_store_page_after_products', $vendor_id);
   ?>
 </div>
 

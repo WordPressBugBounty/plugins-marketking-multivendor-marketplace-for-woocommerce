@@ -17,13 +17,6 @@ class Marketkingcore_Activator {
 		// prevent option update issues due to caching
 		wp_cache_delete ( 'alloptions', 'options' );
 
-		
-		// Flush rewrite rules
-		if (apply_filters('marketking_flush_permalinks', true)){
-			// Flush rewrite rules
-			flush_rewrite_rules();
-		}
-
 		// Set admin notice state to enabled ('activate woocommerce' notice)
 		update_user_meta(get_current_user_id(), 'marketking_dismiss_activate_woocommerce_notice', 0);
 
@@ -405,6 +398,15 @@ class Marketkingcore_Activator {
 	    		add_role('marketking_role_'.$group, get_the_title($group));
 	    	}
 	    }
+
+
+		// Flush rewrite rules
+		if (apply_filters('marketking_flush_permalinks', true)){
+			// Flush rewrite rules
+			flush_rewrite_rules();
+			update_option('marketking_last_rewrite_flush', 0);
+
+		}
 
 
 	}

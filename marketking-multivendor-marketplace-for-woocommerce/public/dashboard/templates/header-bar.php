@@ -143,6 +143,7 @@ For example, if your theme is storefront, you can copy this file under wp-conten
                                     }
                                 }
                                 ?>
+
                                 <li class="dropdown chats-dropdown hide-mb-xs">
                                     <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
                                         <div class="icon-status <?php if ($unread_msg !== 0) {echo 'icon-status-info';}?>"><em class="icon ni ni-comments"></em></div>

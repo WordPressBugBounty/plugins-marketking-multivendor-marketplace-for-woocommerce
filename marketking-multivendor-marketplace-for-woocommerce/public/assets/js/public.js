@@ -2542,7 +2542,11 @@
 						if (parseInt(marketking_display_settings.loggedin) === 1){
 							// go to my account conversation
 							if (parseInt(discussionurl) !== 0){
-								window.location = discussionurl;
+								if (parseInt(marketking_display_settings.inquiry_reload_page) === 1){
+									location.reload();
+								} else {
+									window.location = discussionurl;
+								}
 							} else {
 								location.reload();
 							}

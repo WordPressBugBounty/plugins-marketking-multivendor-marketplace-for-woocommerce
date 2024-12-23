@@ -96,10 +96,11 @@ class Marketkingcore_Public{
 					/* Vendors / stores page */
 					// Add vendors page content
 					add_filter('the_content', [$this,'marketking_vendors_page']);
+
 					// Rewrite url
 					add_action('init', [$this, 'marketking_rewrite_url']);
+
 					// Products in the vendor page filters
-			
 					add_filter( 'woocommerce_shortcode_products_query', [$this, 'marketking_filter_products_author'], 10, 2 );
 					// woof filter author
 					add_filter('woof_dynamic_count_attr', function($args, $type){
@@ -601,10 +602,12 @@ class Marketkingcore_Public{
 	}
 
 	function marketking_rewrite_url(){
-		$pageid = apply_filters( 'wpml_object_id', get_option( 'marketking_stores_page_setting', 'none' ), 'post' , true);
-		//$slug = get_post_field( 'post_name', $pageid );
-		$slug = get_page_uri($pageid);
+	    // Only flush rewrite rules if they haven't been flushed recently
+	    $last_flush = get_option('marketking_last_rewrite_flush', 0);
+	    $flush_interval = 3600; // Only flush once per hour max
 
+	    $pageid = apply_filters( 'wpml_object_id', get_option( 'marketking_stores_page_setting', 'none' ), 'post' , true);
+	    $slug = get_page_uri($pageid);
 	    add_rewrite_rule(
 	        '^'.$slug.'/([^/]*)/?([^/]*)/?([^/]*)/?',
 	        'index.php?pagename='.$slug.'&vendorid=$matches[1]'.'&pagenr=$matches[2]'.'&pagenr2=$matches[3]',
@@ -612,8 +615,11 @@ class Marketkingcore_Public{
 	    );
 
 	    if (apply_filters('marketking_flush_permalinks', true)){
-	    	// Flush rewrite rules
-	    	flush_rewrite_rules();
+	        // Only flush if it's been longer than the interval
+	        if (time() - $last_flush > $flush_interval) {
+	            flush_rewrite_rules();
+	            update_option('marketking_last_rewrite_flush', time());
+	        }
 	    }
 	}
 
@@ -668,8 +674,11 @@ class Marketkingcore_Public{
 		<h3><?php esc_html_e('Vendor Information', 'marketking-multivendor-marketplace-for-woocommerce'); ?></h3>
 		<?php
 		global $post;
-		echo '<strong>'.esc_html__('Vendor: ','marketking-multivendor-marketplace-for-woocommerce').'</strong>';
 		$vendor_id = marketking()->get_product_vendor($post->ID);
+
+		do_action('marketking_before_vendor_details_product_page', $vendor_id);
+
+		echo '<strong>'.esc_html__('Vendor: ','marketking-multivendor-marketplace-for-woocommerce').'</strong>';
 		$store_name = marketking()->get_store_name_display($vendor_id);
 
 		echo '<a href='.marketking()->get_store_link($vendor_id).'>'.esc_html($store_name).'</a>';
@@ -811,122 +820,103 @@ class Marketkingcore_Public{
 		$content = ob_get_clean();
 		return $content;
 	}
+	
 	function marketking_vendors_list_shortcode_content($atts){
-
-		ob_start();
-
-		$atts = shortcode_atts(
+	    ob_start();
+	    $atts = shortcode_atts(
 	        array(
 	            'group' => 'all',
 	            'category' => 'all',
 	            'vendors' => 'all',
+	            'latest' => 0,
 	        ), 
 	    $atts);
-
 	    $category = $atts['category'];
 	    $vendors = $atts['vendors'];
+	    if ($atts['group'] === 'all'){
+	        $users = get_users(array(
+	            'meta_key'     => 'marketking_group',
+	            'meta_value'   => 'none',
+	            'meta_compare' => '!=',
+	        ));
+	    } else {
+	        $groups = explode(',', $atts['group']);
+	        if (count($groups) > 1){
+	            $users_total = array();
+	            foreach ($groups as $group){
+	                $users = get_users(array(
+	                    'meta_key'     => 'marketking_group',
+	                    'meta_value'   => $group,
+	                    'meta_compare' => '=',
+	                ));
+	                $users_total = array_merge($users_total, $users);
+	            }
+	            $users = $users_total;
+	        } else {
+	            $users = get_users(array(
+	                'meta_key'     => 'marketking_group',
+	                'meta_value'   => $atts['group'],
+	                'meta_compare' => '=',
+	            ));
+	        }
+	    }
+	    if ($category !== 'all'){
+	        $categories = explode(',', $category);
+	        $categories_slugs = array();
+	        foreach ($categories as $cat){
+	            if (!empty($cat)){
+	                $term = get_term_by('slug', $cat, 'storecat');
+	                if ($term){
+	                    $id = $term->term_id;
+	                    array_push($categories_slugs, $id);
+	                }
+	            }
+	        }
+	        $usersfinal = array();
+	        foreach ($users as $user){
+	            $user_categories = get_user_meta($user->ID,'marketking_store_categories', true);
+	            $match = 'no';
+	            if (!empty($user_categories)){
+	                foreach ($user_categories as $user_category){
+	                    if (in_array($user_category, $categories) || in_array($user_category, $categories_slugs)){
+	                        $match = 'yes';
+	                        break;
+	                    }
+	                }
+	            }
+	            if ($match === 'yes'){
+	                array_push($usersfinal, $user);
+	            }
+	        }
+	        $users = $usersfinal;
+	    }
+	    $showcat = 'yes';
+	    if ($category !== 'all'){
+	        $showcat = 'no';
+	    }
+	    if ($vendors !== 'all'){
+	        $users = array();
+	        $vendors = array_filter(array_unique(explode(',', $vendors)));
+	        foreach ($vendors as $vendor_id){
+	            $user = new WP_User(trim($vendor_id));
+	            array_push($users, $user);
+	        }
+	    }
 
-		if ($atts['group'] === 'all'){
-			$users = get_users(array(
-			    'meta_key'     => 'marketking_group',
-			    'meta_value'   => 'none',
-			    'meta_compare' => '!=',
-			));
-		} else {
-			$groups = explode(',', $atts['group']);
-			if (count($groups) > 1){
-				$users_total = array();
-				foreach ($groups as $group){
-					$users = get_users(array(
-					    'meta_key'     => 'marketking_group',
-					    'meta_value'   => $group,
-					    'meta_compare' => '=',
-					));
-					$users_total = array_merge($users_total, $users);
-				}
-				$users = $users_total;
-			} else {
-				$users = get_users(array(
-				    'meta_key'     => 'marketking_group',
-				    'meta_value'   => $atts['group'],
-				    'meta_compare' => '=',
-				));
-			}
+	    // Sort by registration date if latest parameter is set
+	    if (!empty($atts['latest']) && is_numeric($atts['latest'])) {
+	        usort($users, function($a, $b) {
+	            return strtotime($b->user_registered) - strtotime($a->user_registered);
+	        });
+	        $users = array_slice($users, 0, intval($atts['latest']));
+	    }
 
-			
-		}
-
-		if ($category !== 'all'){
-			// only users who match categories
-			$categories = explode(',', $category);
-			$categories_slugs = array();
+	    $users = apply_filters('marketking_get_all_vendors_list', $users);
 
 
-			foreach ($categories as $cat){
-				if (!empty($cat)){
-					$term = get_term_by('slug', $cat, 'storecat');
-					if ($term){
-						$id = $term->term_id;
-						array_push($categories_slugs, $id);
-					}
-					
-				}
-				
-			}
-
-			$usersfinal = array();
-			foreach ($users as $user){
-				// if user does not match, remove
-				$user_categories = get_user_meta($user->ID,'marketking_store_categories', true);
-				$match = 'no';
-
-				if (!empty($user_categories)){
-					foreach ($user_categories as $user_category){
-
-						// category IDs
-						if (in_array($user_category, $categories)){
-							$match = 'yes';
-							break;
-						}
-
-						// category slugs
-						if (in_array($user_category, $categories_slugs)){
-							$match = 'yes';
-							break;
-						}
-					}
-				}
-				
-
-				if ($match === 'yes'){
-					array_push($usersfinal, $user);
-				}
-			}
-
-			$users = $usersfinal;
-		}
-
-		$showcat = 'yes';
-		if ($category !== 'all'){
-			$showcat = 'no';
-		}
-
-		if ($vendors !== 'all'){
-			$users = array();
-			$vendors = array_filter(array_unique(explode(',', $vendors)));
-			foreach ($vendors as $vendor_id){
-				$user = new WP_User(trim($vendor_id));
-				array_push($users, $user);
-			}
-		}	
-
-	   	// showcat is the category selector dropdown. 
-	   	// if the shortcode specifices certain categories, we don't want to show it
-
-		echo marketking()->display_stores_list($users, $showcat);
-		$content = ob_get_clean();
-
-		return $content;
+	    echo marketking()->display_stores_list($users, $showcat);
+	    $content = ob_get_clean();
+	    return $content;
 	}
 
 
@@ -3038,6 +3028,11 @@ class Marketkingcore_Public{
 
 		}
 
+		// Get number of allowed countries and pass it to registration public.js 
+		$countries = new WC_Countries;
+		$countries_allowed = $countries->get_allowed_countries();
+		$number_of_countries = count($countries_allowed);
+
 		// Send display settings to JS
     	$data_to_be_passed = array(
     		'security'  => wp_create_nonce( 'marketking_security_nonce' ),
@@ -3060,6 +3055,7 @@ class Marketkingcore_Public{
     		'inquiry_invalid_email' => esc_html__( 'The email address you entered is invalid', 'marketking-multivendor-marketplace-for-woocommerce' ),
     		'loadertransparenturl' => plugins_url('../includes/assets/images/loadertransparent.svg', __FILE__),
     		'loggedin' => is_user_logged_in(),
+    		'inquiry_reload_page' => apply_filters('marketking_send_inquiry_reload_page', false) ? 1 : 0,
     		'request_many_vendors' => esc_html__('Your cart contains items from multiple vendors. Quote requests can only be sent to 1 vendor at a time. Please adjust cart items. You may need to reload the cart page.'),
     		'follow_text' => esc_html__('Follow','marketking-multivendor-marketplace-for-woocommerce'),
     		'following_text' => apply_filters('marketking_following_text', esc_html__('Following','marketking-multivendor-marketplace-for-woocommerce')),   
@@ -3087,6 +3083,8 @@ class Marketkingcore_Public{
     		'allow_dash_store_url' => apply_filters('marketking_allow_dash_store_url', 0),
     		'allcattext' => esc_html__('All Categories','marketking-multivendor-marketplace-for-woocommerce'),
     		'storenamelength' => intval(apply_filters('marketking_store_name_max_length', 25)),
+    		'number_of_countries' => $number_of_countries,
+
 
 		);
 

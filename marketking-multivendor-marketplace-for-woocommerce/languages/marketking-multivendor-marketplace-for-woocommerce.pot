@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MarketKing Core\n"
-"POT-Creation-Date: 2024-11-03 16:12+0100\n"
-"PO-Revision-Date: 2024-11-03 16:12+0100\n"
+"POT-Creation-Date: 2024-12-23 09:55+0200\n"
+"PO-Revision-Date: 2024-12-23 09:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -58,15 +58,15 @@ msgid "Vendor Commissions"
 msgstr ""
 
 #: admin/class-marketking-core-admin.php:246
-#: includes/class-marketking-core-helper.php:2286
-#: includes/class-marketking-core.php:2111
-#: includes/class-marketking-core.php:2112
-#: includes/class-marketking-core.php:2137
+#: includes/class-marketking-core-helper.php:2290
+#: includes/class-marketking-core.php:2168
+#: includes/class-marketking-core.php:2169
+#: includes/class-marketking-core.php:2194
 msgid "Earning"
 msgstr ""
 
 #: admin/class-marketking-core-admin.php:333
-#: includes/class-marketking-core.php:4787
+#: includes/class-marketking-core.php:4946
 msgid "Vendor:"
 msgstr ""
 
@@ -83,10 +83,10 @@ msgid "- Choose Vendor -"
 msgstr ""
 
 #: admin/class-marketking-core-admin.php:382
-#: admin/class-marketking-core-admin.php:2968
-#: admin/class-marketking-core-admin.php:5252
-#: admin/class-marketking-core-admin.php:5253
-#: includes/class-marketking-core-activator.php:43
+#: admin/class-marketking-core-admin.php:2973
+#: admin/class-marketking-core-admin.php:5261
+#: admin/class-marketking-core-admin.php:5262
+#: includes/class-marketking-core-activator.php:36
 msgid "Vendors"
 msgstr ""
 
@@ -196,7 +196,7 @@ msgstr ""
 
 #: admin/class-marketking-core-admin.php:829
 #: admin/class-marketking-core-admin.php:928
-#: includes/class-marketking-core.php:3434
+#: includes/class-marketking-core.php:3529
 #: public/dashboard/edit-product.php:548 public/dashboard/products.php:331
 msgid "days left"
 msgstr ""
@@ -224,18 +224,18 @@ msgstr ""
 #: admin/class-marketking-core-admin.php:1099
 #: admin/class-marketking-core-admin.php:1134
 #: admin/class-marketking-core-admin.php:1189
-#: admin/class-marketking-core-admin.php:1617
-#: admin/class-marketking-core-admin.php:2976
-#: admin/class-marketking-core-admin.php:3074
-#: admin/class-marketking-core-admin.php:3107
-#: admin/class-marketking-core-admin.php:3324
+#: admin/class-marketking-core-admin.php:1622
+#: admin/class-marketking-core-admin.php:2981
+#: admin/class-marketking-core-admin.php:3083
+#: admin/class-marketking-core-admin.php:3116
+#: admin/class-marketking-core-admin.php:3333
 #: admin/class-marketking-core-settings.php:1234
 #: admin/class-marketking-core-settings.php:1250
-#: includes/class-marketking-core-activator.php:196
-#: public/class-marketking-core-public.php:265
-#: public/class-marketking-core-public.php:959
-#: public/class-marketking-core-public.php:1756
-#: public/dashboard/templates/header-bar.php:335
+#: includes/class-marketking-core-activator.php:189
+#: public/class-marketking-core-public.php:266
+#: public/class-marketking-core-public.php:949
+#: public/class-marketking-core-public.php:1746
+#: public/dashboard/templates/header-bar.php:336
 msgid "Vendor"
 msgstr ""
 
@@ -298,14 +298,14 @@ msgid "The file did not upload correctly"
 msgstr ""
 
 #: admin/class-marketking-core-admin.php:1436
-#: admin/class-marketking-core-admin.php:2269
-#: admin/class-marketking-core-admin.php:3251 public/dashboard/payouts.php:532
+#: admin/class-marketking-core-admin.php:2274
+#: admin/class-marketking-core-admin.php:3260 public/dashboard/payouts.php:532
 msgid "State"
 msgstr ""
 
 #: admin/class-marketking-core-admin.php:1460
-#: admin/class-marketking-core-admin.php:1512
-#: admin/class-marketking-core-admin.php:1558
+#: admin/class-marketking-core-admin.php:1517
+#: admin/class-marketking-core-admin.php:1563
 msgid "Registration Approval"
 msgstr ""
 
@@ -313,527 +313,531 @@ msgstr ""
 msgid "No group is set up. Please create a customer group"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1493
+#: admin/class-marketking-core-admin.php:1484
+msgid "Approve as regular customer"
+msgstr ""
+
+#: admin/class-marketking-core-admin.php:1498
 msgid "Approve user"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1499
+#: admin/class-marketking-core-admin.php:1504
 msgid "Reject and delete user"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1521
-#: admin/class-marketking-core-admin.php:1567
+#: admin/class-marketking-core-admin.php:1526
+#: admin/class-marketking-core-admin.php:1572
 msgid "Deactivate / unapprove user"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1530
+#: admin/class-marketking-core-admin.php:1535
 msgid "Update Registration Data"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1542
-#: admin/class-marketking-core-admin.php:5672
-#: public/class-marketking-core-public.php:2475
+#: admin/class-marketking-core-admin.php:1547
+#: admin/class-marketking-core-admin.php:5680
+#: public/class-marketking-core-public.php:2465
 msgid "Print"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1552
+#: admin/class-marketking-core-admin.php:1557
 #: admin/class-marketking-core-settings.php:1531
 msgid "Vendor Registration"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1598
+#: admin/class-marketking-core-admin.php:1603
 msgid "Vendor Settings (MarketKing)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1612
+#: admin/class-marketking-core-admin.php:1617
 msgid "This user is a"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1615
+#: admin/class-marketking-core-admin.php:1620
 #: admin/class-marketking-reviews-page.php:15
-#: includes/class-marketking-core-activator.php:176
+#: includes/class-marketking-core-activator.php:169
 #: public/dashboard/dashboard-content.php:315 public/dashboard/orders.php:79
 msgid "Customer"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1624
-#: admin/class-marketking-core-admin.php:1702
+#: admin/class-marketking-core-admin.php:1629
+#: admin/class-marketking-core-admin.php:1707
 msgid "Vendor Settings"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1633
-#: admin/class-marketking-core-admin.php:2072
-#: admin/class-marketking-core-admin.php:2977
-#: admin/class-marketking-core-admin.php:3075
-#: admin/class-marketking-core-admin.php:3108
-#: admin/class-marketking-core-admin.php:3325
+#: admin/class-marketking-core-admin.php:1638
+#: admin/class-marketking-core-admin.php:2077
+#: admin/class-marketking-core-admin.php:2982
+#: admin/class-marketking-core-admin.php:3084
+#: admin/class-marketking-core-admin.php:3117
+#: admin/class-marketking-core-admin.php:3334
 msgid "Vendor Group"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1638
+#: admin/class-marketking-core-admin.php:1643
 msgid "- No group (inactive) -"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1640
-#: admin/class-marketking-core-admin.php:2580
-#: admin/class-marketking-core-admin.php:5240
-#: admin/class-marketking-core-admin.php:5241
+#: admin/class-marketking-core-admin.php:1645
+#: admin/class-marketking-core-admin.php:2585
+#: admin/class-marketking-core-admin.php:5249
+#: admin/class-marketking-core-admin.php:5250
 msgid "Vendor Groups"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1662
+#: admin/class-marketking-core-admin.php:1667
 msgid "Vendor Profile"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1664
-#: admin/class-marketking-core-admin.php:1683 public/dashboard/profile.php:282
+#: admin/class-marketking-core-admin.php:1669
+#: admin/class-marketking-core-admin.php:1688 public/dashboard/profile.php:282
 #: public/dashboard/profile.php:299
 msgid "clear"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1664 public/dashboard/profile.php:282
+#: admin/class-marketking-core-admin.php:1669 public/dashboard/profile.php:282
 msgid "Vendor Picture"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1672
+#: admin/class-marketking-core-admin.php:1677
 msgid "Click to select / upload a profile picture for the vendor."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1684 public/dashboard/profile.php:300
+#: admin/class-marketking-core-admin.php:1689 public/dashboard/profile.php:300
 msgid "Upload Banner"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1685 public/dashboard/profile.php:301
+#: admin/class-marketking-core-admin.php:1690 public/dashboard/profile.php:301
 msgid "Click to select / upload a banner for the store."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1685
-#: includes/class-marketking-core-activator.php:336
-#: includes/class-marketking-core-activator.php:352
+#: admin/class-marketking-core-admin.php:1690
+#: includes/class-marketking-core-activator.php:329
+#: includes/class-marketking-core-activator.php:345
 #: public/dashboard/profile.php:91 public/dashboard/profile.php:202
 msgid "Store Name"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1685
-#: includes/class-marketking-core-activator.php:366
-#: includes/class-marketking-core-activator.php:382
+#: admin/class-marketking-core-admin.php:1690
+#: includes/class-marketking-core-activator.php:359
+#: includes/class-marketking-core-activator.php:375
 msgid "Store URL"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1697
-#: includes/class-marketking-core-activator.php:307
-#: includes/class-marketking-core-activator.php:323
+#: admin/class-marketking-core-admin.php:1702
+#: includes/class-marketking-core-activator.php:300
+#: includes/class-marketking-core-activator.php:316
 msgid "Phone Number"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1697 public/dashboard/profile.php:98
+#: admin/class-marketking-core-admin.php:1702 public/dashboard/profile.php:98
 #: public/dashboard/profile.php:210
 msgid "Email"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1708
+#: admin/class-marketking-core-admin.php:1713
 msgid "Vendor can publish products directly"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1728
+#: admin/class-marketking-core-admin.php:1733
 msgid ""
 "Vendor can bypass the \"pending / review\" status, and directly publish "
 "products in the shop."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1730
-#: admin/class-marketking-core-admin.php:1761
+#: admin/class-marketking-core-admin.php:1735
+#: admin/class-marketking-core-admin.php:1766
 msgid ""
 " This setting cannot be disabled, because it is enabled globally in "
 "MarketKing -> Settings, or at the group level."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1739
+#: admin/class-marketking-core-admin.php:1744
 msgid "Vendor can change order statuses"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1759
+#: admin/class-marketking-core-admin.php:1764
 msgid "Vendor can directly change order status for their own orders."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1802
-#: admin/class-marketking-core-admin.php:5451
-#: admin/class-marketking-core-admin.php:5452
+#: admin/class-marketking-core-admin.php:1807
+#: admin/class-marketking-core-admin.php:5460
+#: admin/class-marketking-core-admin.php:5461
 #: admin/class-marketking-core-settings.php:1693
 #: includes/class-marketking-core-helper.php:304
 #: includes/elementor/classes.php:943
 #: public/dashboard/templates/profile-sidebar.php:137
-#: public/templates/stores-list.php:68 public/templates/stores-list.php:235
+#: public/templates/stores-list.php:86 public/templates/stores-list.php:253
 msgid "Store Categories"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1820
+#: admin/class-marketking-core-admin.php:1825
 msgid "Advanced Settings"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1826
+#: admin/class-marketking-core-admin.php:1831
 msgid "Enable base site URL for this store"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1836
+#: admin/class-marketking-core-admin.php:1841
 msgid ""
 "This vendor store URL will be added to the website base URL, and can be "
 "accessed directly e.g. yoursite.com/storeurl"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1847
+#: admin/class-marketking-core-admin.php:1852
 msgid "Vendor Subscription ID"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1866
-#: admin/class-marketking-core-admin.php:1873
+#: admin/class-marketking-core-admin.php:1871
+#: admin/class-marketking-core-admin.php:1878
 #: public/dashboard/edit-product.php:560
 msgid "Advertising Credits"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1875
+#: admin/class-marketking-core-admin.php:1880
 msgid ""
 "The vendor can use credits to purchase advertising for their own products."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1887
+#: admin/class-marketking-core-admin.php:1892
 msgid "Credit History Log"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1889
+#: admin/class-marketking-core-admin.php:1894
 msgid "Download a log of all credit changes for this vendor."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1895
+#: admin/class-marketking-core-admin.php:1900
 msgid "Download Vendor Credits History"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:1921
+#: admin/class-marketking-core-admin.php:1926
 msgid "This user is a team member of the following vendor: "
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2019
+#: admin/class-marketking-core-admin.php:2024
 msgid "Modified by admin for user profile (backend)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2083
+#: admin/class-marketking-core-admin.php:2088
 msgid "Requires Approval"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2095
+#: admin/class-marketking-core-admin.php:2100
 msgid "Team Member: "
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2147
+#: admin/class-marketking-core-admin.php:2152
 msgid "Vendor Payouts"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2150
+#: admin/class-marketking-core-admin.php:2155
 msgid "Go Back"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2156
+#: admin/class-marketking-core-admin.php:2161
 msgid "Payouts for"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2166
+#: admin/class-marketking-core-admin.php:2171
 msgid "Current Vendor Payout Information"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2170
+#: admin/class-marketking-core-admin.php:2175
 msgid "Chosen payout method"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2206
+#: admin/class-marketking-core-admin.php:2211
 msgid "connected successfully"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2208 public/dashboard/payouts.php:202
+#: admin/class-marketking-core-admin.php:2213 public/dashboard/payouts.php:202
 msgid "not connected yet"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2214
-#: admin/class-marketking-core-admin.php:3214
+#: admin/class-marketking-core-admin.php:2219
+#: admin/class-marketking-core-admin.php:3223
 msgid "The vendor has not configured a payout method yet"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2224
+#: admin/class-marketking-core-admin.php:2229
 msgid "PayPal email address"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2236
+#: admin/class-marketking-core-admin.php:2241
 msgid "Details"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2253
-#: admin/class-marketking-core-admin.php:3235 public/dashboard/payouts.php:508
+#: admin/class-marketking-core-admin.php:2258
+#: admin/class-marketking-core-admin.php:3244 public/dashboard/payouts.php:508
 msgid "Full Name"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2257
-#: admin/class-marketking-core-admin.php:3239 public/dashboard/payouts.php:514
+#: admin/class-marketking-core-admin.php:2262
+#: admin/class-marketking-core-admin.php:3248 public/dashboard/payouts.php:514
 msgid "Billing Address Line 1"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2261
-#: admin/class-marketking-core-admin.php:3243 public/dashboard/payouts.php:520
+#: admin/class-marketking-core-admin.php:2266
+#: admin/class-marketking-core-admin.php:3252 public/dashboard/payouts.php:520
 msgid "Billing Address Line 2"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2265
-#: admin/class-marketking-core-admin.php:3247 public/dashboard/payouts.php:526
+#: admin/class-marketking-core-admin.php:2270
+#: admin/class-marketking-core-admin.php:3256 public/dashboard/payouts.php:526
 #: public/dashboard/profile.php:337
 msgid "City"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2273
-#: admin/class-marketking-core-admin.php:3255 public/dashboard/payouts.php:538
+#: admin/class-marketking-core-admin.php:2278
+#: admin/class-marketking-core-admin.php:3264 public/dashboard/payouts.php:538
 msgid "Postcode"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2277
-#: admin/class-marketking-core-admin.php:3259 public/dashboard/payouts.php:544
+#: admin/class-marketking-core-admin.php:2282
+#: admin/class-marketking-core-admin.php:3268 public/dashboard/payouts.php:544
 msgid "Country"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2281
-#: admin/class-marketking-core-admin.php:3263
+#: admin/class-marketking-core-admin.php:2286
+#: admin/class-marketking-core-admin.php:3272
 msgid "Bank Account Holder Name"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2285
-#: admin/class-marketking-core-admin.php:3267 public/dashboard/payouts.php:570
+#: admin/class-marketking-core-admin.php:2290
+#: admin/class-marketking-core-admin.php:3276 public/dashboard/payouts.php:570
 msgid "Bank Account Number/IBAN"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2289
-#: admin/class-marketking-core-admin.php:3271 public/dashboard/payouts.php:576
+#: admin/class-marketking-core-admin.php:2294
+#: admin/class-marketking-core-admin.php:3280 public/dashboard/payouts.php:576
 msgid "Bank Branch City"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2293
-#: admin/class-marketking-core-admin.php:3275 public/dashboard/payouts.php:582
+#: admin/class-marketking-core-admin.php:2298
+#: admin/class-marketking-core-admin.php:3284 public/dashboard/payouts.php:582
 msgid "Bank Branch Country"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2297
-#: admin/class-marketking-core-admin.php:3279 public/dashboard/payouts.php:588
+#: admin/class-marketking-core-admin.php:2302
+#: admin/class-marketking-core-admin.php:3288 public/dashboard/payouts.php:588
 msgid "Intermediary Bank - Bank Code"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2301
-#: admin/class-marketking-core-admin.php:3283 public/dashboard/payouts.php:594
+#: admin/class-marketking-core-admin.php:2306
+#: admin/class-marketking-core-admin.php:3292 public/dashboard/payouts.php:594
 msgid "Intermediary Bank - Name"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2305
-#: admin/class-marketking-core-admin.php:3287 public/dashboard/payouts.php:600
+#: admin/class-marketking-core-admin.php:2310
+#: admin/class-marketking-core-admin.php:3296 public/dashboard/payouts.php:600
 msgid "Intermediary Bank - City"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2309
-#: admin/class-marketking-core-admin.php:3291 public/dashboard/payouts.php:606
+#: admin/class-marketking-core-admin.php:2314
+#: admin/class-marketking-core-admin.php:3300 public/dashboard/payouts.php:606
 msgid "Intermediary Bank - Country"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2313
-#: admin/class-marketking-core-admin.php:3295 public/dashboard/payouts.php:558
+#: admin/class-marketking-core-admin.php:2318
+#: admin/class-marketking-core-admin.php:3304 public/dashboard/payouts.php:558
 msgid "Bank Name"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2317
-#: admin/class-marketking-core-admin.php:3299
+#: admin/class-marketking-core-admin.php:2322
+#: admin/class-marketking-core-admin.php:3308
 msgid "Bank BIC / SWIFT"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2345
+#: admin/class-marketking-core-admin.php:2350
 msgid "Manage Payments"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2354
+#: admin/class-marketking-core-admin.php:2359
 msgid "Active Withdrawal Request: "
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2363
+#: admin/class-marketking-core-admin.php:2368
 msgid "Payment Amount"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2365
+#: admin/class-marketking-core-admin.php:2370
 msgid "Enter the amount that has been sent..."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2373
-#: admin/class-marketking-core-admin.php:2437 public/dashboard/payouts.php:247
+#: admin/class-marketking-core-admin.php:2378
+#: admin/class-marketking-core-admin.php:2442 public/dashboard/payouts.php:247
 msgid "Payment Method"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2375
+#: admin/class-marketking-core-admin.php:2380
 msgid "Enter payment method used here..."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2398
-#: admin/class-marketking-core-admin.php:2514
+#: admin/class-marketking-core-admin.php:2403
+#: admin/class-marketking-core-admin.php:2519
 msgid "Note / Details"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2400
+#: admin/class-marketking-core-admin.php:2405
 msgid "Enter note / details here..."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2404
+#: admin/class-marketking-core-admin.php:2409
 msgid "Bonus / Extra Payment (is not deducted from outstanding balance)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2408
+#: admin/class-marketking-core-admin.php:2413
 msgid "Save Payment and Notify Vendor"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2416
+#: admin/class-marketking-core-admin.php:2421
 msgid "Payouts History"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2420
-#: admin/class-marketking-core-admin.php:2495
+#: admin/class-marketking-core-admin.php:2425
+#: admin/class-marketking-core-admin.php:2500
 msgid "Current oustanding balance (unpaid earnings)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2435
-#: includes/class-marketking-core.php:4629
-#: includes/class-marketking-core.php:4692
+#: admin/class-marketking-core-admin.php:2440
+#: includes/class-marketking-core.php:4778
+#: includes/class-marketking-core.php:4841
 #: public/dashboard/dashboard-content.php:316
 #: public/dashboard/integrations/fooevents.php:194
 #: public/dashboard/orders.php:76
 msgid "Date"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2436
-#: includes/class-marketking-core.php:4629
-#: includes/class-marketking-core.php:4692
+#: admin/class-marketking-core-admin.php:2441
+#: includes/class-marketking-core.php:4778
+#: includes/class-marketking-core.php:4841
 #: public/dashboard/dashboard-content.php:317 public/dashboard/payouts.php:246
 msgid "Amount"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2438
+#: admin/class-marketking-core-admin.php:2443
 msgid "Outstanding (Unpaid) Balance"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2439
-#: includes/class-marketking-core.php:4629
-#: includes/class-marketking-core.php:4692
+#: admin/class-marketking-core-admin.php:2444
+#: includes/class-marketking-core.php:4778
+#: includes/class-marketking-core.php:4841
 msgid "Note"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2471 public/dashboard/payouts.php:279
+#: admin/class-marketking-core-admin.php:2476 public/dashboard/payouts.php:279
 msgid "(bonus)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2491
+#: admin/class-marketking-core-admin.php:2496
 msgid "Vendor Balance History & Manual Adjustments"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2508
+#: admin/class-marketking-core-admin.php:2513
 msgid "Manual Adjustment Amount"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2510
+#: admin/class-marketking-core-admin.php:2515
 msgid ""
 "Enter the adjustment amount (you can enter a positive / negative value to "
 "increase / reduce balance)."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2516
+#: admin/class-marketking-core-admin.php:2521
 msgid "Enter note / explanation here..."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2519
+#: admin/class-marketking-core-admin.php:2524
 msgid "Save Adjustment"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2521
+#: admin/class-marketking-core-admin.php:2526
 msgid "Download Vendor Balance History"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2543
+#: admin/class-marketking-core-admin.php:2548
 msgid "Welcome to MarketKing Pro!"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2544
+#: admin/class-marketking-core-admin.php:2549
 msgid ""
 "Please activate your license to get important plugin updates and premium "
 "support."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2545
+#: admin/class-marketking-core-admin.php:2550
 #: admin/class-marketking-core-settings.php:2098
 msgid "Activate License"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2575
+#: admin/class-marketking-core-admin.php:2580
 msgid "Groups"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2583
+#: admin/class-marketking-core-admin.php:2588
 msgid "Create, edit and manage vendor user groups & permissions."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2592
+#: admin/class-marketking-core-admin.php:2597
 msgid "Go to Vendor Groups"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2599
+#: admin/class-marketking-core-admin.php:2604
 msgid "Group Transfer Rules"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2602
+#: admin/class-marketking-core-admin.php:2607
 msgid ""
 "Transfer vendors across groups automatically (e.g. group ranks or tiers)."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2612
+#: admin/class-marketking-core-admin.php:2617
 msgid "Go to Group Rules"
 msgstr ""
 
 #. translators: %s: Comments count.
-#: admin/class-marketking-core-admin.php:2789
+#: admin/class-marketking-core-admin.php:2794
 #, php-format
 msgid "Reviews (%s)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2794
-#: admin/class-marketking-core-admin.php:2814
+#: admin/class-marketking-core-admin.php:2799
+#: admin/class-marketking-core-admin.php:2819
 #: public/dashboard/templates/sidebar.php:299
 msgid "Reviews"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2802
+#: admin/class-marketking-core-admin.php:2807
 msgid "Filter reviews list"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2803
+#: admin/class-marketking-core-admin.php:2808
 msgid "Reviews list navigation"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2804
+#: admin/class-marketking-core-admin.php:2809
 msgid "Reviews list"
 msgstr ""
 
 #. translators: %s: Search query.
-#: admin/class-marketking-core-admin.php:2825
-#: includes/class-marketking-core.php:1851
+#: admin/class-marketking-core-admin.php:2830
+#: includes/class-marketking-core.php:1908
 #, php-format
 msgid "Search results for: %s"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2840
+#: admin/class-marketking-core-admin.php:2845
 msgid "Invalid review ID."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2843
+#: admin/class-marketking-core-admin.php:2848
 msgid "Sorry, you are not allowed to edit reviews on this post."
 msgstr ""
 
 #. translators: %s: Number of comments.
-#: admin/class-marketking-core-admin.php:2863
+#: admin/class-marketking-core-admin.php:2868
 #, php-format
 msgid "%s review approved."
 msgid_plural "%s reviews approved."
@@ -841,21 +845,21 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: Number of comments.
-#: admin/class-marketking-core-admin.php:2869
+#: admin/class-marketking-core-admin.php:2874
 #, php-format
 msgid "%s review marked as spam."
 msgid_plural "%s reviews marked as spam."
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-marketking-core-admin.php:2869
-#: admin/class-marketking-core-admin.php:2880
-#: includes/class-marketking-core.php:1874
+#: admin/class-marketking-core-admin.php:2874
+#: admin/class-marketking-core-admin.php:2885
+#: includes/class-marketking-core.php:1931
 msgid "Undo"
 msgstr ""
 
 #. translators: %s: Number of comments.
-#: admin/class-marketking-core-admin.php:2874
+#: admin/class-marketking-core-admin.php:2879
 #, php-format
 msgid "%s comment restored from the spam."
 msgid_plural "%s comments restored from the spam."
@@ -863,7 +867,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: Number of comments.
-#: admin/class-marketking-core-admin.php:2880
+#: admin/class-marketking-core-admin.php:2885
 #, php-format
 msgid "%s comment moved to the Trash."
 msgid_plural "%s comments moved to the Trash."
@@ -871,7 +875,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: Number of comments.
-#: admin/class-marketking-core-admin.php:2885
+#: admin/class-marketking-core-admin.php:2890
 #, php-format
 msgid "%s review restored from the Trash."
 msgid_plural "%s reviews restored from the Trash."
@@ -879,68 +883,68 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: Number of comments.
-#: admin/class-marketking-core-admin.php:2890
+#: admin/class-marketking-core-admin.php:2895
 #, php-format
 msgid "%s review permanently deleted."
 msgid_plural "%s reviews permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/class-marketking-core-admin.php:2898
+#: admin/class-marketking-core-admin.php:2903
 msgid "This review is already approved."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2898
-#: admin/class-marketking-core-admin.php:2904
+#: admin/class-marketking-core-admin.php:2903
+#: admin/class-marketking-core-admin.php:2909
 msgid "Edit review"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2901
+#: admin/class-marketking-core-admin.php:2906
 msgid "This review is already in the Trash."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2901
+#: admin/class-marketking-core-admin.php:2906
 msgid "View Trash"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2904
+#: admin/class-marketking-core-admin.php:2909
 msgid "This review is already marked as spam."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2969
+#: admin/class-marketking-core-admin.php:2974
 msgid "Add New"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2978
-#: admin/class-marketking-core-admin.php:3076
+#: admin/class-marketking-core-admin.php:2983
+#: admin/class-marketking-core-admin.php:3085
 msgid "Contact Info"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2983
-#: admin/class-marketking-core-admin.php:3080
-#: admin/class-marketking-core-admin.php:4164
-#: admin/class-marketking-core-admin.php:4328
+#: admin/class-marketking-core-admin.php:2988
+#: admin/class-marketking-core-admin.php:3089
+#: admin/class-marketking-core-admin.php:4173
+#: admin/class-marketking-core-admin.php:4337
 msgid "Total Sales Value"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:2988
-#: admin/class-marketking-core-admin.php:3084
-#: admin/class-marketking-core-admin.php:3120
-#: admin/class-marketking-core-admin.php:3337 public/dashboard/orders.php:86
-#: public/dashboard/products.php:155 public/templates/stores-list.php:81
-#: public/templates/stores-list.php:248
+#: admin/class-marketking-core-admin.php:2993
+#: admin/class-marketking-core-admin.php:3093
+#: admin/class-marketking-core-admin.php:3129
+#: admin/class-marketking-core-admin.php:3346 public/dashboard/orders.php:86
+#: public/dashboard/products.php:155 public/templates/stores-list.php:99
+#: public/templates/stores-list.php:266
 msgid "Actions"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3005
+#: admin/class-marketking-core-admin.php:3010
 msgid "Inactive Vendor - No Group"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3037
+#: admin/class-marketking-core-admin.php:3042
 msgid "(on vacation)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3054
+#: admin/class-marketking-core-admin.php:3059
 #: includes/elementor/classes.php:510
 #: public/dashboard/marketking-dashboard-login.php:943
 #: public/dashboard/products.php:30 public/dashboard/templates/sidebar.php:132
@@ -948,359 +952,359 @@ msgstr ""
 msgid "Products"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3058
-#: admin/class-marketking-core-admin.php:4221
-#: admin/class-marketking-core-admin.php:4354
+#: admin/class-marketking-core-admin.php:3063
+#: admin/class-marketking-core-admin.php:4230
+#: admin/class-marketking-core-admin.php:4363
 #: public/dashboard/dashboard-content.php:191 public/dashboard/orders.php:26
 #: public/dashboard/templates/sidebar.php:163
 msgid "Orders"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3062
-#: admin/class-marketking-core-admin.php:3101
-#: admin/class-marketking-core-admin.php:5278
-#: admin/class-marketking-core-admin.php:5279
+#: admin/class-marketking-core-admin.php:3067
+#: admin/class-marketking-core-admin.php:3110
+#: admin/class-marketking-core-admin.php:5287
+#: admin/class-marketking-core-admin.php:5288
 #: admin/class-marketking-core-settings.php:1361
 #: admin/class-marketking-core-settings.php:1781
 #: public/dashboard/payouts.php:132 public/dashboard/templates/sidebar.php:286
 msgid "Payouts"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3063
+#: admin/class-marketking-core-admin.php:3068
 msgid "Profile"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3109
-#: admin/class-marketking-core-admin.php:3326
+#: admin/class-marketking-core-admin.php:3118
+#: admin/class-marketking-core-admin.php:3335
 msgid "Last Payment"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3110
-#: admin/class-marketking-core-admin.php:3327
+#: admin/class-marketking-core-admin.php:3119
+#: admin/class-marketking-core-admin.php:3336
 msgid "Outstanding Balance"
-msgstr ""
-
-#: admin/class-marketking-core-admin.php:3115
-#: admin/class-marketking-core-admin.php:3332
-msgid "Withdrawal Requests"
 msgstr ""
 
 #: admin/class-marketking-core-admin.php:3124
 #: admin/class-marketking-core-admin.php:3341
+msgid "Withdrawal Requests"
+msgstr ""
+
+#: admin/class-marketking-core-admin.php:3133
+#: admin/class-marketking-core-admin.php:3350
 msgid "Payout Information"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3167
+#: admin/class-marketking-core-admin.php:3176
 msgid "No payment yet"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3196
-#: admin/class-marketking-core-admin.php:5396
-#: admin/class-marketking-core-admin.php:5397
+#: admin/class-marketking-core-admin.php:3205
+#: admin/class-marketking-core-admin.php:5405
+#: admin/class-marketking-core-admin.php:5406
 msgid "View Payouts"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3217
+#: admin/class-marketking-core-admin.php:3226
 #: public/emails/templates/new-payout-email-template.php:16
 #: public/emails/templates/plain-new-payout-email-template.php:13
 msgid "Method: "
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3222
+#: admin/class-marketking-core-admin.php:3231
 msgid "Details: "
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3360
+#: admin/class-marketking-core-admin.php:3369
 msgid "Pro Modules"
-msgstr ""
-
-#: admin/class-marketking-core-admin.php:3367
-#: admin/class-marketking-core-admin.php:3400
-msgid "(Unlock all with a Premium License! - 35% OFF TODAY)"
-msgstr ""
-
-#: admin/class-marketking-core-admin.php:3374
-#: admin/class-marketking-core-admin.php:3407
-msgid "Disable all"
-msgstr ""
-
-#: admin/class-marketking-core-admin.php:3375
-#: admin/class-marketking-core-admin.php:3408
-msgid "Enable all"
 msgstr ""
 
 #: admin/class-marketking-core-admin.php:3376
 #: admin/class-marketking-core-admin.php:3409
+msgid "(Unlock all with a Premium License! - 35% OFF TODAY)"
+msgstr ""
+
+#: admin/class-marketking-core-admin.php:3383
+#: admin/class-marketking-core-admin.php:3416
+msgid "Disable all"
+msgstr ""
+
+#: admin/class-marketking-core-admin.php:3384
+#: admin/class-marketking-core-admin.php:3417
+msgid "Enable all"
+msgstr ""
+
+#: admin/class-marketking-core-admin.php:3385
+#: admin/class-marketking-core-admin.php:3418
 #: public/dashboard/profile-settings.php:165
 msgid "Save Settings"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3397
+#: admin/class-marketking-core-admin.php:3406
 msgid "Pro Plugin Integrations"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3557
+#: admin/class-marketking-core-admin.php:3566
 msgid "PRO"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3559
+#: admin/class-marketking-core-admin.php:3568
 msgid "OFF"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3563
+#: admin/class-marketking-core-admin.php:3572
 msgid "ON"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3581
+#: admin/class-marketking-core-admin.php:3590
 msgid "View Documentation"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3587
+#: admin/class-marketking-core-admin.php:3596
 msgid "Unlock now"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3587
+#: admin/class-marketking-core-admin.php:3596
 msgid " with a Premium License"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3593
+#: admin/class-marketking-core-admin.php:3602
 msgid "Compatible"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3593
+#: admin/class-marketking-core-admin.php:3602
 msgid " with your version of MarketKing"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3634
+#: admin/class-marketking-core-admin.php:3643
 msgid "Unlock 137+ Pro Features"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3638
+#: admin/class-marketking-core-admin.php:3647
 msgid "with a "
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3638
+#: admin/class-marketking-core-admin.php:3647
 msgid "Premium License"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3641
+#: admin/class-marketking-core-admin.php:3650
 msgid ""
 "Get full lifetime access to 25+ powerful modules, as well as hundreds of "
 "features & integrations. Pay once, get lifetime updates."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3644
+#: admin/class-marketking-core-admin.php:3653
 msgid "UPGRADE NOW"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3671
+#: admin/class-marketking-core-admin.php:3680
 #: admin/class-marketking-core-settings.php:2138
 msgid "Documentation"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3672
+#: admin/class-marketking-core-admin.php:3681
 #: public/dashboard/templates/profile-sidebar.php:99
 msgid "Support"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3687
+#: admin/class-marketking-core-admin.php:3696
 msgid "Upgrade to Premium"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3702
-#: admin/class-marketking-core-admin.php:5409
-#: admin/class-marketking-core-admin.php:5410
+#: admin/class-marketking-core-admin.php:3711
+#: admin/class-marketking-core-admin.php:5418
+#: admin/class-marketking-core-admin.php:5419
 #: admin/class-marketking-core-settings.php:1343
 msgid "Registration"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3707
+#: admin/class-marketking-core-admin.php:3716
 msgid "Fields"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3710
+#: admin/class-marketking-core-admin.php:3719
 msgid "Create & Edit Registration Fields. Choose from 9+ Custom Field Types."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3718
+#: admin/class-marketking-core-admin.php:3727
 msgid "Manage Registration Fields"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3725
+#: admin/class-marketking-core-admin.php:3734
 msgid "Options"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3728
+#: admin/class-marketking-core-admin.php:3737
 msgid "Manage Options (e.g. \"Customer\" / \"Vendor\")"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:3737
+#: admin/class-marketking-core-admin.php:3746
 msgid "Manage Registration Options"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4163
+#: admin/class-marketking-core-admin.php:4172
 msgid "Sales Reports"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4168
-#: admin/class-marketking-core-admin.php:4275
-#: admin/class-marketking-core-admin.php:4415
+#: admin/class-marketking-core-admin.php:4177
+#: admin/class-marketking-core-admin.php:4284
+#: admin/class-marketking-core-admin.php:4424
 msgid "Commission"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4169
-#: admin/class-marketking-core-admin.php:4254
-#: admin/class-marketking-core-admin.php:4373
+#: admin/class-marketking-core-admin.php:4178
+#: admin/class-marketking-core-admin.php:4263
+#: admin/class-marketking-core-admin.php:4382
 msgid "Total Sales"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4170
-#: admin/class-marketking-core-admin.php:4265
+#: admin/class-marketking-core-admin.php:4179
+#: admin/class-marketking-core-admin.php:4274
 msgid "Number of Orders"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4176
+#: admin/class-marketking-core-admin.php:4185
 msgid "All Vendors (Market)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4177
+#: admin/class-marketking-core-admin.php:4186
 msgid "Vendor Stores"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4178
+#: admin/class-marketking-core-admin.php:4187
 msgid "Admin Store (Self)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4195
+#: admin/class-marketking-core-admin.php:4204
 msgid "From:"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4199
+#: admin/class-marketking-core-admin.php:4208
 msgid "To:"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4204
+#: admin/class-marketking-core-admin.php:4213
 msgid "Quick Select:"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4205
+#: admin/class-marketking-core-admin.php:4214
 msgid "This Month"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4206
+#: admin/class-marketking-core-admin.php:4215
 msgid "Last Month"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4207
+#: admin/class-marketking-core-admin.php:4216
 msgid "This Year"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4208
+#: admin/class-marketking-core-admin.php:4217
 msgid "Last Year"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4219
-#: admin/class-marketking-core-admin.php:4332
-#: admin/class-marketking-core-admin.php:4350
+#: admin/class-marketking-core-admin.php:4228
+#: admin/class-marketking-core-admin.php:4341
+#: admin/class-marketking-core-admin.php:4359
 msgid "Sales"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4245
-#: admin/class-marketking-core-admin.php:4403
+#: admin/class-marketking-core-admin.php:4254
+#: admin/class-marketking-core-admin.php:4412
 msgid "New Vendors"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4327
+#: admin/class-marketking-core-admin.php:4336
 msgid "Sales Summary"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4337
+#: admin/class-marketking-core-admin.php:4346
 #: public/dashboard/integrations/fooevents.php:21
 #: public/dashboard/integrations/fooevents.php:84
 msgid "Today"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4338
+#: admin/class-marketking-core-admin.php:4347
 msgid "Last 7 Days"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4339
+#: admin/class-marketking-core-admin.php:4348
 msgid "Last 31 Days"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4391
+#: admin/class-marketking-core-admin.php:4400
 msgid "Orders Nr."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4441
+#: admin/class-marketking-core-admin.php:4450
 msgid "Nothing here..."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4441
+#: admin/class-marketking-core-admin.php:4450
 msgid "No registrations need approval!"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4445
+#: admin/class-marketking-core-admin.php:4454
 msgid " Vendor Registrations - Approval Needed"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4450
+#: admin/class-marketking-core-admin.php:4459
 msgid "Name and Email"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4451
+#: admin/class-marketking-core-admin.php:4460
 msgid "Reg. Role"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4452
+#: admin/class-marketking-core-admin.php:4461
 msgid "Reg. Date"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4453
+#: admin/class-marketking-core-admin.php:4462
 msgid "Approval"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4483
+#: admin/class-marketking-core-admin.php:4492
 msgid "Review"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4517
+#: admin/class-marketking-core-admin.php:4526
 msgid "You Have"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4519
+#: admin/class-marketking-core-admin.php:4528
 msgid "Get Premium"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4556
+#: admin/class-marketking-core-admin.php:4565
 msgid " New Messages"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4558
+#: admin/class-marketking-core-admin.php:4567
 msgid "Messages (Premium)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4571
+#: admin/class-marketking-core-admin.php:4580
 msgid "You have"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4585
+#: admin/class-marketking-core-admin.php:4594
 msgid " Products Pending Review"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4611
+#: admin/class-marketking-core-admin.php:4620
 msgid "messages"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4706
-#: admin/class-marketking-core-admin.php:5266
-#: admin/class-marketking-core-admin.php:5267
+#: admin/class-marketking-core-admin.php:4715
+#: admin/class-marketking-core-admin.php:5275
+#: admin/class-marketking-core-admin.php:5276
 #: public/dashboard/templates/sidebar.php:102
 msgid "Messages"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4712
-#: admin/class-marketking-core-admin.php:4719
+#: admin/class-marketking-core-admin.php:4721
+#: admin/class-marketking-core-admin.php:4728
 #: public/emails/class-marketking-new-message-email.php:19
 #: public/emails/class-marketking-new-message-email.php:20
 #: public/emails/class-marketking-new-message-email.php:48
@@ -1308,318 +1312,318 @@ msgstr ""
 msgid "New message"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4720
+#: admin/class-marketking-core-admin.php:4729
 msgid "Close X"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4725
-#: admin/class-marketking-core-admin.php:4792 public/dashboard/products.php:151
+#: admin/class-marketking-core-admin.php:4734
+#: admin/class-marketking-core-admin.php:4801 public/dashboard/products.php:151
 msgid "Type"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4730
-#: includes/class-marketking-core.php:4366
-#: public/class-marketking-core-public.php:3056
+#: admin/class-marketking-core-admin.php:4739
+#: includes/class-marketking-core.php:4483
+#: public/class-marketking-core-public.php:3051
 msgid "Inquiry"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4731
-#: admin/class-marketking-core-admin.php:4745
+#: admin/class-marketking-core-admin.php:4740
+#: admin/class-marketking-core-admin.php:4754
 msgid "Message"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4732
+#: admin/class-marketking-core-admin.php:4741
 msgid "Quote Request"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4741
-#: admin/class-marketking-core-admin.php:4791
+#: admin/class-marketking-core-admin.php:4750
+#: admin/class-marketking-core-admin.php:4800
 msgid "Title"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4742
+#: admin/class-marketking-core-admin.php:4751
 msgid "Enter the title here..."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4746
+#: admin/class-marketking-core-admin.php:4755
 msgid "Enter your message here..."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4753
+#: admin/class-marketking-core-admin.php:4762
 msgid "Start message"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4793
+#: admin/class-marketking-core-admin.php:4802
 msgid "User"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4795
+#: admin/class-marketking-core-admin.php:4804
 msgid "Last Reply"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4802
+#: admin/class-marketking-core-admin.php:4811
 msgid "inquiry"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4805
+#: admin/class-marketking-core-admin.php:4814
 msgid "message"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4808
+#: admin/class-marketking-core-admin.php:4817
 msgid "support"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4811
+#: admin/class-marketking-core-admin.php:4820
 msgid "quote"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4825
+#: admin/class-marketking-core-admin.php:4834
 msgid "View message"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4835
+#: admin/class-marketking-core-admin.php:4844
 msgid "No messages exist."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4849
+#: admin/class-marketking-core-admin.php:4858
 msgid "← Newer messages"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4852
+#: admin/class-marketking-core-admin.php:4861
 msgid "Older messages →"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4896
+#: admin/class-marketking-core-admin.php:4905
 msgid "←  Go Back"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4901
+#: admin/class-marketking-core-admin.php:4910
 msgid "Type:"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4902
+#: admin/class-marketking-core-admin.php:4911
 msgid "Date Started:"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:4998
-#: includes/class-marketking-core-helper.php:1403
-#: includes/class-marketking-core.php:4393
+#: admin/class-marketking-core-admin.php:5007
+#: includes/class-marketking-core-helper.php:1407
+#: includes/class-marketking-core.php:4510
 msgid "System Message"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5019
+#: admin/class-marketking-core-admin.php:5028
 msgid "Send Message"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5024
+#: admin/class-marketking-core-admin.php:5033
 msgid "message does not exist!"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5093
+#: admin/class-marketking-core-admin.php:5102
 msgctxt "Admin menu name"
 msgid "Dashboard"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5115
+#: admin/class-marketking-core-admin.php:5124
 msgctxt "Admin menu name"
 msgid "Payouts"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5138
+#: admin/class-marketking-core-admin.php:5147
 msgctxt "Admin menu name"
 msgid "Refunds"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5162
+#: admin/class-marketking-core-admin.php:5171
 msgctxt "Admin menu name"
 msgid "Verifications"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5190
-#: admin/class-marketking-core-admin.php:5191
+#: admin/class-marketking-core-admin.php:5199
+#: admin/class-marketking-core-admin.php:5200
 msgid "MarketKing"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5212
-#: admin/class-marketking-core-admin.php:5213
+#: admin/class-marketking-core-admin.php:5221
+#: admin/class-marketking-core-admin.php:5222
 #: public/dashboard/dashboard-content.php:38
 #: public/dashboard/templates/sidebar.php:88
 msgid "Dashboard"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5227
-#: admin/class-marketking-core-admin.php:5228
+#: admin/class-marketking-core-admin.php:5236
+#: admin/class-marketking-core-admin.php:5237
 #: public/dashboard/templates/sidebar.php:53
 #: public/dashboard/templates/sidebar.php:70
 msgid "Announcements"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5289
-#: admin/class-marketking-core-admin.php:5290
+#: admin/class-marketking-core-admin.php:5298
+#: admin/class-marketking-core-admin.php:5299
 msgid "Reports"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5302
-#: admin/class-marketking-core-admin.php:5303
+#: admin/class-marketking-core-admin.php:5311
+#: admin/class-marketking-core-admin.php:5312
 #: admin/class-marketking-core-settings.php:1743
 msgid "Commission Rules"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5316
-#: admin/class-marketking-core-admin.php:5317
+#: admin/class-marketking-core-admin.php:5325
+#: admin/class-marketking-core-admin.php:5326
 msgid "Abuse Reports"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5330
-#: admin/class-marketking-core-admin.php:5331
+#: admin/class-marketking-core-admin.php:5339
+#: admin/class-marketking-core-admin.php:5340
 #: admin/class-marketking-core-settings.php:1468
 #: admin/class-marketking-core-settings.php:1910
 #: admin/class-marketking-core-settings.php:1920
 msgid "Memberships"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5344
-#: admin/class-marketking-core-admin.php:5345
+#: admin/class-marketking-core-admin.php:5353
+#: admin/class-marketking-core-admin.php:5354
 msgid "Verifications"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5358
-#: admin/class-marketking-core-admin.php:5359
+#: admin/class-marketking-core-admin.php:5367
+#: admin/class-marketking-core-admin.php:5368
 msgid "Badges"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5372
-#: admin/class-marketking-core-admin.php:5373
+#: admin/class-marketking-core-admin.php:5381
+#: admin/class-marketking-core-admin.php:5382
 #: public/dashboard/templates/sidebar.php:311
 msgid "Refunds"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5385
-#: admin/class-marketking-core-admin.php:5386
+#: admin/class-marketking-core-admin.php:5394
+#: admin/class-marketking-core-admin.php:5395
 msgid "Modules"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5424
-#: admin/class-marketking-core-admin.php:5425
+#: admin/class-marketking-core-admin.php:5433
+#: admin/class-marketking-core-admin.php:5434
 msgid "Seller Docs"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5438
-#: admin/class-marketking-core-admin.php:5439
+#: admin/class-marketking-core-admin.php:5447
+#: admin/class-marketking-core-admin.php:5448
 msgid "Store Reviews"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5466
-#: admin/class-marketking-core-admin.php:5467
-#: admin/class-marketking-core-admin.php:5541
+#: admin/class-marketking-core-admin.php:5475
+#: admin/class-marketking-core-admin.php:5476
+#: admin/class-marketking-core-admin.php:5550
 #: public/dashboard/templates/sidebar.php:404
 msgid "Settings"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5476
+#: admin/class-marketking-core-admin.php:5485
 msgid "Upgrade Now"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5517
+#: admin/class-marketking-core-admin.php:5526
 #: admin/class-marketking-core-settings.php:1503
 msgid "License"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5517
+#: admin/class-marketking-core-admin.php:5526
 msgid "ACTIVE"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5639
+#: admin/class-marketking-core-admin.php:5647
 msgid "Are you sure you want to save this payment?"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5640
+#: admin/class-marketking-core-admin.php:5648
 msgid "Are you sure you want to add an ad for this product?"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5641
+#: admin/class-marketking-core-admin.php:5649
 msgid "Are you sure you want to remove all ads for this product?"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5642
+#: admin/class-marketking-core-admin.php:5650
 msgid "Are you sure you want to make this manual adjustment?"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5643
+#: admin/class-marketking-core-admin.php:5651
 msgid "Are you sure you want to update this user's data?"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5644
+#: admin/class-marketking-core-admin.php:5652
 msgid "The user's data has been updated."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5645
+#: admin/class-marketking-core-admin.php:5653
 msgid "Are you sure you want to approve this vendor account?"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5646
+#: admin/class-marketking-core-admin.php:5654
 msgid ""
 "Are you sure you want to REJECT and DELETE this user? This is irreversible."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5647
+#: admin/class-marketking-core-admin.php:5655
 msgid ""
 "Are you sure you want to DEACTIVATE this user? The user will no longer be "
 "approved and they will be unable to login."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5648
-#: public/class-marketking-core-public.php:3047
+#: admin/class-marketking-core-admin.php:5656
+#: public/class-marketking-core-public.php:3042
 msgid "This URL is available!"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5649
+#: admin/class-marketking-core-admin.php:5657
 msgid "This URL is unavailable!"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5651
+#: admin/class-marketking-core-admin.php:5659
 msgid "Username already in the list!"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5652
+#: admin/class-marketking-core-admin.php:5660
 msgid "Add user"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5653
+#: admin/class-marketking-core-admin.php:5661
 msgid "Message regarding product submission #"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5655
+#: admin/class-marketking-core-admin.php:5663
 msgid "Set up group rules (optional)"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5656
+#: admin/class-marketking-core-admin.php:5664
 msgid "Go back"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5657
+#: admin/class-marketking-core-admin.php:5665
 msgid "Configure Verification Items"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5660
+#: admin/class-marketking-core-admin.php:5668
 msgid "Enter a reason for the rejection - this will be shown to the vendor."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5668
+#: admin/class-marketking-core-admin.php:5676
 msgid "Processing activation request..."
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5671
-#: public/class-marketking-core-public.php:2487
+#: admin/class-marketking-core-admin.php:5679
+#: public/class-marketking-core-public.php:2477
 msgid "Are you sure you want to create this shipment?"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5673
-#: public/class-marketking-core-public.php:2476
+#: admin/class-marketking-core-admin.php:5681
+#: public/class-marketking-core-public.php:2466
 msgid "Edit Columns"
 msgstr ""
 
-#: admin/class-marketking-core-admin.php:5742
+#: admin/class-marketking-core-admin.php:5750
 msgid ""
 "Warning: The plugin \"MarketKing\" requires WooCommerce to be installed and "
 "activated."
@@ -1640,12 +1644,12 @@ msgid ""
 msgstr ""
 
 #: admin/class-marketking-core-settings.php:40
-#: includes/class-marketking-core.php:1105
+#: includes/class-marketking-core.php:1162
 msgid "Vendor Stores Page"
 msgstr ""
 
 #: admin/class-marketking-core-settings.php:49
-#: includes/class-marketking-core.php:1097
+#: includes/class-marketking-core.php:1154
 msgid "Vendor Dashboard Page"
 msgstr ""
 
@@ -2060,8 +2064,8 @@ msgid ""
 msgstr ""
 
 #: admin/class-marketking-core-settings.php:536
-#: public/class-marketking-core-public.php:484
 #: public/class-marketking-core-public.php:485
+#: public/class-marketking-core-public.php:486
 msgid ""
 "The products in your cart are sold by multiple different vendor partners. "
 "The order will be placed simultaneously with all vendors and you will "
@@ -2236,7 +2240,7 @@ msgid "Admin commission value"
 msgstr ""
 
 #: admin/class-marketking-core-settings.php:1347
-#: includes/class-marketking-core-activator.php:84
+#: includes/class-marketking-core-activator.php:77
 msgid "Vendor Dashboard"
 msgstr ""
 
@@ -2528,128 +2532,128 @@ msgctxt "column name"
 msgid "Date"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:58
-#: public/class-marketking-core-public.php:2736
+#: includes/class-marketking-core-activator.php:51
+#: public/class-marketking-core-public.php:2726
 #: public/dashboard/marketking-dashboard-login.php:2397
 msgid "Become a Vendor"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:71
+#: includes/class-marketking-core-activator.php:64
 msgid "Stores List"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:96
+#: includes/class-marketking-core-activator.php:89
 msgid "Proof of Identity"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:107
+#: includes/class-marketking-core-activator.php:100
 msgid "Proof of Address"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:119
+#: includes/class-marketking-core-activator.php:112
 msgid "Starter"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:134
+#: includes/class-marketking-core-activator.php:127
 msgid "Professional"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:152
+#: includes/class-marketking-core-activator.php:145
 msgid "Business"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:218
-#: includes/class-marketking-core-activator.php:234
+#: includes/class-marketking-core-activator.php:211
+#: includes/class-marketking-core-activator.php:227
 #: public/dashboard/profile.php:63 public/dashboard/profile.php:184
 msgid "First Name"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:235
+#: includes/class-marketking-core-activator.php:228
 msgid "Enter your first name here..."
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:247
-#: includes/class-marketking-core-activator.php:263
+#: includes/class-marketking-core-activator.php:240
+#: includes/class-marketking-core-activator.php:256
 #: public/dashboard/profile.php:70 public/dashboard/profile.php:190
 msgid "Last Name"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:264
+#: includes/class-marketking-core-activator.php:257
 msgid "Enter your last name here..."
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:277
-#: includes/class-marketking-core-activator.php:293
+#: includes/class-marketking-core-activator.php:270
+#: includes/class-marketking-core-activator.php:286
 #: public/dashboard/profile.php:77 public/dashboard/profile.php:196
 msgid "Company Name"
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:294
+#: includes/class-marketking-core-activator.php:287
 msgid "Enter your company name here..."
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:324
+#: includes/class-marketking-core-activator.php:317
 msgid "Enter your phone here..."
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:353
+#: includes/class-marketking-core-activator.php:346
 msgid "Enter your desired store name here..."
 msgstr ""
 
-#: includes/class-marketking-core-activator.php:383
+#: includes/class-marketking-core-activator.php:376
 msgid "Enter your desired store URL here..."
 msgstr ""
 
 #: includes/class-marketking-core-helper.php:207
 #: includes/elementor/classes.php:848
-#: public/class-marketking-core-public.php:668
+#: public/class-marketking-core-public.php:674
 msgid "Vendor Information"
 msgstr ""
 
 #: includes/class-marketking-core-helper.php:213
 #: includes/elementor/classes.php:854
-#: public/class-marketking-core-public.php:671
-#: public/class-marketking-core-public.php:937
+#: public/class-marketking-core-public.php:681
+#: public/class-marketking-core-public.php:927
 #: public/emails/templates/new-product-requires-approval-email-template.php:23
 #: public/emails/templates/plain-new-product-requires-approval-email-template.php:16
 msgid "Vendor: "
 msgstr ""
 
 #: includes/class-marketking-core-helper.php:242
-#: includes/class-marketking-core.php:5282 includes/elementor/classes.php:792
+#: includes/class-marketking-core.php:5453 includes/elementor/classes.php:792
 #: includes/elementor/classes.php:882
-#: public/class-marketking-core-public.php:692
-#: public/templates/store-page.php:361 public/templates/stores-list.php:126
+#: public/class-marketking-core-public.php:701
+#: public/templates/store-page.php:363 public/templates/stores-list.php:144
 msgid "review"
 msgstr ""
 
 #: includes/class-marketking-core-helper.php:244
-#: includes/class-marketking-core.php:5284 includes/elementor/classes.php:794
+#: includes/class-marketking-core.php:5455 includes/elementor/classes.php:794
 #: includes/elementor/classes.php:884
-#: public/class-marketking-core-public.php:694
-#: public/templates/store-page.php:363 public/templates/stores-list.php:128
+#: public/class-marketking-core-public.php:703
+#: public/templates/store-page.php:365 public/templates/stores-list.php:146
 msgid "reviews"
 msgstr ""
 
 #: includes/class-marketking-core-helper.php:246
-#: includes/class-marketking-core.php:5286 includes/elementor/classes.php:796
+#: includes/class-marketking-core.php:5457 includes/elementor/classes.php:796
 #: includes/elementor/classes.php:886
-#: public/class-marketking-core-public.php:696
-#: public/templates/store-page.php:365 public/templates/stores-list.php:130
+#: public/class-marketking-core-public.php:705
+#: public/templates/store-page.php:367 public/templates/stores-list.php:148
 msgid "Rating:"
 msgstr ""
 
 #: includes/class-marketking-core-helper.php:246
-#: includes/class-marketking-core.php:5286 includes/elementor/classes.php:796
+#: includes/class-marketking-core.php:5457 includes/elementor/classes.php:796
 #: includes/elementor/classes.php:886
-#: public/class-marketking-core-public.php:696
-#: public/templates/store-page.php:365
+#: public/class-marketking-core-public.php:705
+#: public/templates/store-page.php:367
 msgid "rating from"
 msgstr ""
 
 #: includes/class-marketking-core-helper.php:257
 #: includes/elementor/classes.php:897
-#: public/class-marketking-core-public.php:702
+#: public/class-marketking-core-public.php:711
 msgid "Company:"
 msgstr ""
 
@@ -2665,20 +2669,20 @@ msgstr ""
 
 #: includes/class-marketking-core-helper.php:323
 #: includes/elementor/classes.php:961
-#: public/class-marketking-core-public.php:719
+#: public/class-marketking-core-public.php:728
 #: public/dashboard/manage-order.php:270
 msgid "Phone:"
 msgstr ""
 
 #: includes/class-marketking-core-helper.php:328
 #: includes/elementor/classes.php:967
-#: public/class-marketking-core-public.php:722
+#: public/class-marketking-core-public.php:731
 #: public/dashboard/manage-order.php:265
 msgid "Email:"
 msgstr ""
 
-#: includes/class-marketking-core-helper.php:3172
-#: includes/class-marketking-core-helper.php:3178
+#: includes/class-marketking-core-helper.php:3176
+#: includes/class-marketking-core-helper.php:3182
 msgid "There is no store here..."
 msgstr ""
 
@@ -2686,375 +2690,381 @@ msgstr ""
 msgid "Simple product"
 msgstr ""
 
-#: includes/class-marketking-core.php:573
+#: includes/class-marketking-core.php:578
 msgid "Commission Invoice"
 msgstr ""
 
-#: includes/class-marketking-core.php:813
+#: includes/class-marketking-core.php:823
 msgid "The following vendors have not added their bank details:"
 msgstr ""
 
-#: includes/class-marketking-core.php:969
+#: includes/class-marketking-core.php:954
+msgid ""
+"Removed shipping methods that did not match order item vendors and "
+"recalculated totals."
+msgstr ""
+
+#: includes/class-marketking-core.php:1029
 msgid "This product has been temporarily deactivated and cannot be purchased."
 msgstr ""
 
-#: includes/class-marketking-core.php:1050
-#: includes/class-marketking-core.php:1064
+#: includes/class-marketking-core.php:1107
+#: includes/class-marketking-core.php:1121
 msgid "Vendor ID"
 msgstr ""
 
-#: includes/class-marketking-core.php:1115
+#: includes/class-marketking-core.php:1172
 msgid "Vendor Store Page Template (Elementor)"
 msgstr ""
 
-#: includes/class-marketking-core.php:1165
+#: includes/class-marketking-core.php:1222
 msgid "The resource has already been linked to this product"
 msgstr ""
 
-#: includes/class-marketking-core.php:1181
+#: includes/class-marketking-core.php:1238
 msgid "Unable to add resource"
 msgstr ""
 
-#: includes/class-marketking-core.php:1283
-#: includes/class-marketking-core.php:1304
+#: includes/class-marketking-core.php:1340
+#: includes/class-marketking-core.php:1361
 #: public/dashboard/marketking-dashboard-login.php:934
 #: public/dashboard/templates/sidebar.php:193
 msgid "Bookings"
 msgstr ""
 
-#: includes/class-marketking-core.php:1283
+#: includes/class-marketking-core.php:1340
 msgid "Start date cannot be greater than end date."
 msgstr ""
 
-#: includes/class-marketking-core.php:1304
+#: includes/class-marketking-core.php:1361
 msgid "Date should be of the format yyyy-mm-dd and cannot be empty."
 msgstr ""
 
-#: includes/class-marketking-core.php:1386
+#: includes/class-marketking-core.php:1443
 msgid "Error: Could not create item"
 msgstr ""
 
-#: includes/class-marketking-core.php:1514
+#: includes/class-marketking-core.php:1571
 msgid "MarketKing Multivendor Marketplace"
 msgstr ""
 
-#: includes/class-marketking-core.php:1700
-#: includes/class-marketking-core.php:1703
+#: includes/class-marketking-core.php:1757
+#: includes/class-marketking-core.php:1760
 msgid "Unable to disconnect your account, please try again"
 msgstr ""
 
-#: includes/class-marketking-core.php:1725
+#: includes/class-marketking-core.php:1782
 msgid "Invalid post type."
 msgstr ""
 
-#: includes/class-marketking-core.php:1730
+#: includes/class-marketking-core.php:1787
 msgid "You need a higher level of permission."
 msgstr ""
 
-#: includes/class-marketking-core.php:1731
+#: includes/class-marketking-core.php:1788
 msgid "Sorry, you are not allowed to edit posts in this post type."
 msgstr ""
 
-#: includes/class-marketking-core.php:1804
+#: includes/class-marketking-core.php:1861
 #, php-format
 msgid "%s post updated."
 msgid_plural "%s posts updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1805
+#: includes/class-marketking-core.php:1862
 msgid "1 post not updated, somebody is editing it."
 msgstr ""
 
-#: includes/class-marketking-core.php:1807
+#: includes/class-marketking-core.php:1864
 #, php-format
 msgid "%s post not updated, somebody is editing it."
 msgid_plural "%s posts not updated, somebody is editing them."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1809
+#: includes/class-marketking-core.php:1866
 #, php-format
 msgid "%s post permanently deleted."
 msgid_plural "%s posts permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1810
+#: includes/class-marketking-core.php:1867
 #, php-format
 msgid "%s post moved to the Trash."
 msgid_plural "%s posts moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1811
+#: includes/class-marketking-core.php:1868
 #, php-format
 msgid "%s post restored from the Trash."
 msgid_plural "%s posts restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1814
+#: includes/class-marketking-core.php:1871
 #, php-format
 msgid "%s page updated."
 msgid_plural "%s pages updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1815
+#: includes/class-marketking-core.php:1872
 msgid "1 page not updated, somebody is editing it."
 msgstr ""
 
-#: includes/class-marketking-core.php:1816
+#: includes/class-marketking-core.php:1873
 #, php-format
 msgid "%s page not updated, somebody is editing it."
 msgid_plural "%s pages not updated, somebody is editing them."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1817
+#: includes/class-marketking-core.php:1874
 #, php-format
 msgid "%s page permanently deleted."
 msgid_plural "%s pages permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1818
+#: includes/class-marketking-core.php:1875
 #, php-format
 msgid "%s page moved to the Trash."
 msgid_plural "%s pages moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1819
+#: includes/class-marketking-core.php:1876
 #, php-format
 msgid "%s page restored from the Trash."
 msgid_plural "%s pages restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1822
+#: includes/class-marketking-core.php:1879
 #, php-format
 msgid "%s block updated."
 msgid_plural "%s blocks updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1823
+#: includes/class-marketking-core.php:1880
 msgid "1 block not updated, somebody is editing it."
 msgstr ""
 
-#: includes/class-marketking-core.php:1824
+#: includes/class-marketking-core.php:1881
 #, php-format
 msgid "%s block not updated, somebody is editing it."
 msgid_plural "%s blocks not updated, somebody is editing them."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1825
+#: includes/class-marketking-core.php:1882
 #, php-format
 msgid "%s block permanently deleted."
 msgid_plural "%s blocks permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1826
+#: includes/class-marketking-core.php:1883
 #, php-format
 msgid "%s block moved to the Trash."
 msgid_plural "%s blocks moved to the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1827
+#: includes/class-marketking-core.php:1884
 #, php-format
 msgid "%s block restored from the Trash."
 msgid_plural "%s blocks restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:1954
-#: includes/class-marketking-core.php:1988
+#: includes/class-marketking-core.php:2011
+#: includes/class-marketking-core.php:2045
 msgid "Parent order completed"
 msgstr ""
 
-#: includes/class-marketking-core.php:1973
+#: includes/class-marketking-core.php:2030
 msgid "Credit order completed"
 msgstr ""
 
-#: includes/class-marketking-core.php:2029
-#: includes/class-marketking-core.php:2437
+#: includes/class-marketking-core.php:2086
+#: includes/class-marketking-core.php:2498
 #: includes/class-marketking-order-splitter.php:437
 #: includes/class-marketking-order-splitter.php:438
 msgid "Payment"
 msgstr ""
 
-#: includes/class-marketking-core.php:2113
-#: includes/class-marketking-core.php:2114 public/dashboard/orders.php:82
+#: includes/class-marketking-core.php:2170
+#: includes/class-marketking-core.php:2171 public/dashboard/orders.php:82
 #: public/dashboard/templates/sidebar.php:273
 msgid "Earnings"
 msgstr ""
 
-#: includes/class-marketking-core.php:2115
+#: includes/class-marketking-core.php:2172
 msgid "Create new earning"
 msgstr ""
 
-#: includes/class-marketking-core.php:2116
+#: includes/class-marketking-core.php:2173
 msgid "Create new customer earning"
 msgstr ""
 
-#: includes/class-marketking-core.php:2117
+#: includes/class-marketking-core.php:2174
 #: public/dashboard/marketking-dashboard-login.php:198
 #: public/dashboard/marketking-dashboard-login.php:378
 msgid "Edit"
 msgstr ""
 
-#: includes/class-marketking-core.php:2118
+#: includes/class-marketking-core.php:2175
 msgid "Edit earning"
 msgstr ""
 
-#: includes/class-marketking-core.php:2119
+#: includes/class-marketking-core.php:2176
 msgid "New earning"
 msgstr ""
 
-#: includes/class-marketking-core.php:2120
+#: includes/class-marketking-core.php:2177
 msgid "View earning"
 msgstr ""
 
-#: includes/class-marketking-core.php:2121
+#: includes/class-marketking-core.php:2178
 #: public/dashboard/dashboard-content.php:71
 msgid "View earnings"
 msgstr ""
 
-#: includes/class-marketking-core.php:2122
+#: includes/class-marketking-core.php:2179
 msgid "Search earnings"
 msgstr ""
 
-#: includes/class-marketking-core.php:2123
+#: includes/class-marketking-core.php:2180
 msgid "No earnings found"
 msgstr ""
 
-#: includes/class-marketking-core.php:2124
+#: includes/class-marketking-core.php:2181
 msgid "No earnings found in trash"
 msgstr ""
 
-#: includes/class-marketking-core.php:2125
+#: includes/class-marketking-core.php:2182
 msgid "Parent earning"
 msgstr ""
 
-#: includes/class-marketking-core.php:2126
+#: includes/class-marketking-core.php:2183
 msgid "Earning image"
 msgstr ""
 
-#: includes/class-marketking-core.php:2127
+#: includes/class-marketking-core.php:2184
 msgid "Set earning image"
 msgstr ""
 
-#: includes/class-marketking-core.php:2128
+#: includes/class-marketking-core.php:2185
 msgid "Remove earning image"
 msgstr ""
 
-#: includes/class-marketking-core.php:2129
+#: includes/class-marketking-core.php:2186
 msgid "Use as earning image"
 msgstr ""
 
-#: includes/class-marketking-core.php:2130
+#: includes/class-marketking-core.php:2187
 msgid "Insert into earning"
 msgstr ""
 
-#: includes/class-marketking-core.php:2131
+#: includes/class-marketking-core.php:2188
 msgid "Uploaded to this earning"
 msgstr ""
 
-#: includes/class-marketking-core.php:2132
+#: includes/class-marketking-core.php:2189
 msgid "Filter earnings"
 msgstr ""
 
-#: includes/class-marketking-core.php:2133
+#: includes/class-marketking-core.php:2190
 msgid "Earnings navigation"
 msgstr ""
 
-#: includes/class-marketking-core.php:2134
+#: includes/class-marketking-core.php:2191
 msgid "Earnings list"
 msgstr ""
 
-#: includes/class-marketking-core.php:2138
+#: includes/class-marketking-core.php:2195
 msgid "Agent earnings"
 msgstr ""
 
-#: includes/class-marketking-core.php:2247
+#: includes/class-marketking-core.php:2304
 #, php-format
 msgid "Composite order (%s)"
 msgid_plural "Composite order (%s)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-marketking-core.php:3466 public/dashboard/products.php:364
+#: includes/class-marketking-core.php:3561 public/dashboard/products.php:364
 msgid "In stock"
 msgstr ""
 
-#: includes/class-marketking-core.php:3469 public/dashboard/products.php:367
+#: includes/class-marketking-core.php:3564 public/dashboard/products.php:367
 msgid "Out of stock"
 msgstr ""
 
-#: includes/class-marketking-core.php:3472 public/dashboard/products.php:370
+#: includes/class-marketking-core.php:3567 public/dashboard/products.php:370
 msgid "On backorder"
 msgstr ""
 
-#: includes/class-marketking-core.php:3497 public/dashboard/products.php:52
+#: includes/class-marketking-core.php:3592 public/dashboard/products.php:52
 #: public/dashboard/products.php:396
 msgid "Published"
 msgstr ""
 
-#: includes/class-marketking-core.php:3500 public/dashboard/products.php:53
+#: includes/class-marketking-core.php:3595 public/dashboard/products.php:53
 #: public/dashboard/products.php:399
 msgid "Draft"
 msgstr ""
 
-#: includes/class-marketking-core.php:3503
-#: public/class-marketking-core-public.php:2480
+#: includes/class-marketking-core.php:3598
+#: public/class-marketking-core-public.php:2470
 #: public/dashboard/dashboard-content.php:166 public/dashboard/products.php:54
 #: public/dashboard/products.php:402
 msgid "Pending"
 msgstr ""
 
-#: includes/class-marketking-core.php:3532
+#: includes/class-marketking-core.php:3627
 #: public/dashboard/edit-product.php:134 public/dashboard/products.php:440
 msgid "Edit Product"
 msgstr ""
 
-#: includes/class-marketking-core.php:3537
+#: includes/class-marketking-core.php:3632
 #: public/dashboard/edit-product.php:189 public/dashboard/edit-product.php:225
 #: public/dashboard/products.php:450
 msgid "View Product"
 msgstr ""
 
-#: includes/class-marketking-core.php:3545
+#: includes/class-marketking-core.php:3640
 #: public/dashboard/edit-product.php:198 public/dashboard/products.php:464
 msgid "Clone Product"
 msgstr ""
 
-#: includes/class-marketking-core.php:3552
+#: includes/class-marketking-core.php:3647
 #: public/dashboard/edit-product.php:205 public/dashboard/products.php:476
 msgid "Delete Product"
 msgstr ""
 
-#: includes/class-marketking-core.php:3645 public/dashboard/orders.php:160
+#: includes/class-marketking-core.php:3746 public/dashboard/orders.php:160
 msgid "susbcription renewal"
 msgstr ""
 
-#: includes/class-marketking-core.php:3676
+#: includes/class-marketking-core.php:3777
 #: public/dashboard/manage-order.php:154 public/dashboard/orders.php:47
 #: public/dashboard/orders.php:200
 msgid "Processing"
 msgstr ""
 
-#: includes/class-marketking-core.php:3679 public/dashboard/orders.php:48
+#: includes/class-marketking-core.php:3780 public/dashboard/orders.php:48
 #: public/dashboard/orders.php:203
 msgid "On Hold"
 msgstr ""
 
-#: includes/class-marketking-core.php:3682
-#: public/class-marketking-core-public.php:2479
+#: includes/class-marketking-core.php:3783
+#: public/class-marketking-core-public.php:2469
 #: public/dashboard/dashboard-content.php:160
 #: public/dashboard/dashboard-content.php:417
 #: public/dashboard/manage-order.php:192 public/dashboard/orders.php:49
@@ -3062,50 +3072,50 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-#: includes/class-marketking-core.php:3685
+#: includes/class-marketking-core.php:3786
 #: public/dashboard/manage-order.php:218 public/dashboard/orders.php:50
 #: public/dashboard/orders.php:209
 msgid "Refunded"
 msgstr ""
 
-#: includes/class-marketking-core.php:3688
-#: public/class-marketking-core-public.php:2481
+#: includes/class-marketking-core.php:3789
+#: public/class-marketking-core-public.php:2471
 #: public/dashboard/dashboard-content.php:172
 #: public/dashboard/manage-order.php:211 public/dashboard/orders.php:51
 #: public/dashboard/orders.php:212
 msgid "Cancelled"
 msgstr ""
 
-#: includes/class-marketking-core.php:3691 public/dashboard/orders.php:43
+#: includes/class-marketking-core.php:3792 public/dashboard/orders.php:43
 #: public/dashboard/orders.php:215
 msgid "Pending Payment"
 msgstr ""
 
-#: includes/class-marketking-core.php:3694
+#: includes/class-marketking-core.php:3795
 #: public/dashboard/manage-order.php:225 public/dashboard/orders.php:52
 #: public/dashboard/orders.php:218
 msgid "Failed"
 msgstr ""
 
-#: includes/class-marketking-core.php:3722 public/dashboard/orders.php:263
+#: includes/class-marketking-core.php:3833 public/dashboard/orders.php:263
 msgid "Items"
 msgstr ""
 
-#: includes/class-marketking-core.php:3758 public/dashboard/orders.php:295
+#: includes/class-marketking-core.php:3869 public/dashboard/orders.php:295
 msgid "tax"
 msgstr ""
 
-#: includes/class-marketking-core.php:3770 public/dashboard/orders.php:308
+#: includes/class-marketking-core.php:3881 public/dashboard/orders.php:308
 #: public/templates/order-details.php:93
 msgid "View Order"
 msgstr ""
 
-#: includes/class-marketking-core.php:3864
+#: includes/class-marketking-core.php:3975
 msgid "invoice"
 msgstr ""
 
-#: includes/class-marketking-core.php:4129
-#: includes/class-marketking-core.php:4313
+#: includes/class-marketking-core.php:4246
+#: includes/class-marketking-core.php:4430
 #: public/emails/templates/new-product-requires-approval-email-template.php:25
 #: public/emails/templates/new-rating-email-template.php:18
 #: public/emails/templates/plain-new-product-requires-approval-email-template.php:18
@@ -3115,165 +3125,165 @@ msgstr ""
 msgid "Product: "
 msgstr ""
 
-#: includes/class-marketking-core.php:4132
+#: includes/class-marketking-core.php:4249
 msgid "Order: #"
 msgstr ""
 
-#: includes/class-marketking-core.php:4142
-#: includes/class-marketking-core.php:4331
+#: includes/class-marketking-core.php:4259
+#: includes/class-marketking-core.php:4448
 msgid "User:"
 msgstr ""
 
-#: includes/class-marketking-core.php:4153
+#: includes/class-marketking-core.php:4270
 msgid "The user sent this support request from the order page."
 msgstr ""
 
-#: includes/class-marketking-core.php:4157
-#: public/class-marketking-core-public.php:3057
+#: includes/class-marketking-core.php:4274
+#: public/class-marketking-core-public.php:3052
 msgid "Support Request"
 msgstr ""
 
-#: includes/class-marketking-core.php:4240
+#: includes/class-marketking-core.php:4357
 msgid "A new shipment was created."
 msgstr ""
 
-#: includes/class-marketking-core.php:4243
-#: includes/class-marketking-core.php:4246
+#: includes/class-marketking-core.php:4360
+#: includes/class-marketking-core.php:4363
 msgid "Provider: "
 msgstr ""
 
-#: includes/class-marketking-core.php:4250
+#: includes/class-marketking-core.php:4367
 msgid "Tracking Number: "
 msgstr ""
 
-#: includes/class-marketking-core.php:4251
+#: includes/class-marketking-core.php:4368
 msgid "Tracking URL: "
 msgstr ""
 
-#: includes/class-marketking-core.php:4251
+#: includes/class-marketking-core.php:4368
 msgid "Click to track shipment"
 msgstr ""
 
-#: includes/class-marketking-core.php:4295
+#: includes/class-marketking-core.php:4412
 msgid "Name: "
 msgstr ""
 
-#: includes/class-marketking-core.php:4299
+#: includes/class-marketking-core.php:4416
 #: public/emails/templates/new-vendor-requires-approval-email-template.php:19
 #: public/emails/templates/plain-new-vendor-requires-approval-email-template.php:16
 msgid "Email: "
 msgstr ""
 
-#: includes/class-marketking-core.php:4304
+#: includes/class-marketking-core.php:4421
 msgid "Phone: "
 msgstr ""
 
-#: includes/class-marketking-core.php:4316
+#: includes/class-marketking-core.php:4433
 #: public/emails/templates/new-message-email-template.php:25
 msgid "Message: "
 msgstr ""
 
-#: includes/class-marketking-core.php:4322
+#: includes/class-marketking-core.php:4439
 msgid "Name:"
 msgstr ""
 
-#: includes/class-marketking-core.php:4322
+#: includes/class-marketking-core.php:4439
 msgid " Email:"
 msgstr ""
 
-#: includes/class-marketking-core.php:4346
-#: includes/class-marketking-core.php:4347
+#: includes/class-marketking-core.php:4463
+#: includes/class-marketking-core.php:4464
 msgid "The user has not purchased this product."
 msgstr ""
 
-#: includes/class-marketking-core.php:4350
-#: includes/class-marketking-core.php:4351
+#: includes/class-marketking-core.php:4467
+#: includes/class-marketking-core.php:4468
 msgid "The user has purchased this product."
 msgstr ""
 
-#: includes/class-marketking-core.php:4391
+#: includes/class-marketking-core.php:4508
 msgid ""
 "This inquiry was sent by a logged out user, without an account. Please email "
 "the user directly!"
 msgstr ""
 
-#: includes/class-marketking-core.php:4629
+#: includes/class-marketking-core.php:4778
 msgid "Outstanding balance"
 msgstr ""
 
-#: includes/class-marketking-core.php:4629
+#: includes/class-marketking-core.php:4778
 msgid "Payment method"
 msgstr ""
 
-#: includes/class-marketking-core.php:4692
+#: includes/class-marketking-core.php:4841
 msgid "Operation"
 msgstr ""
 
-#: includes/class-marketking-core.php:4692
+#: includes/class-marketking-core.php:4841
 msgid "Credit balance"
 msgstr ""
 
-#: includes/class-marketking-core.php:4787
+#: includes/class-marketking-core.php:4946
 msgid "Amount:"
 msgstr ""
 
-#: includes/class-marketking-core.php:5271 includes/elementor/classes.php:781
-#: public/templates/store-page.php:350
+#: includes/class-marketking-core.php:5442 includes/elementor/classes.php:781
+#: public/templates/store-page.php:352
 msgid "There are no reviews yet..."
 msgstr ""
 
-#: includes/class-marketking-core.php:5365
-#: public/class-marketking-core-public.php:985
+#: includes/class-marketking-core.php:5536
+#: public/class-marketking-core-public.php:975
 msgid "Go to the Vendor Dashboard"
 msgstr ""
 
-#: includes/class-marketking-core.php:5374
+#: includes/class-marketking-core.php:5545
 msgid ""
 "You have applied for a vendor account. We are currently reviewing your "
 "application."
 msgstr ""
 
-#: includes/class-marketking-core.php:5389
+#: includes/class-marketking-core.php:5560
 msgid "Send application"
 msgstr ""
 
-#: includes/class-marketking-core.php:5401
+#: includes/class-marketking-core.php:5572
 msgid ""
 "You are already logged in and cannot apply for a new account. To apply for a "
 "new Vendor account, please logout first. "
 msgstr ""
 
-#: includes/class-marketking-core.php:5403
+#: includes/class-marketking-core.php:5574
 msgid "Click here to log out"
 msgstr ""
 
-#: includes/class-marketking-core.php:5417
-#: includes/class-marketking-core.php:5460
+#: includes/class-marketking-core.php:5588
+#: includes/class-marketking-core.php:5631
 msgid "Register"
 msgstr ""
 
-#: includes/class-marketking-core.php:5426
+#: includes/class-marketking-core.php:5597
 msgid "Username"
 msgstr ""
 
-#: includes/class-marketking-core.php:5433
+#: includes/class-marketking-core.php:5604
 msgid "Email address"
 msgstr ""
 
-#: includes/class-marketking-core.php:5440
+#: includes/class-marketking-core.php:5611
 #: public/dashboard/marketking-dashboard-login.php:2367
 msgid "Password"
 msgstr ""
 
-#: includes/class-marketking-core.php:5446
+#: includes/class-marketking-core.php:5617
 msgid "A password will be sent to your email address."
 msgstr ""
 
-#: includes/class-marketking-core.php:5714
+#: includes/class-marketking-core.php:5885
 msgid "Split Pay for Order #"
 msgstr ""
 
-#: includes/class-marketking-core.php:5715
+#: includes/class-marketking-core.php:5886
 msgid "Payment for Order #"
 msgstr ""
 
@@ -3409,7 +3419,7 @@ msgid "Store Tabs"
 msgstr ""
 
 #: includes/elementor/classes.php:514
-#: public/class-marketking-core-public.php:737
+#: public/class-marketking-core-public.php:746
 #: public/templates/store-page.php:225
 msgid "Vendor Details"
 msgstr ""
@@ -3431,15 +3441,15 @@ msgid "Follow Button"
 msgstr ""
 
 #: includes/elementor/classes.php:640
-#: public/class-marketking-core-public.php:3064
-#: public/templates/store-page.php:274 public/templates/stores-list.php:76
-#: public/templates/stores-list.php:178 public/templates/stores-list.php:243
+#: public/class-marketking-core-public.php:3060
+#: public/templates/store-page.php:274 public/templates/stores-list.php:94
+#: public/templates/stores-list.php:196 public/templates/stores-list.php:261
 msgid "Follow"
 msgstr ""
 
 #: includes/elementor/classes.php:642
-#: public/class-marketking-core-public.php:3065
-#: public/templates/store-page.php:276 public/templates/stores-list.php:180
+#: public/class-marketking-core-public.php:3061
+#: public/templates/store-page.php:276 public/templates/stores-list.php:198
 msgid "Following"
 msgstr ""
 
@@ -3456,219 +3466,219 @@ msgstr ""
 msgid "Social Media Icons (MarketKing)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:219
-#: public/class-marketking-core-public.php:229
+#: public/class-marketking-core-public.php:220
+#: public/class-marketking-core-public.php:230
 msgid "Your cannot purchase your own products!"
 msgstr ""
 
-#: public/class-marketking-core-public.php:276
+#: public/class-marketking-core-public.php:277
 msgid "Multiple"
 msgstr ""
 
-#: public/class-marketking-core-public.php:315
+#: public/class-marketking-core-public.php:316
 msgid "Invalid file type"
 msgstr ""
 
-#: public/class-marketking-core-public.php:317
+#: public/class-marketking-core-public.php:318
 msgid "Supported file types"
 msgstr ""
 
-#: public/class-marketking-core-public.php:321
+#: public/class-marketking-core-public.php:322
 msgid "File is too large. Max. upload file size is"
 msgstr ""
 
-#: public/class-marketking-core-public.php:401
+#: public/class-marketking-core-public.php:402
 msgid "is a required field."
 msgstr ""
 
-#: public/class-marketking-core-public.php:569
+#: public/class-marketking-core-public.php:570
 msgid "This vendor doesn't have any products yet..."
 msgstr ""
 
-#: public/class-marketking-core-public.php:748
+#: public/class-marketking-core-public.php:757
 msgid "Product Inquiry"
 msgstr ""
 
-#: public/class-marketking-core-public.php:762
+#: public/class-marketking-core-public.php:771
 msgid "Product Support"
 msgstr ""
 
-#: public/class-marketking-core-public.php:776
+#: public/class-marketking-core-public.php:785
 msgid "Other Offers"
 msgstr ""
 
-#: public/class-marketking-core-public.php:975
+#: public/class-marketking-core-public.php:965
 msgid "We are currently reviewing your vendor application and it is pending."
 msgstr ""
 
-#: public/class-marketking-core-public.php:1005
+#: public/class-marketking-core-public.php:995
 msgid "Your account is waiting for approval. Until approved, you cannot login."
 msgstr ""
 
-#: public/class-marketking-core-public.php:1021
+#: public/class-marketking-core-public.php:1011
 msgid ""
 "Before you can login, your account requires manual approval. Our team will "
 "review it as soon as possible. Thank you for understanding."
 msgstr ""
 
-#: public/class-marketking-core-public.php:1052
+#: public/class-marketking-core-public.php:1042
 msgid ""
 "Your account has been succesfully created. We are now reviewing your "
 "application to become a vendor. Please wait to be approved."
 msgstr ""
 
-#: public/class-marketking-core-public.php:1059
+#: public/class-marketking-core-public.php:1049
 msgid ""
 "Thank you for registering. Your vendor account requires manual approval. "
 "Please wait to be approved."
 msgstr ""
 
-#: public/class-marketking-core-public.php:1563
-#: public/dashboard/templates/header-bar.php:152
+#: public/class-marketking-core-public.php:1553
+#: public/dashboard/templates/header-bar.php:153
 msgid "Recent Messages"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1666
-#: public/class-marketking-core-public.php:1726
-#: public/dashboard/templates/header-bar.php:254
-#: public/dashboard/templates/header-bar.php:311
+#: public/class-marketking-core-public.php:1656
+#: public/class-marketking-core-public.php:1716
+#: public/dashboard/templates/header-bar.php:255
+#: public/dashboard/templates/header-bar.php:312
 msgid "View All"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1690
-#: public/dashboard/templates/header-bar.php:275
+#: public/class-marketking-core-public.php:1680
+#: public/dashboard/templates/header-bar.php:276
 msgid "Unread Announcements"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1802
-#: public/dashboard/templates/header-bar.php:380
+#: public/class-marketking-core-public.php:1792
+#: public/dashboard/templates/header-bar.php:381
 msgid "Go to My Store"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1811
-#: public/dashboard/templates/header-bar.php:389
+#: public/class-marketking-core-public.php:1801
+#: public/dashboard/templates/header-bar.php:390
 msgid "Store Settings"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1820
-#: public/dashboard/templates/header-bar.php:398
+#: public/class-marketking-core-public.php:1810
+#: public/dashboard/templates/header-bar.php:399
 msgid "Sign out"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1924
+#: public/class-marketking-core-public.php:1914
 msgid "WooCommerce"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1986
-#: public/class-marketking-core-public.php:2256
+#: public/class-marketking-core-public.php:1976
+#: public/class-marketking-core-public.php:2246
 msgctxt "enhanced select"
 msgid "No matches found"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1987
-#: public/class-marketking-core-public.php:2257
+#: public/class-marketking-core-public.php:1977
+#: public/class-marketking-core-public.php:2247
 msgctxt "enhanced select"
 msgid "Loading failed"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1988
-#: public/class-marketking-core-public.php:2258
+#: public/class-marketking-core-public.php:1978
+#: public/class-marketking-core-public.php:2248
 msgctxt "enhanced select"
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1989
-#: public/class-marketking-core-public.php:2259
+#: public/class-marketking-core-public.php:1979
+#: public/class-marketking-core-public.php:2249
 msgctxt "enhanced select"
 msgid "Please enter %qty% or more characters"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1990
-#: public/class-marketking-core-public.php:2260
+#: public/class-marketking-core-public.php:1980
+#: public/class-marketking-core-public.php:2250
 msgctxt "enhanced select"
 msgid "Please delete 1 character"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1991
-#: public/class-marketking-core-public.php:2261
+#: public/class-marketking-core-public.php:1981
+#: public/class-marketking-core-public.php:2251
 msgctxt "enhanced select"
 msgid "Please delete %qty% characters"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1992
-#: public/class-marketking-core-public.php:2262
+#: public/class-marketking-core-public.php:1982
+#: public/class-marketking-core-public.php:2252
 msgctxt "enhanced select"
 msgid "You can only select 1 item"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1993
-#: public/class-marketking-core-public.php:2263
+#: public/class-marketking-core-public.php:1983
+#: public/class-marketking-core-public.php:2253
 msgctxt "enhanced select"
 msgid "You can only select %qty% items"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1994
-#: public/class-marketking-core-public.php:2264
+#: public/class-marketking-core-public.php:1984
+#: public/class-marketking-core-public.php:2254
 msgctxt "enhanced select"
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: public/class-marketking-core-public.php:1995
-#: public/class-marketking-core-public.php:2265
+#: public/class-marketking-core-public.php:1985
+#: public/class-marketking-core-public.php:2255
 msgctxt "enhanced select"
 msgid "Searching&hellip;"
 msgstr ""
 
 #. translators: %s: decimal
-#: public/class-marketking-core-public.php:2037
+#: public/class-marketking-core-public.php:2027
 #, php-format
 msgid "Please enter with one decimal point (%s) without thousand separators."
 msgstr ""
 
 #. translators: %s: price decimal separator
-#: public/class-marketking-core-public.php:2039
+#: public/class-marketking-core-public.php:2029
 #, php-format
 msgid ""
 "Please enter with one monetary decimal point (%s) without thousand "
 "separators and currency symbols."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2040
+#: public/class-marketking-core-public.php:2030
 msgid "Please enter in country code with two capital letters."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2041
+#: public/class-marketking-core-public.php:2031
 msgid "Please enter in a value less than the regular price."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2042
+#: public/class-marketking-core-public.php:2032
 msgid ""
 "This product has produced sales and may be linked to existing orders. Are "
 "you sure you want to delete it?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2043
+#: public/class-marketking-core-public.php:2033
 msgid ""
 "This action cannot be reversed. Are you sure you wish to erase personal data "
 "from the selected orders?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2048
+#: public/class-marketking-core-public.php:2038
 #: public/dashboard/products.php:98
 msgid "Import"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2049
+#: public/class-marketking-core-public.php:2039
 #: public/dashboard/products.php:108
 msgid "Export"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2069
+#: public/class-marketking-core-public.php:2059
 msgid "Enable reviews"
 msgstr ""
 
 #. translators: %d: Number of variations
-#: public/class-marketking-core-public.php:2100
+#: public/class-marketking-core-public.php:2090
 #, php-format
 msgid ""
 "Are you sure you want to link all variations? This will create a new "
@@ -3676,426 +3686,426 @@ msgid ""
 "(max %d per run)."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2101
+#: public/class-marketking-core-public.php:2091
 #: public/dashboard/marketking-dashboard-login.php:1685
 msgid "Enter a value"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2102
+#: public/class-marketking-core-public.php:2092
 msgid "Variation menu order (determines position in the list of variations)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2103
+#: public/class-marketking-core-public.php:2093
 #: public/dashboard/marketking-dashboard-login.php:1686
 msgid "Enter a value (fixed or %)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2104
+#: public/class-marketking-core-public.php:2094
 msgid "Are you sure you want to delete all variations? This cannot be undone."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2105
+#: public/class-marketking-core-public.php:2095
 msgid "Last warning, are you sure?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2106
+#: public/class-marketking-core-public.php:2096
 msgid "Choose an image"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2107
+#: public/class-marketking-core-public.php:2097
 msgid "Set variation image"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2108
+#: public/class-marketking-core-public.php:2098
 msgid "variation added"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2109
+#: public/class-marketking-core-public.php:2099
 msgid "variations added"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2110
+#: public/class-marketking-core-public.php:2100
 msgid "No variations added"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2111
+#: public/class-marketking-core-public.php:2101
 msgid "Are you sure you want to remove this variation?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2112
+#: public/class-marketking-core-public.php:2102
 msgid "Sale start date (YYYY-MM-DD format or leave blank)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2113
+#: public/class-marketking-core-public.php:2103
 msgid "Sale end date (YYYY-MM-DD format or leave blank)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2114
+#: public/class-marketking-core-public.php:2104
 msgid "Save changes before changing page?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2115
+#: public/class-marketking-core-public.php:2105
 msgid "%qty% variation"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2116
+#: public/class-marketking-core-public.php:2106
 msgid "%qty% variations"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2130
-#: public/class-marketking-core-public.php:2255
+#: public/class-marketking-core-public.php:2120
+#: public/class-marketking-core-public.php:2245
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2133
+#: public/class-marketking-core-public.php:2123
 msgid "Name (required)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2134
+#: public/class-marketking-core-public.php:2124
 msgid "Value (required)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2143
+#: public/class-marketking-core-public.php:2133
 msgid "Generate coupon code"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2152
+#: public/class-marketking-core-public.php:2142
 msgid "Are you sure you want to remove the selected items?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2153
+#: public/class-marketking-core-public.php:2143
 msgid "Are you sure you want to remove the selected fees?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2154
+#: public/class-marketking-core-public.php:2144
 msgid "Are you sure you want to remove the selected shipping?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2162
+#: public/class-marketking-core-public.php:2152
 msgid "You may need to manually restore the item's stock."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2169
+#: public/class-marketking-core-public.php:2159
 msgid "Please select some items."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2170
+#: public/class-marketking-core-public.php:2160
 msgid ""
 "Are you sure you wish to process this refund? This action cannot be undone."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2171
+#: public/class-marketking-core-public.php:2161
 msgid ""
 "Are you sure you wish to delete this refund? This action cannot be undone."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2172
+#: public/class-marketking-core-public.php:2162
 msgid ""
 "Are you sure you wish to delete this tax column? This action cannot be "
 "undone."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2173
+#: public/class-marketking-core-public.php:2163
 msgid "Remove this item meta?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2174
+#: public/class-marketking-core-public.php:2164
 msgid "Remove this attribute?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2175
+#: public/class-marketking-core-public.php:2165
 #: public/dashboard/products.php:136
 msgid "Name"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2176
+#: public/class-marketking-core-public.php:2166
 msgid "Remove"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2177
+#: public/class-marketking-core-public.php:2167
 msgid "Click to toggle"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2178
+#: public/class-marketking-core-public.php:2168
 msgid "Value(s)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2179
+#: public/class-marketking-core-public.php:2169
 msgid "Enter some text, or some attributes by pipe (|) separating values."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2180
+#: public/class-marketking-core-public.php:2170
 msgid "Visible on the product page"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2181
+#: public/class-marketking-core-public.php:2171
 msgid "Used for variations"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2182
+#: public/class-marketking-core-public.php:2172
 msgid "Enter a name for the new attribute term:"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2183
+#: public/class-marketking-core-public.php:2173
 msgid ""
 "Recalculate totals? This will calculate taxes based on the customers country "
 "(or the store base country) and update totals."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2184
+#: public/class-marketking-core-public.php:2174
 msgid ""
 "Copy billing information to shipping information? This will remove any "
 "currently entered shipping information."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2185
+#: public/class-marketking-core-public.php:2175
 msgid ""
 "Load the customer's billing information? This will remove any currently "
 "entered billing information."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2186
+#: public/class-marketking-core-public.php:2176
 msgid ""
 "Load the customer's shipping information? This will remove any currently "
 "entered shipping information."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2187
+#: public/class-marketking-core-public.php:2177
 msgid "Featured"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2191
+#: public/class-marketking-core-public.php:2181
 msgid "No customer selected"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2215
+#: public/class-marketking-core-public.php:2205
 msgid ""
 "Could not grant access - the user may already have permission for this file "
 "or billing email is not set. Ensure the billing email is set, and the order "
 "has been saved."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2216
+#: public/class-marketking-core-public.php:2206
 msgid "Are you sure you want to revoke access to this download?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2217
+#: public/class-marketking-core-public.php:2207
 msgid "You cannot add the same tax rate twice!"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2218
+#: public/class-marketking-core-public.php:2208
 msgid ""
 "Are you sure you wish to delete this note? This action cannot be undone."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2219
+#: public/class-marketking-core-public.php:2209
 msgid ""
 "Enter a coupon code to apply. Discounts are applied to line totals, before "
 "taxes."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2220
+#: public/class-marketking-core-public.php:2210
 msgid "Enter a fixed amount or percentage to apply as a fee."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2221
+#: public/class-marketking-core-public.php:2211
 msgid ""
 "<b>Simple –</b> covers the vast majority of any products you may sell. "
 "Simple products are shipped and have no options. For example, a book."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2222
+#: public/class-marketking-core-public.php:2212
 msgid ""
 "<b>Grouped –</b> a collection of related products that can be purchased "
 "individually and only consist of simple products. For example, a set of six "
 "drinking glasses."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2223
+#: public/class-marketking-core-public.php:2213
 msgid ""
 "<b>External or Affiliate –</b> one that you list and describe on your "
 "website but is sold elsewhere."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2224
+#: public/class-marketking-core-public.php:2214
 msgid ""
 "<b>Variable –</b> a product with variations, each of which may have a "
 "different SKU, price, stock option, etc. For example, a t-shirt available in "
 "different colors and/or sizes."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2225
+#: public/class-marketking-core-public.php:2215
 msgid ""
 "Product types define available product details and attributes, such as "
 "downloadable files and variations. They’re also used for analytics and "
 "inventory management."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2226
+#: public/class-marketking-core-public.php:2216
 msgid ""
 "Describe this product. What makes it unique? What are its most important "
 "features?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2227
+#: public/class-marketking-core-public.php:2217
 msgid ""
 "Summarize this product in 1-2 short sentences. We’ll show it at the top of "
 "the page."
 msgstr ""
 
 #. translators: %1$s: maximum file size
-#: public/class-marketking-core-public.php:2229
+#: public/class-marketking-core-public.php:2219
 #, php-format
 msgid ""
 "For best results, upload JPEG or PNG files that are 1000 by 1000 pixels or "
 "larger. Maximum upload file size: %1$s."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2230
+#: public/class-marketking-core-public.php:2220
 msgid ""
 "If you remove this attribute, customers will no longer be able to purchase "
 "some variations of this product."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2231
+#: public/class-marketking-core-public.php:2221
 msgid "Adding new attribute failed."
 msgstr ""
 
 #. translators: %s: WC_DELIMITER
-#: public/class-marketking-core-public.php:2233
+#: public/class-marketking-core-public.php:2223
 #, php-format
 msgid "Enter some descriptive text. Use “%s” to separate different values."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2234
+#: public/class-marketking-core-public.php:2224
 #, php-format
 msgid ""
 "Enter options for customers to choose from, f.e. “Blue” or “Large”. Use “%s” "
 "to separate different options."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2333
-#: public/class-marketking-core-public.php:2519
+#: public/class-marketking-core-public.php:2323
+#: public/class-marketking-core-public.php:2509
 msgid "Min. Quantity"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2334
-#: public/class-marketking-core-public.php:2520
+#: public/class-marketking-core-public.php:2324
+#: public/class-marketking-core-public.php:2510
 msgid "Final Price"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2335
-#: public/class-marketking-core-public.php:2521
+#: public/class-marketking-core-public.php:2325
+#: public/class-marketking-core-public.php:2511
 msgid "Label"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2336
-#: public/class-marketking-core-public.php:2536
+#: public/class-marketking-core-public.php:2326
+#: public/class-marketking-core-public.php:2526
 msgid "Text"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2337
+#: public/class-marketking-core-public.php:2327
 msgid "X"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2339
+#: public/class-marketking-core-public.php:2329
 msgid "Are you sure you want to publish this offer?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2340
+#: public/class-marketking-core-public.php:2330
 msgid "Are you sure you want to delete this offer?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2341
+#: public/class-marketking-core-public.php:2331
 msgid "Are you sure you want to publish this rule?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2342
-#: public/class-marketking-core-public.php:2370
+#: public/class-marketking-core-public.php:2332
+#: public/class-marketking-core-public.php:2360
 msgid "Are you sure you want to delete this rule?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2343
+#: public/class-marketking-core-public.php:2333
 msgid "You must enter a title for the rule!"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2344
+#: public/class-marketking-core-public.php:2334
 msgid "You must enter a title for the offer!"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2345
+#: public/class-marketking-core-public.php:2335
 msgid "You must have at least 1 product with quantity and price!"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2346
+#: public/class-marketking-core-public.php:2336
 msgid "Cart Total Quantity"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2347
+#: public/class-marketking-core-public.php:2337
 msgid "Cart Total Value"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2348
+#: public/class-marketking-core-public.php:2338
 msgid "Category Product Quantity"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2349
+#: public/class-marketking-core-public.php:2339
 msgid "Category Product Value"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2350
+#: public/class-marketking-core-public.php:2340
 msgid "Product Quantity"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2351
+#: public/class-marketking-core-public.php:2341
 msgid "Product Value"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2352
+#: public/class-marketking-core-public.php:2342
 msgid "greater (>)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2353
+#: public/class-marketking-core-public.php:2343
 msgid "equal (=)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2354
+#: public/class-marketking-core-public.php:2344
 msgid "smaller (<)"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2355
+#: public/class-marketking-core-public.php:2345
 #: public/dashboard/integrations/woo_vou_pdf_vouchers.php:185
 msgid "Delete"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2356
+#: public/class-marketking-core-public.php:2346
 msgid "Enter the quantity/value"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2357
+#: public/class-marketking-core-public.php:2347
 msgid "Add Condition"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2358
+#: public/class-marketking-core-public.php:2348
 msgid "Conditions must apply cumulatively."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2359
+#: public/class-marketking-core-public.php:2349
 msgid "Each product must meet all product conditions."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2363
-#: public/class-marketking-core-public.php:2543
+#: public/class-marketking-core-public.php:2353
+#: public/class-marketking-core-public.php:2533
 msgid ""
 "Your cart contains items from multiple vendors. Quote requests can only be "
 "sent to 1 vendor at a time. Please adjust cart items."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2365
+#: public/class-marketking-core-public.php:2355
 msgid "Email Offer"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2366
+#: public/class-marketking-core-public.php:2356
 msgid ""
 "This offer will be emailed to ALL users that have visibility. That includes "
 "all groups you selected, all users, and all email addresses entered. Make "
@@ -4103,328 +4113,328 @@ msgid ""
 "want to proceed?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2367
+#: public/class-marketking-core-public.php:2357
 msgid "The offer has been emailed successfully."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2369
+#: public/class-marketking-core-public.php:2359
 msgid "The offer has been saved. Do you want to also email it to the user?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2452
+#: public/class-marketking-core-public.php:2442
 msgid ""
 "Are you sure you want to permanently CANCEL this subscription? This is "
 "irreversible."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2453
+#: public/class-marketking-core-public.php:2443
 msgid "Are you sure you want to delete this coupon?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2454
+#: public/class-marketking-core-public.php:2444
 msgid "Are you sure you want to save this cart?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2455
-#: public/class-marketking-core-public.php:3080
+#: public/class-marketking-core-public.php:2445
+#: public/class-marketking-core-public.php:3076
 msgid "Are you sure you want to send this refund request?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2456
+#: public/class-marketking-core-public.php:2446
 msgid "Are you sure you want to delete this cart?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2457
+#: public/class-marketking-core-public.php:2447
 msgid "Are you sure you want to add this customer?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2458
+#: public/class-marketking-core-public.php:2448
 msgid "Are you sure you want to add this team member?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2459
+#: public/class-marketking-core-public.php:2449
 msgid "Are you sure you want to save the payout info?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2460
+#: public/class-marketking-core-public.php:2450
 msgid "Are you sure you want to disconnect this Stripe account?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2461
+#: public/class-marketking-core-public.php:2451
 msgid "Are you sure you want to make the withdrawal request?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2462
+#: public/class-marketking-core-public.php:2452
 msgid "Are you sure you want to cancel your current withdrawal request?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2463
+#: public/class-marketking-core-public.php:2453
 msgid "The requested withdrawal amount is below the minimum limit."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2464
+#: public/class-marketking-core-public.php:2454
 msgid "You do not have sufficient funds for this withdrawal."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2465
+#: public/class-marketking-core-public.php:2455
 msgid "Ready"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2466
+#: public/class-marketking-core-public.php:2456
 msgid "Link copied"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2467
+#: public/class-marketking-core-public.php:2457
 msgid "Copied"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2468
+#: public/class-marketking-core-public.php:2458
 msgid "Search "
 msgstr ""
 
-#: public/class-marketking-core-public.php:2469
+#: public/class-marketking-core-public.php:2459
 msgid "Copy"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2470
+#: public/class-marketking-core-public.php:2460
 msgid ""
 "The customer account has been created. An email has been sent to the "
 "customer with account details."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2471
+#: public/class-marketking-core-public.php:2461
 msgid ""
 "The customer account could not be created. It may be because the username or "
 "email already exists. Here are the error details:"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2472
+#: public/class-marketking-core-public.php:2462
 msgid ""
 "The team member account has been created. An email has been sent to them "
 "with account details."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2473
+#: public/class-marketking-core-public.php:2463
 msgid "Please fill all required (*) fields / resolve all validation errors."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2474
+#: public/class-marketking-core-public.php:2464
 msgid ""
 "The team member account could not be created. It may be because the username "
 "or email already exists. Here are the error details: "
 msgstr ""
 
-#: public/class-marketking-core-public.php:2482
+#: public/class-marketking-core-public.php:2472
 msgid "orders"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2483
+#: public/class-marketking-core-public.php:2473
 msgid "Upload Image"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2486
+#: public/class-marketking-core-public.php:2476
 msgid "Are you sure you want to delete this product?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2488
+#: public/class-marketking-core-public.php:2478
 msgid "Are you sure you want to advertise this product?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2489
+#: public/class-marketking-core-public.php:2479
 msgid "You have insufficient credits for this advertisement"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2490
+#: public/class-marketking-core-public.php:2480
 msgid "You have successfully advertised this product"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2491
+#: public/class-marketking-core-public.php:2481
 msgid ""
 "Are you sure you want to delete this team member account? This is "
 "irreversible."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2492
+#: public/class-marketking-core-public.php:2482
 msgid "Are you sure you want to delete this shipping method?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2493
+#: public/class-marketking-core-public.php:2483
 msgid "Are you sure you want to add this shipping method?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2496
+#: public/class-marketking-core-public.php:2486
 msgid "The product must have a name (title)!"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2510
+#: public/class-marketking-core-public.php:2500
 msgid "This coupon code is already in use. Please use a different code."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2524
+#: public/class-marketking-core-public.php:2514
 msgid "Choose an attribute:"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2537
+#: public/class-marketking-core-public.php:2527
 msgid "You must save the product first before you can configure attributes."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2538
+#: public/class-marketking-core-public.php:2528
 msgid "You must save the product first before you can configure variations."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2544
-#: public/class-marketking-core-public.php:3074
+#: public/class-marketking-core-public.php:2534
+#: public/class-marketking-core-public.php:3070
 msgid ""
 "Are you sure you want to submit this reply? Please note that you can only "
 "reply once."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2545
+#: public/class-marketking-core-public.php:2535
 msgid "Are you sure you want to approve this refund? This is irreversible."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2546
+#: public/class-marketking-core-public.php:2536
 msgid ""
 "Are you sure you want to save this product as a draft? It will no longer be "
 "published."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2547
+#: public/class-marketking-core-public.php:2537
 msgid "Are you sure you want to deny this refund? This is irreversible."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2548
-#: public/class-marketking-core-public.php:3077
+#: public/class-marketking-core-public.php:2538
+#: public/class-marketking-core-public.php:3073
 msgid "Your reply has been submitted."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2549
-#: public/class-marketking-core-public.php:3078
+#: public/class-marketking-core-public.php:2539
+#: public/class-marketking-core-public.php:3074
 msgid "Your report has been submitted."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2550
+#: public/class-marketking-core-public.php:2540
 msgid "Are you sure you want to submit this for verification?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2551
+#: public/class-marketking-core-public.php:2541
 msgid "Are you sure?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2552
+#: public/class-marketking-core-public.php:2542
 msgid "Yes, continue"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2553
+#: public/class-marketking-core-public.php:2543
 #: public/dashboard/integrations/woo_vou_pdf_vouchers.php:184
 #: public/dashboard/profile.php:253 public/dashboard/profile.php:315
 #: public/dashboard/profile.php:367 public/dashboard/profile.php:419
 msgid "Cancel"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2554
+#: public/class-marketking-core-public.php:2544
 msgid "Please select a file."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2567
+#: public/class-marketking-core-public.php:2557
 #: public/dashboard/products.php:179
 msgid "type"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2570
+#: public/class-marketking-core-public.php:2560
 msgid "Loading shipping data..."
 msgstr ""
 
-#: public/class-marketking-core-public.php:2783
+#: public/class-marketking-core-public.php:2773
 msgid "User Type"
 msgstr ""
 
-#: public/class-marketking-core-public.php:2924
+#: public/class-marketking-core-public.php:2914
 msgid "Supported file types: jpg, jpeg, png, txt, pdf, doc, docx"
 msgstr ""
 
-#: public/class-marketking-core-public.php:3005
+#: public/class-marketking-core-public.php:2995
 msgid "State / County"
 msgstr ""
 
-#: public/class-marketking-core-public.php:3048
+#: public/class-marketking-core-public.php:3043
 msgid "This URL is not available!"
 msgstr ""
 
-#: public/class-marketking-core-public.php:3049
+#: public/class-marketking-core-public.php:3044
 msgid "Searching availability..."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3050
+#: public/class-marketking-core-public.php:3045
 msgid "The URL is too short..."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3051
+#: public/class-marketking-core-public.php:3046
 msgid "There are no sellers yet..."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3054
+#: public/class-marketking-core-public.php:3049
 msgid ""
 "Your message has been received. We will get back to you as soon as possible."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3055
+#: public/class-marketking-core-public.php:3050
 msgid ""
 "Your support request has been received. The vendor will get back to you as "
 "soon as possible."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3058
+#: public/class-marketking-core-public.php:3053
 msgid "Send inquiry"
 msgstr ""
 
-#: public/class-marketking-core-public.php:3059
+#: public/class-marketking-core-public.php:3054
 msgid "Please fill all fields to submit the inquiry"
 msgstr ""
 
-#: public/class-marketking-core-public.php:3060
+#: public/class-marketking-core-public.php:3055
 msgid "The email address you entered is invalid"
 msgstr ""
 
-#: public/class-marketking-core-public.php:3063
+#: public/class-marketking-core-public.php:3059
 msgid ""
 "Your cart contains items from multiple vendors. Quote requests can only be "
 "sent to 1 vendor at a time. Please adjust cart items. You may need to reload "
 "the cart page."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3066
+#: public/class-marketking-core-public.php:3062
 msgid "Are you sure you want to submit this abuse report?"
 msgstr ""
 
-#: public/class-marketking-core-public.php:3067
+#: public/class-marketking-core-public.php:3063
 msgid ""
 "Are you sure you want to mark this order as Received? This means you are "
 "confirming you have correctly received all packages and items within this "
 "order."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3068
+#: public/class-marketking-core-public.php:3064
 msgid "Thank you for your submission. Your report has been received."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3069
+#: public/class-marketking-core-public.php:3065
 msgid "Your abuse report has been received."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3070
+#: public/class-marketking-core-public.php:3066
 msgid "The product has been added to your store"
 msgstr ""
 
-#: public/class-marketking-core-public.php:3079
+#: public/class-marketking-core-public.php:3075
 msgid "Your request has been sent."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3081
+#: public/class-marketking-core-public.php:3077
 msgid "The value requested cannot exceed the order value."
 msgstr ""
 
-#: public/class-marketking-core-public.php:3088
+#: public/class-marketking-core-public.php:3084
 #: public/templates/stores-list.php:37
 msgid "All Categories"
 msgstr ""
@@ -6570,7 +6580,7 @@ msgstr ""
 #: public/emails/class-marketking-new-announcement-email.php:100
 #: public/emails/class-marketking-new-message-email.php:122
 #: public/emails/class-marketking-new-payout-email.php:96
-#: public/emails/class-marketking-new-product-requires-approval-email.php:88
+#: public/emails/class-marketking-new-product-requires-approval-email.php:89
 #: public/emails/class-marketking-new-rating-email.php:95
 #: public/emails/class-marketking-new-refund-email.php:96
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:97
@@ -6583,7 +6593,7 @@ msgstr ""
 #: public/emails/class-marketking-new-announcement-email.php:102
 #: public/emails/class-marketking-new-message-email.php:124
 #: public/emails/class-marketking-new-payout-email.php:98
-#: public/emails/class-marketking-new-product-requires-approval-email.php:90
+#: public/emails/class-marketking-new-product-requires-approval-email.php:91
 #: public/emails/class-marketking-new-rating-email.php:97
 #: public/emails/class-marketking-new-refund-email.php:98
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:99
@@ -6596,7 +6606,7 @@ msgstr ""
 #: public/emails/class-marketking-new-announcement-email.php:108
 #: public/emails/class-marketking-new-message-email.php:130
 #: public/emails/class-marketking-new-payout-email.php:104
-#: public/emails/class-marketking-new-product-requires-approval-email.php:103
+#: public/emails/class-marketking-new-product-requires-approval-email.php:104
 #: public/emails/class-marketking-new-rating-email.php:103
 #: public/emails/class-marketking-new-refund-email.php:104
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:112
@@ -6611,7 +6621,7 @@ msgstr ""
 #: public/emails/class-marketking-new-announcement-email.php:113
 #: public/emails/class-marketking-new-message-email.php:135
 #: public/emails/class-marketking-new-payout-email.php:109
-#: public/emails/class-marketking-new-product-requires-approval-email.php:108
+#: public/emails/class-marketking-new-product-requires-approval-email.php:109
 #: public/emails/class-marketking-new-rating-email.php:108
 #: public/emails/class-marketking-new-refund-email.php:109
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:117
@@ -6624,7 +6634,7 @@ msgstr ""
 #: public/emails/class-marketking-new-announcement-email.php:115
 #: public/emails/class-marketking-new-message-email.php:137
 #: public/emails/class-marketking-new-payout-email.php:111
-#: public/emails/class-marketking-new-product-requires-approval-email.php:110
+#: public/emails/class-marketking-new-product-requires-approval-email.php:111
 #: public/emails/class-marketking-new-rating-email.php:110
 #: public/emails/class-marketking-new-refund-email.php:111
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:119
@@ -6639,7 +6649,7 @@ msgstr ""
 #: public/emails/class-marketking-new-announcement-email.php:120
 #: public/emails/class-marketking-new-message-email.php:142
 #: public/emails/class-marketking-new-payout-email.php:116
-#: public/emails/class-marketking-new-product-requires-approval-email.php:115
+#: public/emails/class-marketking-new-product-requires-approval-email.php:116
 #: public/emails/class-marketking-new-rating-email.php:115
 #: public/emails/class-marketking-new-refund-email.php:116
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:124
@@ -6652,7 +6662,7 @@ msgstr ""
 #: public/emails/class-marketking-new-announcement-email.php:122
 #: public/emails/class-marketking-new-message-email.php:144
 #: public/emails/class-marketking-new-payout-email.php:118
-#: public/emails/class-marketking-new-product-requires-approval-email.php:117
+#: public/emails/class-marketking-new-product-requires-approval-email.php:118
 #: public/emails/class-marketking-new-rating-email.php:117
 #: public/emails/class-marketking-new-refund-email.php:118
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:126
@@ -6694,31 +6704,31 @@ msgid ""
 "manual approval"
 msgstr ""
 
-#: public/emails/class-marketking-new-product-requires-approval-email.php:94
+#: public/emails/class-marketking-new-product-requires-approval-email.php:95
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:103
 msgid "Recipient(s)"
 msgstr ""
 
-#: public/emails/class-marketking-new-product-requires-approval-email.php:96
+#: public/emails/class-marketking-new-product-requires-approval-email.php:97
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:105
 msgid "Enter recipients (comma separated) for this email. Defaults to"
 msgstr ""
 
-#: public/emails/class-marketking-new-product-requires-approval-email.php:127
+#: public/emails/class-marketking-new-product-requires-approval-email.php:128
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:136
 #: public/emails/class-marketking-product-has-been-approved-email.php:127
 #: public/emails/class-marketking-your-account-approved-email.php:131
 msgid "Additional content"
 msgstr ""
 
-#: public/emails/class-marketking-new-product-requires-approval-email.php:128
+#: public/emails/class-marketking-new-product-requires-approval-email.php:129
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:137
 #: public/emails/class-marketking-product-has-been-approved-email.php:128
 #: public/emails/class-marketking-your-account-approved-email.php:132
 msgid "Text to appear below the main email content."
 msgstr ""
 
-#: public/emails/class-marketking-new-product-requires-approval-email.php:130
+#: public/emails/class-marketking-new-product-requires-approval-email.php:131
 #: public/emails/class-marketking-new-vendor-requires-approval-email.php:139
 #: public/emails/class-marketking-product-has-been-approved-email.php:130
 #: public/emails/class-marketking-your-account-approved-email.php:134
@@ -7070,23 +7080,23 @@ msgstr ""
 msgid "Store: "
 msgstr ""
 
-#: public/templates/stores-list.php:59 public/templates/stores-list.php:226
+#: public/templates/stores-list.php:77 public/templates/stores-list.php:244
 msgid "Vendor Pic"
 msgstr ""
 
-#: public/templates/stores-list.php:60 public/templates/stores-list.php:227
+#: public/templates/stores-list.php:78 public/templates/stores-list.php:245
 msgid "Vendor Name"
 msgstr ""
 
-#: public/templates/stores-list.php:61 public/templates/stores-list.php:228
+#: public/templates/stores-list.php:79 public/templates/stores-list.php:246
 msgid "Vendor Rating"
 msgstr ""
 
-#: public/templates/stores-list.php:130
+#: public/templates/stores-list.php:148
 msgid "out of 5"
 msgstr ""
 
-#: public/templates/stores-list.php:201
+#: public/templates/stores-list.php:219
 msgid "This is your store."
 msgstr ""
 
