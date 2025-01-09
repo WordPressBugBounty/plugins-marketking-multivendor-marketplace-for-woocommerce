@@ -418,53 +418,56 @@ class Marketkingcore {
 			// modify categories dropdown in edit product page
 			add_filter( 'wp_dropdown_cats', [$this, 'wp_dropdown_cats_multiple'], 10, 2 );
 
+			// custom URLs for vendor store pages
 			function prefix_rewrite_rules(){
-			    // Only flush rewrite rules if they haven't been flushed recently
-			    $last_flush = get_option('marketking_last_rewrite_flush', 0);
-			    $flush_interval = 3600; // Only flush once per hour max
 
-			    // Your existing vendors code...
-			    $vendors = marketking()->get_all_vendors();
-			    if (!empty($vendors)){
-			        $stores_page = intval(apply_filters( 'wpml_object_id', get_option( 'marketking_stores_page_setting', 'none' )));
-			        $stores_post = get_post($stores_page);
-			        if ($stores_post){
-			            $stores_slug = $stores_post->post_name;
-			        }
-			    }
-			    
-			    foreach ($vendors as $vendor){
-			        // Your existing vendor rules...
-			        if (isset($vendor->ID)){
-			            $vendor_id = $vendor->ID;
-			            $baseurl = get_user_meta($vendor_id,'marketking_vendor_store_url_base',true);
-			            if (!empty($baseurl)){
-			                if (intval($baseurl) === 1){
-			                    $store_url = get_user_meta($vendor_id,'marketking_store_url', true);
-			                    add_rewrite_rule(
-			                        '^'.$store_url.'$',
-			                        'index.php?pagename='.$stores_slug.'&vendorid='.$store_url,
-			                        'top'
-			                    );
-			                    add_rewrite_rule(
-			                        '^'.$store_url.'/([^/]*)/?([^/]*)/?([^/]*)/?',
-			                        'index.php?pagename='.$stores_slug.'&vendorid='.$store_url.'&pagenr=$matches[1]&pagenr2=$matches[2]',
-			                        'top'
-			                    );
-			                }
-			            }
-			        }
-			    }
+				// get all vendors with base store URLs
+				$vendors = marketking()->get_all_vendors();
 
-			    if (apply_filters('marketking_flush_permalinks', true)){
-			        // Only flush if it's been longer than the interval
-			        if (time() - $last_flush > $flush_interval) {
-			            flush_rewrite_rules();
-			            update_option('marketking_last_rewrite_flush', time());
-			        }
-			    }
+				if (!empty($vendors)){
+					$stores_page = intval(apply_filters( 'wpml_object_id', get_option( 'marketking_stores_page_setting', 'none' )));
+					$stores_post = get_post($stores_page);
+					if ($stores_post){
+						$stores_slug = $stores_post->post_name;
+					}
+				}
+
+				foreach ($vendors as $vendor){
+					if (isset($vendor->ID)){
+						$vendor_id = $vendor->ID;
+
+						// check if vendor has its own base url
+						$baseurl = get_user_meta($vendor_id,'marketking_vendor_store_url_base',true);
+						if (!empty($baseurl)){
+							if (intval($baseurl) === 1){
+
+								$store_url = get_user_meta($vendor_id,'marketking_store_url', true);
+
+								add_rewrite_rule(
+								    '^'.$store_url.'$',
+								    'index.php?pagename='.$stores_slug.'&vendorid='.$store_url,
+								    'top' //Places it as the prioritary rewrite rule
+								  );
+
+								add_rewrite_rule(
+								    '^'.$store_url.'/([^/]*)/?([^/]*)/?([^/]*)/?',
+								    'index.php?pagename='.$stores_slug.'&vendorid='.$store_url.'&pagenr=$matches[1]&pagenr2=$matches[2]',
+								    'top' //Places it as the prioritary rewrite rule
+								  );
+								
+							}
+						}
+					}
+					
+				}			    
+			  	
+			  	if (apply_filters('marketking_flush_permalinks', true)){
+			  		// Flush rewrite rules
+			  		flush_rewrite_rules();
+			  	}
+
 			}
-			  
+
 			add_action( 'init', 'prefix_rewrite_rules' );
 
 		}
@@ -484,10 +487,10 @@ class Marketkingcore {
 		//Force a flush when vendor URLs are updated
 		function marketking_handle_vendor_url_update($meta_id, $object_id, $meta_key, $_meta_value) {
 		    if (in_array($meta_key, ['marketking_vendor_store_url_base', 'marketking_store_url'])) {
-		        delete_option('marketking_last_rewrite_flush'); // Force next flush
 		        flush_rewrite_rules();
 		    }
 		}
+		
 		add_action('update_user_meta', 'marketking_handle_vendor_url_update', 10, 4);
 		
 
@@ -852,27 +855,21 @@ class Marketkingcore {
     }
 
     function marketking_rewrite_dashboard_url2() {
-        // Only flush rewrite rules if they haven't been flushed recently
-        $last_flush = get_option('marketking_last_rewrite_flush', 0);
-        $flush_interval = 3600; // Only flush once per hour max
-
         $pageid = apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true);
         $slug = get_page_uri($pageid);
+
         // Optional language prefix
         $lang_prefix = '([^/]*)/?';
-        
+
         add_rewrite_rule(
             '^' . $lang_prefix . $slug . '/([^/]*)/?([^/]*)/?([^/]*)/?',
             'index.php?lang=$matches[1]&pagename='.$slug.'&dashpage=$matches[2]'.'&pagenr=$matches[3]'.'&pagenr2=$matches[4]',
             'top'
         );
-        
+
         if (apply_filters('marketking_flush_permalinks', true)){
-            // Only flush if it's been longer than the interval
-            if (time() - $last_flush > $flush_interval) {
-                flush_rewrite_rules();
-                update_option('marketking_last_rewrite_flush', time());
-            }
+            // Flush rewrite rules
+            flush_rewrite_rules();
         }
     }
 
@@ -5217,6 +5214,21 @@ class Marketkingcore {
 			require_once MARKETKINGCORE_DIR . '/public/class-marketking-core-public.php';
 			$marketking_public = new Marketkingcore_Public();
 		}
+
+		// Handle files
+	    if (!empty($_FILES)) {
+	        foreach ($_FILES as $key => $file) {
+	            if (!empty($file['name'])) {
+	                // Ensure WordPress file upload handling is properly initialized
+	                if (!function_exists('wp_handle_upload')) {
+	        	        require_once( ABSPATH . 'wp-admin/includes/image.php' );
+	        			require_once( ABSPATH . 'wp-admin/includes/file.php' );
+	        			require_once( ABSPATH . 'wp-admin/includes/media.php' );	                
+	        		}
+	            }
+	        }
+	    }
+
 		$marketking_public->marketking_save_custom_registration_fields(get_current_user_id());
 		update_user_meta(get_current_user_id(),'marketking_vendor_application_pending','yes');
 
@@ -5548,7 +5560,7 @@ class Marketkingcore {
 							// register
 
 							?>
-							<form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="POST" class="woocommerce-form woocommerce-form-register register">
+							<form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="POST" enctype="multipart/form-data" class="woocommerce-form woocommerce-form-register register">
 
 
 								<?php

@@ -602,12 +602,10 @@ class Marketkingcore_Public{
 	}
 
 	function marketking_rewrite_url(){
-	    // Only flush rewrite rules if they haven't been flushed recently
-	    $last_flush = get_option('marketking_last_rewrite_flush', 0);
-	    $flush_interval = 3600; // Only flush once per hour max
+		$pageid = apply_filters( 'wpml_object_id', get_option( 'marketking_stores_page_setting', 'none' ), 'post' , true);
+		//$slug = get_post_field( 'post_name', $pageid );
+		$slug = get_page_uri($pageid);
 
-	    $pageid = apply_filters( 'wpml_object_id', get_option( 'marketking_stores_page_setting', 'none' ), 'post' , true);
-	    $slug = get_page_uri($pageid);
 	    add_rewrite_rule(
 	        '^'.$slug.'/([^/]*)/?([^/]*)/?([^/]*)/?',
 	        'index.php?pagename='.$slug.'&vendorid=$matches[1]'.'&pagenr=$matches[2]'.'&pagenr2=$matches[3]',
@@ -615,11 +613,8 @@ class Marketkingcore_Public{
 	    );
 
 	    if (apply_filters('marketking_flush_permalinks', true)){
-	        // Only flush if it's been longer than the interval
-	        if (time() - $last_flush > $flush_interval) {
-	            flush_rewrite_rules();
-	            update_option('marketking_last_rewrite_flush', time());
-	        }
+	    	// Flush rewrite rules
+	    	flush_rewrite_rules();
 	    }
 	}
 
@@ -3043,6 +3038,7 @@ class Marketkingcore_Public{
     		'url_not_available' => esc_html__('This URL is not available!', 'marketking-multivendor-marketplace-for-woocommerce'),
     		'url_searching' => esc_html__('Searching availability...', 'marketking-multivendor-marketplace-for-woocommerce'),
     		'url_too_short' => esc_html__('The URL is too short...', 'marketking-multivendor-marketplace-for-woocommerce'),
+    		'urlminlength' => apply_filters('marketking_url_min_length', 5),
     		'no_vendors_yet' => esc_html__('There are no sellers yet...','marketking-multivendor-marketplace-for-woocommerce'),
     		'profile_pic' => plugins_url('../includes/assets/images/store-profile.png', __FILE__),
     		'cartstyle' => get_option( 'marketking_cart_display_setting', 'newcart' ),

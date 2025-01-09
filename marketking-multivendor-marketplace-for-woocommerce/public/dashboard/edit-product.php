@@ -23,7 +23,7 @@ For example, if your theme is storefront, you can copy this file under wp-conten
 
         if (!apply_filters('marketking_vendors_can_edit_products', true)){
             return;
-        }   
+        } 
 
         $productid = sanitize_text_field(marketking()->get_pagenr_query_var());
         $canadd = marketking()->vendor_can_add_more_products($user_id);
@@ -62,7 +62,12 @@ For example, if your theme is storefront, you can copy this file under wp-conten
             $retake = 'yes';
         }
 
-        if ( (int) marketking()->get_product_vendor( $productid ) !== (int) $user_id ) {
+        $product_vendor = (int) marketking()->get_product_vendor( $productid );
+        if (marketking()->is_vendor_team_member() && $product_vendor === (int) get_current_user_id()){
+            $product_vendor = marketking()->get_team_member_parent();
+        }
+
+        if ( $product_vendor !== (int) $user_id ) {
             // check that we're not on add page
             if (get_query_var('pagenr') !== 'add'){
                 return;

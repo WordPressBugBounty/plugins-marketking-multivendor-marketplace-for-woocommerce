@@ -2289,7 +2289,7 @@
 		    let storeurl = $('.billing_store_url').val();
 
 		    // Check if the URL has a minimum of 5 characters
-	        if (storeurl.length < 5) {
+	        if (storeurl.length < parseInt(marketking_display_settings.urlminlength)) {
 	            $('.marketking_availability').html('(' + marketking_display_settings.url_too_short + ')');
 	            $('.marketking_availability').removeClass('marketking_url_available');
 	            $('.marketking_availability').addClass('marketking_url_unavailable');

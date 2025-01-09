@@ -285,7 +285,14 @@ if(marketking()->vendor_has_panel('products')){
                                                 if (empty($tagstext)){
                                                     $tagstext = '—';
                                                 }
-                                                $type = ucfirst($product->get_type());
+                                                $type = $product->get_type();
+
+                                                foreach ( wc_get_product_types() as $value => $label ){
+                                                    if ($type === $value){
+                                                        $type = $label;
+                                                    }
+                                                }
+
                                                 $time = $product->get_date_created();
                                                 if ($time === null){
                                                     $time = $product->get_date_modified();

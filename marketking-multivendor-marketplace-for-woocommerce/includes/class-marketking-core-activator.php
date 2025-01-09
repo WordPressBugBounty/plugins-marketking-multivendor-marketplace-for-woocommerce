@@ -404,8 +404,6 @@ class Marketkingcore_Activator {
 		if (apply_filters('marketking_flush_permalinks', true)){
 			// Flush rewrite rules
 			flush_rewrite_rules();
-			update_option('marketking_last_rewrite_flush', 0);
-
 		}
 
 
