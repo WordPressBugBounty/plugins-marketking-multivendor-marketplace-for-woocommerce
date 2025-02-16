@@ -463,6 +463,15 @@ if(marketking()->vendor_has_panel('orders')){
                                                                 <?php
                                                             // show packages
                                                             foreach ($shipping_history as $shipment){
+                                                                
+                                                                if (isset($shipment['provider']) && !empty($shipment['provider'])){
+                                                                    //proceed
+                                                                } else {
+                                                                    // skip
+                                                                    continue;
+                                                                }
+
+
                                                                 esc_html_e('Shipment via ','marketking-multivendor-marketplace-for-woocommerce');
 
                                                                 $providername = $providers[$shipment['provider']]['label'];

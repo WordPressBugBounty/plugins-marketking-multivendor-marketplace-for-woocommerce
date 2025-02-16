@@ -14,6 +14,7 @@ For example, if your theme is storefront, you can copy this file under wp-conten
 */
 
 ?>
+
 <?php
     if(marketking()->vendor_has_panel('products')){
         $checkedval = 0;
@@ -299,6 +300,109 @@ For example, if your theme is storefront, you can copy this file under wp-conten
                                 <div class="row">
                                     <!-- GALLERY -->
                                     <br><br>
+                                    <?php
+                                    if (apply_filters('marketking_allow_wpml_translations_dashboard', true)){
+                                        if (get_query_var('pagenr') !== 'add'){
+                                            if (defined('WPML_PLUGIN_FILE')){
+                                                ?>  
+                                                <div class="col-xxl-12 col-md-12 marketking_translations_box">
+                                                    <div class="code-block"><h6 class="overline-title title"><?php esc_html_e('Translations','marketking-multivendor-marketplace-for-woocommerce');?></h6>
+                                                        <?php
+                                                        $languages = apply_filters( 'wpml_active_languages', NULL, 'orderby=id&order=desc' );
+                                                         
+                                                        if ( !empty( $languages ) ) {
+                                                            foreach( $languages as $l ) {
+
+                                                                $translation_id = apply_filters('wpml_object_id', $productid, 'post', false, $l['language_code']);
+
+                                                                // display flag
+                                                                echo '<img src="' . esc_url ( $l['country_flag_url'] ) . '" height="12" alt="' . esc_attr( $l['language_code'] ) . '" width="18" /> ';
+
+                                                                if (!$translation_id) {
+
+                                                                    // Create translation if it doesn't exist, show plus icon
+                                                                    $url = esc_attr(trailingslashit(get_page_link(get_option( 'marketking_vendordash_page_setting', 'disabled' ))).'edit-product/'.$productid).'/?translate='.$l['language_code'];
+                                                                    if (isset($_GET['translate'])){
+                                                                        $language_to_translate = sanitize_text_field($_GET['translate']);
+                                                                    
+                                                                        $product = wc_get_product($productid);
+
+                                                                        $get_language_args = array('element_id' => $productid, 'element_type' => 'post' );
+                                                                        $original_post_language_info = apply_filters( 'wpml_element_language_details', null, $get_language_args );
+
+                                                                        // create duplicate of currentproduct
+                                                                        $admin = new WC_Admin_Duplicate_Product;
+                                                                        $duplicate = $admin->product_duplicate( $product );
+                                                                        $duplicate->set_name( $title.$language_to_translate );
+                                                                        $duplicate->set_status( 'draft' );
+                                                                        $duplicate->save();
+                                                                        $duplicate_id = $duplicate->get_id();
+
+                                                                        wp_update_post(
+                                                                           array(
+                                                                                'ID'          => $duplicate_id,
+                                                                                'post_author' => $product_vendor,
+                                                                           )
+                                                                        );
+
+                                                                        $newproduct = wc_get_product($duplicate_id);
+                                                                        $newproduct->save();
+
+                                                                        // set language in wpml for the duplicate
+                                                                        $set_language_args = array(
+                                                                            'element_id'    => intval($duplicate_id),
+                                                                            'element_type'  => 'post_product',
+                                                                            'trid'   => $original_post_language_info->trid,
+                                                                            'language_code'   => $language_to_translate,
+                                                                            'source_language_code' => $original_post_language_info->language_code,
+                                                                        );
+                                                                        do_action( 'wpml_set_element_language_details', $set_language_args );
+
+                                                                        // reload page -> go to translation
+                                                                        $newurl = trailingslashit(get_page_link(get_option( 'marketking_vendordash_page_setting', 'disabled' ))).'edit-product/'.$duplicate_id;
+
+                                                                        ?>
+                                                                        <script type="text/javascript">
+                                                                            window.location.href = "<?php echo esc_url($newurl); ?>";
+                                                                        </script>
+                                                                        <?php
+                                                                        exit();
+                                                                    } else {
+                                                                        echo '<a href="'.esc_url($url).'">';
+                                                                        echo '<span><em class="icon ni ni-plus"></em> '.esc_html__('Add translation','marketking-multivendor-marketplace-for-woocommerce').'</span>';
+                                                                        echo '</a>';
+                                                                    }
+
+
+                                                                    
+
+                                                                } else {
+                                                                    // Edit existing translation
+                                                                    if (intval($translation_id) === intval($productid)){
+                                                                        esc_html_e('Your are currently editing this translation.', 'marketking-multivendor-marketplace-for-woocommerce');
+                                                                    } else {
+                                                                        // show pencil icon
+                                                                        $url = esc_attr(trailingslashit(get_page_link(get_option( 'marketking_vendordash_page_setting', 'disabled' ))).'edit-product/'.$translation_id);
+
+                                                                        echo '<a href="'.esc_url($url).'">';
+                                                                        echo '<span><em class="icon ni ni-pen"></em> '.esc_html__('Edit translation','marketking-multivendor-marketplace-for-woocommerce').'</span>';
+                                                                        echo '</a>';
+
+                                                                    }
+                                                                }
+
+                                                                echo '<br>';
+
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                            }
+                                        }
+                                    }
+                                    ?>
                                     <div class="col-xxl-3 col-md-6 marketking_card_gal_cat_tags marketking_main_product_image_block">
                                         <div class="code-block"><h6 class="overline-title title"><?php esc_html_e('Main Product Image','marketking-multivendor-marketplace-for-woocommerce');?></h6>
                                             <img id="marketking_edit_product_main_image" src="<?php
@@ -727,4 +831,16 @@ For example, if your theme is storefront, you can copy this file under wp-conten
             <?php
         }
     }
+
+    ?>
+    <script>
+        jQuery(document).ready(function(){
+            tinymce.on('AddEditor', function(e) {
+                e.editor.on('init', function() {
+                    this.blur();
+                });
+            });
+        });
+    </script>
+    <?php
 ?>

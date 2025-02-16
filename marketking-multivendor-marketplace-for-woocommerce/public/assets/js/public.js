@@ -1133,6 +1133,7 @@
 					"language": {
 					    "url": marketking_display_settings.datatables_folder+marketking_display_settings.tables_language_option+'.json'
 					},
+					pageLength: parseInt(marketking_display_settings.rows_per_page), 
 					oLanguage: {
 		                sSearch: ""
 		            },
@@ -1190,6 +1191,7 @@
 					oLanguage: {
 		                sSearch: ""
 		            },
+		            pageLength: parseInt(marketking_display_settings.rows_per_page),
 		            dom: 'Bfrtip',
 		            columnDefs: [
 		                { "width": "18%", "targets": 0 },
@@ -2664,7 +2666,6 @@
 	        		$(th).html(marketking_display_settings.follow_text);
 	        	}
 	        });
-
 		});
 		
 

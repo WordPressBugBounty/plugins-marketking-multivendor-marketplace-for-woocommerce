@@ -123,7 +123,7 @@ class Marketkingcore_Helper{
 		add_filter( 'plugin_locale', 'get_locale' );
 		
 		unload_textdomain( 'marketking-multivendor-marketplace-for-woocommerce' );
-		load_textdomain( 'marketking-multivendor-marketplace-for-woocommerce', MARKETKINGCORE_LANG.'/MARKETKINGCORE_LANG-'.$locale.'.mo');
+		load_textdomain( 'marketking-multivendor-marketplace-for-woocommerce', WP_PLUGIN_DIR . '/' . MARKETKINGCORE_LANG.'/MARKETKINGCORE_LANG-'.$locale.'.mo');
 		load_plugin_textdomain( 'marketking-multivendor-marketplace-for-woocommerce', false, MARKETKINGCORE_LANG );  
 	}
 

@@ -392,6 +392,13 @@ input.marketking_search_column {
     right: 20px;
     top: 12px
 }
+.marketking_translations_box .code-block{
+    min-height: auto;
+}
+.marketking_translations_box img {
+    margin-right: 9px;
+    margin-bottom: 2px;
+}
 
 table.widefat {
     width: 100%;

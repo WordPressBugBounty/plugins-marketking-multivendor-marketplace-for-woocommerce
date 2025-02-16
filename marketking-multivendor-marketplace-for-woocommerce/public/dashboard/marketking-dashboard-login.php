@@ -484,7 +484,8 @@ if (!defined('ABSPATH')) { exit; }
         if (apply_filters('marketking_enable_minmaxqty_integration', true)){
 
             if (class_exists('WC_Min_Max_Quantities')){
-                include_once WC_MMQ_ABSPATH . '/includes/class-wc-min-max-quantities-admin.php';
+
+                include_once WC_MMQ_ABSPATH . 'includes/admin/class-wc-min-max-quantities-admin.php';
 
                 add_action('wp_print_styles', function(){
                     $instance = WC_Min_Max_Quantities::get_instance();

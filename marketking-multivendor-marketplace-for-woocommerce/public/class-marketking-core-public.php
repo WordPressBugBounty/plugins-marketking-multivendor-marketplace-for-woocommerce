@@ -671,6 +671,10 @@ class Marketkingcore_Public{
 		global $post;
 		$vendor_id = marketking()->get_product_vendor($post->ID);
 
+		if (empty($vendor_id) || intval($vendor_id) === 0){
+			return;
+		}
+
 		do_action('marketking_before_vendor_details_product_page', $vendor_id);
 
 		echo '<strong>'.esc_html__('Vendor: ','marketking-multivendor-marketplace-for-woocommerce').'</strong>';
@@ -2553,7 +2557,7 @@ class Marketkingcore_Public{
     		'advertising_enabled' => $advertising,
     		'loadertransparenturl' => plugins_url('../includes/assets/images/loadertransparent.svg', __FILE__),
     		'loading_shipping_data' => esc_html__('Loading shipping data...','marketking-multivendor-marketplace-for-woocommerce'),
-
+    		'rows_per_page' => apply_filters('marketking_table_rows_per_page', 10),
 		);
 
 

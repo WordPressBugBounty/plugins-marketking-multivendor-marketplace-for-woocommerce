@@ -21,6 +21,9 @@ For example, if your theme is storefront, you can copy this file under wp-conten
             <div class="nk-menu-trigger d-xl-none ml-n1">
                 <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
             </div>
+            <?php
+            do_action('marketking_dashboard_header_bar');
+            ?>
             <div class="nk-header-brand d-xl-none">
                 <a href="<?php echo esc_attr(get_home_url());?>" class="logo-link">
                     <img class="logo-dark logo-img" src="<?php echo esc_url($logo_src); ?>" alt="logo-dark">

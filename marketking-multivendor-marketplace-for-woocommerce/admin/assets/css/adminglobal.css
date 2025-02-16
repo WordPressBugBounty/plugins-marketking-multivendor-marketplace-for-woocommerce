@@ -163,6 +163,11 @@ button.marketking_color_scheme_button {
 .column-ads {
     width: 10%;
 }
+#marketking_admin_vendors_table td:nth-child(1).sorting_1{
+    height: 80px;
+    display: flex;
+    align-items: center;
+}
 
 input.advertising_days_input {
     width: 300px;

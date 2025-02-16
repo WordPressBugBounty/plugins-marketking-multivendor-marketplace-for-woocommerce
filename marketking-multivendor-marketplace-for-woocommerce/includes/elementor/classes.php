@@ -98,16 +98,21 @@ class Elementor_Store_Title_Widget extends \Elementor\Widget_Base {
 
 		$title = marketking()->get_store_name_display($vendor_id);
 
-
 		$settings = $this->get_settings_for_display();
+
+		ob_start();
 		
 		?>
 		<div class="marketking_elementor_store_title">
 		<h3><?php echo esc_html($title); ?> </h3>
 		</div>
 		<?php
+
+		$content = ob_get_clean();
+		echo apply_filters('marketking_elementor_store_title_content', $content, $vendor_id);
 	}
 }
+
 
 class Elementor_Vendor_Badges_Widget extends \Elementor\Widget_Base {
 

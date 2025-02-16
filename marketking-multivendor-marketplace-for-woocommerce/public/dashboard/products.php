@@ -18,6 +18,11 @@ if(marketking()->vendor_has_panel('products')){
     if (marketking()->is_vendor_team_member()){
         $checkedval = intval(get_user_meta(get_current_user_id(),'marketking_teammember_available_panel_editproducts', true));
     }
+
+    if (defined('WPML_PLUGIN_FILE')){
+        $languages = apply_filters( 'wpml_active_languages', NULL, 'orderby=id&order=desc' );
+    }
+
     
     ?>
     <div class="nk-content marketking_products_page">
@@ -152,6 +157,17 @@ if(marketking()->vendor_has_panel('products')){
                                 <th class="nk-tb-col tb-col-md marketking-column-small"><span class="sub-text"><?php esc_html_e('Status','marketking-multivendor-marketplace-for-woocommerce'); ?></span></th>
                                 <th class="nk-tb-col tb-col-md marketking-column-mid"><span class="sub-text"><?php esc_html_e('Tags','marketking-multivendor-marketplace-for-woocommerce'); ?></span></th>
                                 <th class="nk-tb-col tb-col-md marketking-column-mid"><span class="sub-text"><?php esc_html_e('Date Created','marketking-multivendor-marketplace-for-woocommerce'); ?></span></th>
+                                <?php
+
+                                if (apply_filters('marketking_allow_wpml_translations_dashboard', true)){
+                                    if (defined('WPML_PLUGIN_FILE')){
+                                        ?>
+                                        <th class="nk-tb-col marketking-column-min"><span class="sub-text"><?php esc_html_e('Languages','marketking-multivendor-marketplace-for-woocommerce'); ?></span></th>
+                                        <?php
+                                    }
+                                }
+
+                                ?>
                                 <th class="nk-tb-col marketking-column-min"><span class="sub-text"><?php esc_html_e('Actions','marketking-multivendor-marketplace-for-woocommerce'); ?></span></th>                           
 
                             </tr>
@@ -180,6 +196,17 @@ if(marketking()->vendor_has_panel('products')){
                                     <th class="nk-tb-col tb-col-md tb-non-tools"><?php esc_html_e('status','marketking-multivendor-marketplace-for-woocommerce'); ?></th>
                                     <th class="nk-tb-col tb-col-md tb-non-tools"><?php esc_html_e('tags','marketking-multivendor-marketplace-for-woocommerce'); ?></th>
                                     <th class="nk-tb-col tb-col-md tb-non-tools"><?php esc_html_e('date','marketking-multivendor-marketplace-for-woocommerce'); ?></th>
+                                    <?php
+
+                                    if (apply_filters('marketking_allow_wpml_translations_dashboard', true)){
+                                        if (defined('WPML_PLUGIN_FILE')){
+                                            ?>
+                                            <th class="nk-tb-col tb-col-md tb-non-tools"><?php esc_html_e('languages','marketking-multivendor-marketplace-for-woocommerce'); ?></th>
+                                            <?php
+                                        }
+                                    }
+
+                                    ?>
                                     <th class="nk-tb-col tb-non-tools marketking-column-min"></th>
                                 </tr>
                             </tfoot>
@@ -431,6 +458,51 @@ if(marketking()->vendor_has_panel('products')){
                                         <td class="nk-tb-col tb-col-md marketking-column-mid" data-order="<?php echo esc_attr($timestamp);?>">
                                             <span class="tb-sub"><?php echo esc_html($date);?></span>
                                         </td>
+                                        <?php
+                                        if (apply_filters('marketking_allow_wpml_translations_dashboard', true)){
+                                            if (defined('WPML_PLUGIN_FILE')){
+                                                ?>
+                                                <td class="nk-tb-col tb-col-md marketking-column-mid">
+                                                    <span class="tb-sub"><?php 
+                                                     
+                                                    if ( !empty( $languages ) ) {
+                                                        $productid = $product->get_id();
+
+                                                        foreach( $languages as $l ) {
+                                                            $translation_id = apply_filters('wpml_object_id', $productid, 'post', false, $l['language_code']);
+
+                                                            // display flag
+                                                            echo '<img src="' . esc_url ( $l['country_flag_url'] ) . '" height="12" alt="' . esc_attr( $l['language_code'] ) . '" width="18" /> ';
+
+                                                            if (!$translation_id) {
+
+                                                                // Create translation if it doesn't exist, show plus icon
+                                                                $url = esc_attr(trailingslashit(get_page_link(get_option( 'marketking_vendordash_page_setting', 'disabled' ))).'edit-product/'.$productid).'/?translate='.$l['language_code'];
+                                                                
+                                                                echo '<a href="'.esc_url($url).'">';
+                                                                echo '<span><em class="icon ni ni-plus"></em> '.esc_html__('Add','marketking-multivendor-marketplace-for-woocommerce').'</span>';
+                                                                echo '</a>';
+
+
+                                                            } else {
+                                                                // show pencil icon
+                                                                $url = esc_attr(trailingslashit(get_page_link(get_option( 'marketking_vendordash_page_setting', 'disabled' ))).'edit-product/'.$translation_id);
+
+                                                                echo '<a href="'.esc_url($url).'">';
+                                                                echo '<span><em class="icon ni ni-pen"></em> '.esc_html__('Edit','marketking-multivendor-marketplace-for-woocommerce').'</span>';
+                                                                echo '</a>';
+                                                            }
+
+                                                            echo '<br>';
+                                                        }
+                                                    }
+
+                                                    ?></span>
+                                                </td>                                                
+                                                <?php
+                                            }
+                                        }
+                                        ?>
                                         <td class="nk-tb-col marketking-column-min">
                                             <ul class="nk-tb-actions gx-1 my-n1">
                                                 <li class="mr-n1">

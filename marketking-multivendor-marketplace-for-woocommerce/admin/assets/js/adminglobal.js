@@ -747,13 +747,36 @@
 
 			/* Vendors */
 			if (typeof $('#marketking_admin_vendors_table').DataTable === "function") { 
-				$('#marketking_admin_vendors_table').DataTable({
-					"language": {
-					    "url": marketking.datatables_folder+marketking.tables_language_option+'.json'
-					},
-					retrieve: true,
+				if (parseInt(marketking.marketking_vendors_panel_ajax_setting) !== 1){
 
-				});
+					$('#marketking_admin_vendors_table').DataTable({
+						"language": {
+						    "url": marketking.datatables_folder+marketking.tables_language_option+'.json'
+						},
+						retrieve: true,
+
+					});
+				} else {
+					// ajax
+	       		$('#marketking_admin_vendors_table').DataTable({
+	       			"retrieve": true,
+	       			"language": {
+							    "url": marketking.datatables_folder+marketking.tables_language_option+'.json'
+							},
+	       			"processing": true,
+	       			"serverSide": true,
+	       			"info": true,
+	       		    "ajax": {
+	       		   		"url": ajaxurl,
+	       		   		"type": "POST",
+	       		   		"data":{
+	       		   			action: 'marketking_admin_vendors_ajax',
+	       		   			security: marketking.security,
+	       		   		}
+	       		   	}
+	            });
+
+				}
 			}
 
 			// Move header to top of page
@@ -1241,7 +1264,13 @@
 
 		        function myFunction(item, index) {
 		        	if (parseInt(item.length) !== 0){
-		        		let value = $('input[name=marketking_field_'+item+']').val();
+
+		        		if (parseInt($('input[name=marketking_field_'+item+']').length) !== 0){
+		        			var value = $('input[name=marketking_field_'+item+']').val();
+		        		} else if (parseInt($('textarea[name=marketking_field_'+item+']').length) !== 0){
+		        			var value = $('textarea[name=marketking_field_'+item+']').val();
+		        		}
+
 		        		if (value !== null){
 		        			let key = 'field_'+item;
 		        			datavar[key] = value;

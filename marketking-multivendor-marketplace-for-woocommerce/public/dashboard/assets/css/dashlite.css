@@ -205,7 +205,13 @@ span.select2-container--open{
 th.titledesc {
     vertical-align: middle;
 }
-
+.marketking_translations_box .code-block{
+    min-height: auto;
+}
+.marketking_translations_box img {
+    margin-right: 9px;
+    margin-bottom: 2px;
+}
 .list-unstyled { padding-left: 0; list-style: none; }
 
 .list-inline { padding-left: 0; list-style: none; }

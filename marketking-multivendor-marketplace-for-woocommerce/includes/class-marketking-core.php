@@ -139,6 +139,10 @@ class Marketkingcore {
 				add_action( 'wp_ajax_marketking_orders_table_ajax', array($this, 'marketking_orders_table_ajax') );
 				add_action( 'wp_ajax_nopriv_marketking_orders_table_ajax', array($this, 'marketking_orders_table_ajax') );
 
+				// Load backend vendors Table AJAX 
+				add_action( 'wp_ajax_marketking_admin_vendors_ajax', array($this, 'marketking_admin_vendors_ajax') );
+				add_action( 'wp_ajax_nopriv_marketking_admin_vendors_ajax', array($this, 'marketking_admin_vendors_ajax') );
+
 
 				// Save order status
 				add_action( 'wp_ajax_marketkingsaveorder', array($this, 'marketkingsaveorder') );
@@ -640,6 +644,7 @@ class Marketkingcore {
 		add_filter('wc_get_template', [$this, 'marketking_template_vieworder'], 10, 5);
 		// Filter thank you for your order email: only send the main 1, not 3 emails
 		add_filter( 'woocommerce_email_recipient_customer_processing_order', array($this,'filter_customer_received_order_email_recipient'), 10, 2 );
+		add_filter( 'woocommerce_email_recipient_customer_on-hold_order', array($this,'filter_customer_received_order_email_recipient'), 10, 2 );
 		// For "New order" emails, each email has to be sent to its vendor, not to the admin
 		add_filter( 'woocommerce_email_recipient_new_order', array($this,'filter_new_order_email_recipient'), 10, 2 );
 		add_filter('woocommerce_email_recipient_new_renewal_order', array($this, 'filter_new_order_email_recipient'), 10, 2);
@@ -1047,6 +1052,9 @@ class Marketkingcore {
 	}
 
 	function marketking_filter_edit_order_url($url, $order){
+		if (is_admin()){
+			return $url;
+		}
 
 		$order_id = $order->get_id();
 		$vendor_id = marketking()->get_order_vendor($order_id);
@@ -2936,7 +2944,17 @@ class Marketkingcore {
 			wp_die();
 		}
 
-		if (intval($parent) === intval(get_current_user_id())){
+		// if current user is parent, or belongs to the same account with "my team" permissions
+		$is_manager = false;
+		$current_id = get_current_user_id();
+		$current_parent = get_user_meta($current_id,'marketking_parent_vendor', true);
+		if (intval($current_parent) === intval($parent)){
+			if (intval(get_user_meta($current_id, 'marketking_teammember_available_panel_teams', true)) === 1){
+				$is_manager = true;
+			}
+		}
+
+		if ( (intval($parent) === intval($current_id)) || ($is_manager) ){
 			foreach ($panel_slugs as $panel){
 				$value = sanitize_text_field($_POST[$panel]);
 				$value = filter_var($value,FILTER_VALIDATE_BOOLEAN);
@@ -3664,6 +3682,205 @@ class Marketkingcore {
 		echo json_encode($data);
 
 		exit();
+	}
+
+	function marketking_admin_vendors_ajax(){
+		// Check security nonce. 
+		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
+		  	wp_send_json_error( 'Invalid security token sent.' );
+		    wp_die();
+		}
+
+		$start = sanitize_text_field($_POST['start']);
+		$length = sanitize_text_field($_POST['length']);
+		$search = sanitize_text_field($_POST['search']['value']);
+		$pagenr = ($start/$length)+1;
+
+		// If there's a search term, we need to handle meta search separately
+		if (!empty($search)) {
+		    // First, get users matching the meta value (these are final results we want)
+		    $meta_query_args = array(
+		        'meta_key'     => 'marketking_store_name',
+		        'meta_value'   => $search,
+		        'meta_compare' => 'LIKE',
+		        'number'       => -1,
+		        'fields'       => 'ID'
+		    );
+		    
+		    $meta_users = get_users($meta_query_args);
+
+		    // Get users matching regular search, but exclude the meta users we already found
+		    $regular_args = array(
+		        'meta_key'     => 'marketking_group',
+		        'meta_value'   => 'none',
+		        'meta_compare' => '!=',
+		        'number'       => -1,
+		        'search'       => "*{$search}*",
+		        'search_columns' => array(
+		            'display_name',
+		            'user_login', 
+		            'user_email'
+		        ),
+		        'exclude'      => $meta_users, // Exclude users we already found
+		        'fields'       => array('ID', 'display_name', 'user_login', 'user_email'),
+		    );
+		    
+		    // Get regular search results
+		    $regular_users = get_users($regular_args);
+		    
+		    // Get the full user objects for meta matches
+		    $meta_users_full = array();
+		    if (!empty($meta_users)) {
+		        $meta_users_full = get_users(array(
+		            'include' => $meta_users,
+		            'fields' => array('ID', 'display_name', 'user_login', 'user_email')
+		        ));
+		    }
+		    
+		    // Combine both sets
+		    $all_matching_users = array_merge($meta_users_full, $regular_users);
+		    
+		    // Handle pagination manually
+		    $total_count = count($all_matching_users);
+		    $offset = ($pagenr - 1) * $length;
+		    $users = array_slice($all_matching_users, $offset, $length);
+
+		} else {
+		    // If no search term, use original query
+		    $args = array(
+		        'meta_key'     => 'marketking_group',
+		        'meta_value'   => 'none',
+		        'meta_compare' => '!=',
+		        'number'       => $length,
+		        'paged'        => floatval($pagenr),
+		        'fields'       => array('ID', 'display_name', 'user_login', 'user_email'),
+		    );
+		    
+		    $users = get_users($args);
+		    
+		    // Get total count for no search term
+		    $args_total_number = array(
+		        'meta_key'     => 'marketking_group',
+		        'meta_value'   => 'none',
+		        'meta_compare' => '!=',
+		        'number'       => -1,
+		        'fields'       => array('ID', 'display_name'),
+		    );
+		    
+		    $total_count = count(get_users($args_total_number));
+		}
+
+		$data = array(
+			'length'=> $length,
+			'data' => array(),
+			'recordsFiltered' => $total_count, 
+			'recordsTotal' => $total_count
+		);
+
+		foreach ( $users as $user ) {
+
+			$user_id = $user->ID;
+			$original_user_id = $user_id;
+			$username = $user->user_login;
+			$store_name = marketking()->get_store_name_display($user_id);
+
+			$group_name = get_the_title(get_user_meta($user_id, 'marketking_group', true));
+			
+			if (get_user_meta($user_id, 'marketking_group', true) === 'none'){
+				$group_name = '<i>'.esc_html__('Inactive Vendor - No Group','marketking-multivendor-marketplace-for-woocommerce').'</i>';
+			}
+
+			if (empty($group_name)){
+				$group_name = '-';
+			}
+		
+			$profile_pic = get_user_meta($user_id,'marketking_profile_logo_image', true);
+			if (empty($profile_pic)){
+				$profile_pic = plugins_url('../includes/assets/images/store-profile.png', __FILE__);
+			}
+
+			$store_phone = get_user_meta($user_id, 'marketking_store_phone', true);
+			$store_email = get_user_meta($user_id, 'marketking_store_email', true);
+
+			if (!empty($store_email) && !empty($store_phone)){
+				$contact_info = $store_email.' - '.$store_phone;
+			} else if (!empty($store_email)){
+				$contact_info = $store_email;
+			} else if (!empty($store_phone)){
+				$contact_info = $store_phone;
+			} else {
+				$contact_info = '-';
+			}
+
+			if (apply_filters('marketking_show_vendor_total_sales_column', true)){
+
+				$total_sales = marketking()->get_vendor_total_sales($user_id);
+			}
+
+			$vacation = '';
+			if (marketking()->is_on_vacation($user_id)){
+				$vacation = ' <i>'.esc_html__('(on vacation)','marketking-multivendor-marketplace-for-woocommerce').'</i>';
+			}
+
+			ob_start(); 
+
+		    echo '<td class="marketking_vendor_td"><img class="marketking_vendor_profile" src='.esc_attr($profile_pic).'><a href="'.esc_attr(get_edit_user_link($original_user_id)).'#marketking_user_vendor_profile">'.esc_html( $store_name ).$vacation.'</a></td>';
+
+		    $col1 = ob_get_clean(); 
+
+		    ob_start(); 
+
+	        echo '<td>'.esc_html($group_name).'</td>';
+    	    
+    	    $col2 = ob_get_clean();
+
+    	    ob_start();
+
+	        echo '<td>'.esc_html( $contact_info ).'</td>';
+    	    
+    	    $col3 = ob_get_clean();
+
+    	    ob_start();
+
+		    if (apply_filters('marketking_show_vendor_total_sales_column', true)){
+		   		echo '<td data-order="'.$total_sales.'">'.wc_price( $total_sales ).'</td>';
+		   	}
+		    
+		    $col4 = ob_get_clean();
+
+		    ob_start(); ?>
+		    <td>
+		    	<a class="marketking_vendor_link" href="<?php echo esc_attr( admin_url( 'edit.php?post_type=product' ).'&author='.$original_user_id );?>"><button class="marketking-btn marketking-btn-outline-light marketking-btn-sm marketking_manage_vendors_button"><em class="icon marketking-ni marketking-ni-package-fill"></em><span><?php esc_html_e('Products','marketking-multivendor-marketplace-for-woocommerce');?></span></button></a>
+		    	<?php
+		    	if( ! OrderUtil::custom_orders_table_usage_is_enabled() ) {
+		    		?>
+		    		<a class="marketking_vendor_link" href="<?php echo esc_attr( admin_url( 'edit.php?post_type=shop_order' ).'&author='.$original_user_id );?>"><button class="marketking-btn marketking-btn-outline-light marketking-btn-sm marketking_manage_vendors_button"><em class="icon marketking-ni marketking-ni-bag-fill"></em><span><?php esc_html_e('Orders','marketking-multivendor-marketplace-for-woocommerce');?></span></button></a>
+		    		<?php
+		    	}
+		    	?>
+		    	<a class="marketking_vendor_link" href="<?php echo esc_attr(admin_url('admin.php?page=marketking_view_payouts').'&user='.$original_user_id);?>"><button class="marketking-btn marketking-btn-outline-light marketking-btn-sm marketking_manage_payouts_button" value="<?php echo esc_attr($original_user_id); ?>"><em class="icon marketking-ni marketking-ni-wallet-out"></em><span><?php esc_html_e('Payouts','marketking-multivendor-marketplace-for-woocommerce');?></span></button></a>
+		    	<a class="marketking_vendor_link" href="<?php echo esc_attr(get_edit_user_link($original_user_id));?>#marketking_user_vendor_profile"> <button class="marketking-btn marketking-btn-light-blue marketking-btn-sm marketking_manage_vendors_button"><em class="icon marketking-ni marketking-ni-user-fill-c"></em><span><?php esc_html_e('Profile','marketking-multivendor-marketplace-for-woocommerce');?></span></button></a><?php
+
+		    	do_action('marketking_admin_action_buttons', $original_user_id);
+		    	
+		    	?>
+		    </td>
+		    <?php 
+
+		    $col5 = ob_get_clean();
+
+		    if (apply_filters('marketking_show_vendor_total_sales_column', true)){
+				array_push($data['data'], array($col1, $col2, $col3, $col4, $col5) );
+			} else {
+				array_push($data['data'], array($col1, $col2, $col3, $col5) );
+			}
+
+		}
+
+		echo json_encode($data);
+		
+		exit();
+
 	}
 
 	function marketking_orders_table_ajax(){
@@ -4554,6 +4771,11 @@ class Marketkingcore {
 		$fields_array = explode(',',$fields_string);
 		foreach ($fields_array as $field_id){
 			if ($field_id !== NULL && !empty($field_id)){
+
+				$field_type = get_post_meta ($field_id, 'marketking_field_field_type', true);
+				if ($field_type === 'file'){
+					continue;
+				}
 
 				// first check if field is VAT, then update user meta if field not empty
 				$billing_connection = get_post_meta($field_id,'marketking_field_billing_connection', true);
