@@ -2925,7 +2925,7 @@
 
 
 		/* Single Product Multiple Vendors */
-		$('#marketking_add_product_to_my_store').on('click', function(){
+		$('body').on('click', '#marketking_add_product_to_my_store', function(){
 
 			// loader 
 			$('<img class="marketking_loader_icon_button" src="'+marketking_display_settings.loadertransparenturl+'">').insertBefore('#marketking_add_product_to_my_store_icon');
@@ -2940,6 +2940,7 @@
 	        $.post(marketking_display_settings.ajaxurl, datavar, function(response){
 	        	$('#marketking_add_product_to_my_store').html('&nbsp;&nbsp;&nbsp;&nbsp;'+marketking_display_settings.product_added_store);
 	        	$('#marketking_add_product_to_my_store').prop('disabled', true);
+	        	$('#marketking_add_product_to_my_store').attr('disabled', 'disabled');
 
 	        	// remove loader
 	        	$('.marketking_loader_icon_button').remove();

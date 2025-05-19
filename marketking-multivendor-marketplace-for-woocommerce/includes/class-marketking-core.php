@@ -682,7 +682,7 @@ class Marketkingcore {
 		if ( 'email-order-details.php' === basename( $template ) ) {
 
 			// only for html emails for now
-			if ($args['plain_text'] === false && $args['sent_to_admin'] === false){
+			//if ($args['plain_text'] === false && $args['sent_to_admin'] === false){
 
 
 				$order = $args['order'];
@@ -694,7 +694,7 @@ class Marketkingcore {
 
 				}
 				
-			}	
+			//}	
 		}
 		
 		return $template;
@@ -3671,7 +3671,7 @@ class Marketkingcore {
 		        if ($col_advertising === false){
 		        	array_push($data['data'], apply_filters('marketking_products_table_ajax_columns', array($col1, $col2, $col3, $col4, $col5, $col6, $col7, $col8, $col9, $col10)));
 		        } else {
-		        	array_push($data['data'], apply_filters('marketking_products_table_ajax_columns', array($col1, $col_advertising, $col2, $col3, $col4, $col5, $col6, $col7, $col8, $col9, $col10)));
+		        	array_push($data['data'], apply_filters('marketking_products_table_ajax_columns', array($col1, $col2, $col_advertising, $col3, $col4, $col5, $col6, $col7, $col8, $col9, $col10)));
 		        }
 
 		        ?>

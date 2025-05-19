@@ -217,7 +217,7 @@ class Marketkingcore_Public{
 			$vendors_in_cart = marketking()->get_vendors_in_cart();
 			if (in_array(get_current_user_id(),$vendors_in_cart) && get_current_user_id() !== 1 && (marketking()->is_vendor(get_current_user_id()) or marketking()->is_vendor_team_member() ) ){
 				// error
-				wc_print_notice( esc_html__('Your cannot purchase your own products!', 'marketking-multivendor-marketplace-for-woocommerce'), 'error' );
+				wc_print_notice( esc_html__('You cannot purchase your own products!', 'marketking-multivendor-marketplace-for-woocommerce'), 'error' );
 			}
 		}
 	}
@@ -227,7 +227,7 @@ class Marketkingcore_Public{
 			$vendors_in_cart = marketking()->get_vendors_in_cart();
 			if (in_array(get_current_user_id(),$vendors_in_cart) && get_current_user_id() !== 1 && (marketking()->is_vendor(get_current_user_id()) or marketking()->is_vendor_team_member() ) ){
 				// error
-				$errors->add( 'validation', esc_html__('Your cannot purchase your own products!', 'marketking-multivendor-marketplace-for-woocommerce') );
+				$errors->add( 'validation', esc_html__('You cannot purchase your own products!', 'marketking-multivendor-marketplace-for-woocommerce') );
 			}
 		}
 	}
@@ -505,18 +505,38 @@ class Marketkingcore_Public{
 	    return $template;
     }
 
-	function intercept_wc_template( $template, $template_name, $template_path ) {
-		// not for plain emails
-		if ( 'customer-new-account.php' === basename( $template ) && strpos($template, 'plain') === false) {
-			// if vendor
-			if (isset($_POST['marketking_registration_options_dropdown'])){
-				$template = '/emails/templates/vendor-new-account.php';
-
-		    	$template_directory = untrailingslashit( plugin_dir_path( __FILE__ ) );
-		    	$template = $template_directory . $template;
-			}					
-		}
-		return $template;
+	function intercept_wc_template($template, $template_name, $template_path) {
+	    // Only target the new account email template (non-plain)
+	    if ('customer-new-account.php' === basename($template) && strpos($template, 'plain') === false) {
+	        // Check if it's a vendor registration
+	        if (isset($_POST['marketking_registration_options_dropdown'])) {
+	        	$option = sanitize_text_field($_POST['marketking_registration_options_dropdown']); // e..g option_1435
+	        	$option_data = explode('_', $option);
+	        	if (isset($option_data[1])){
+	        		$option_id = $option_data[1];
+        			// check if buyer or seller
+        			$option_approval = get_post_meta($option_id, 'marketking_option_automatic_approval_group', true);
+        			if (!empty($option_approval)){ // empty = customer
+	        		    // Check if theme has the override file
+	        		    $theme_file = get_stylesheet_directory() . '/vendor-new-account.php';
+	        		    
+	        		    // If the theme has the override file, use it
+	        		    if (file_exists($theme_file)) {
+	        		        return $theme_file;
+	        		    }
+	        		    
+	        		    // Otherwise, use the plugin's template
+	        		    $plugin_template = untrailingslashit(plugin_dir_path(__FILE__)) . '/emails/templates/vendor-new-account.php';
+	        		    if (file_exists($plugin_template)) {
+	        		        return $plugin_template;
+	        		    }
+	        		}
+	        	}
+	        	
+	        }
+	    }
+	    
+	    return $template;
 	}
 
 

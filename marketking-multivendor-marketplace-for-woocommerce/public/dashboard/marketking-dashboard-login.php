@@ -673,10 +673,14 @@ if (!defined('ABSPATH')) { exit; }
         // Per Product Shipping
         if (apply_filters('marketking_enable_perproductshipping_integration', true)){
 
+            if (!defined( 'WP_ADMIN' )){
+                define('WP_ADMIN', true);
+            }
+
             if (defined('PER_PRODUCT_SHIPPING_FILE')){
                 $dir = plugin_dir_path(PER_PRODUCT_SHIPPING_FILE);
                 include_once $dir.'includes/class-wc-shipping-per-product-admin.php';
-                new WC_Shipping_Per_Product_Admin( new WC_Shipping_Per_Product_Init );
+                new WC_Shipping_Per_Product_Init;
 
                 add_action('wp_print_styles', function(){
                     $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
@@ -696,6 +700,7 @@ if (!defined('ABSPATH')) { exit; }
                       'i18n_postcode'        => __( 'Zip/Postal Code', 'woocommerce-shipping-per-product' ),
                       'i18n_cost'            => __( 'Cost', 'woocommerce-shipping-per-product' ),
                       'i18n_item_cost'       => __( 'Item Cost', 'woocommerce-shipping-per-product' ),
+                      'decimal_separator'    => wc_get_price_decimal_separator(),
                   ) );
                 });
             }
@@ -705,6 +710,17 @@ if (!defined('ABSPATH')) { exit; }
         if ( class_exists( 'WC_Germanized_Meta_Box_Product_Data' ) ) {
 
             if (apply_filters('marketking_allow_germanized_vendor_dashboard', true)){
+
+                add_action('marketking_dashboard_head', function(){
+
+                    ?>
+                    <style>
+                        .npc-general .select2-search--dropdown{
+                            display: block !important;
+                        }
+                    </style>
+                    <?php
+                });
 
                 include_once WC_GERMANIZED_ABSPATH . 'includes/export/class-wc-gzd-product-export.php';
                 include_once WC_GERMANIZED_ABSPATH . 'includes/import/class-wc-gzd-product-import.php';
@@ -721,18 +737,30 @@ if (!defined('ABSPATH')) { exit; }
                     $assets_path       = WC_germanized()->plugin_url() . '/assets/';
                     $admin_script_path = $assets_path . 'js/admin/';
 
-                    wp_register_style( 'woocommerce-gzd-admin', $assets_path . 'css/admin' . $suffix . '.css', false, WC_GERMANIZED_VERSION );
+                    $gzd    = WC_germanized();
+
+                    wp_register_style( 'woocommerce-gzd-admin', $gzd->get_assets_build_url( 'static/admin.css' ), false, WC_GERMANIZED_VERSION );
                     wp_enqueue_style( 'woocommerce-gzd-admin' );
 
                     wp_register_style(
                         'woocommerce-gzd-admin-settings',
-                        $assets_path . 'css/admin-settings' . $suffix . '.css',
+                        $gzd->get_assets_build_url( 'static/admin-settings.css' ),
                         array(
                             'woocommerce_admin_styles',
                             'woocommerce-gzd-admin',
                         ),
                         WC_GERMANIZED_VERSION
                     );
+
+                    wp_enqueue_style( 'woocommerce-gzd-admin-settings' );
+                    wp_enqueue_style( 'woocommerce-gzd-shipment-admin-settings' );
+                    do_action( 'woocommerce_gzd_admin_settings_styles' );
+
+                    if (class_exists( 'WooCommerce_Germanized_Pro' )){
+                        $gzdp      = WC_germanized_pro();
+                        wp_register_style( 'wc-gzdp-admin', $gzdp->get_assets_build_url( 'static/wc-gzdp-admin.css' ), array(), WC_GERMANIZED_PRO_VERSION );
+                        wp_enqueue_style( 'wc-gzdp-admin' );
+                    }
                 });
 
 
@@ -740,23 +768,15 @@ if (!defined('ABSPATH')) { exit; }
                     $suffix            = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
                     $assets_path       = WC_germanized()->plugin_url() . '/assets/';
                     $admin_script_path = $assets_path . 'js/admin/';
+                    $gzd    = WC_germanized();
 
-                    wp_register_script( 'wc-gzd-admin-product', $admin_script_path . 'product' . $suffix . '.js', array( 'wc-admin-product-meta-boxes', 'media-models' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 
-                    wp_register_script( 'wc-gzd-admin-product-variations', $admin_script_path . 'product-variations' . $suffix . '.js', array( 'wc-gzd-admin-product', 'wc-admin-variation-meta-boxes' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
-
-                    wp_localize_script(
-                        'wc-gzd-admin-product-variations',
-                        'wc_gzd_admin_product_variations_params',
-                        array(
-                            'i18n_set_delivery_time' => __( 'Insert delivery time name, slug or id.', 'woocommerce-germanized' ),
-                            'i18n_set_product_unit'  => __( 'Insert product units amount.', 'woocommerce-germanized' ),
-                        )
-                    );
-
+                    wp_register_script( 'wc-gzd-admin', $gzd->get_assets_build_url( 'static/admin.js' ), array( 'jquery', 'woocommerce_admin' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
+                    wp_register_script( 'wc-gzd-admin-product', $gzd->get_assets_build_url( 'static/admin-product.js' ), array( 'wc-admin-product-meta-boxes', 'media-models' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
+                    wp_register_script( 'wc-gzd-admin-product-variations', $gzd->get_assets_build_url( 'static/admin-product-variations.js' ), array( 'wc-gzd-admin-product', 'wc-admin-variation-meta-boxes' ), WC_GERMANIZED_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
                     wp_register_script( // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
                         'wc-gzd-admin-legal-checkboxes',
-                        $admin_script_path . 'legal-checkboxes' . $suffix . '.js',
+                        $gzd->get_assets_build_url( 'static/admin-legal-checkboxes.js' ),
                         array(
                             'jquery',
                             'wp-util',
@@ -767,15 +787,36 @@ if (!defined('ABSPATH')) { exit; }
                         ),
                         WC_GERMANIZED_VERSION
                     );
-
                     wp_register_script( // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
                         'wc-gzd-admin-settings',
-                        $assets_path . 'js/admin/settings' . $suffix . '.js',
-                        array(
-                            'jquery',
-                            'woocommerce_admin',
-                        ),
+                        $gzd->get_assets_build_url( 'static/admin-settings.js' ),
+                        array( 'wc-gzd-admin' ),
                         WC_GERMANIZED_VERSION
+                    );
+
+                    wp_localize_script(
+                        'wc-gzd-admin-product',
+                        'wc_gzd_admin_product_params',
+                        array(
+                            'i18n_remove_attachment' => __( 'Remove', 'woocommerce-germanized' ),
+                        )
+                    );
+
+                    wp_localize_script(
+                        'wc-gzd-admin-product-variations',
+                        'wc_gzd_admin_product_variations_params',
+                        array(
+                            'i18n_set_delivery_time' => __( 'Insert delivery time name, slug or id.', 'woocommerce-germanized' ),
+                            'i18n_set_product_unit'  => __( 'Insert product units amount.', 'woocommerce-germanized' ),
+                        )
+                    );
+
+                    wp_localize_script(
+                        'wc-gzd-admin',
+                        'wc_gzd_admin_params',
+                        array(
+                            'ajax_url' => admin_url( 'admin-ajax.php' ),
+                        )
                     );
 
                     wp_localize_script(
@@ -791,6 +832,24 @@ if (!defined('ABSPATH')) { exit; }
 
                     wp_enqueue_script( 'wc-gzd-admin-product' );
                     wp_enqueue_script( 'wc-gzd-admin-product-variations' );
+                    wp_enqueue_script( 'wc-gzd-admin' );
+
+                    wp_enqueue_script( 'wc-gzd-shipments-admin-settings' );
+                    do_action( 'woocommerce_gzd_shipments_admin_settings_scripts' );
+                    wp_enqueue_script( 'wc-gzd-admin-settings' );
+                    do_action( 'woocommerce_gzd_admin_settings_scripts' );
+
+                    if (class_exists( 'WooCommerce_Germanized_Pro' )){
+                        $gzdp      = WC_germanized_pro();
+                        wp_register_script( 'wc-gzdp-admin-order', $gzdp->get_assets_build_url( 'static/admin-order.js' ), array( 'jquery' ), WC_GERMANIZED_PRO_VERSION, true );
+                        wp_register_script( 'wc-gzdp-admin-settings', $gzdp->get_assets_build_url( 'static/admin-settings.js' ), array( 'jquery' ), WC_GERMANIZED_PRO_VERSION, true );
+                        wp_register_script( 'wc-gzdp-admin-products', $gzdp->get_assets_build_url( 'static/admin-products.js' ), array( 'jquery' ), WC_GERMANIZED_PRO_VERSION, true );
+                        wp_enqueue_script( 'wc-gzdp-admin-order' );
+                        wp_enqueue_script( 'wc-gzdp-admin-products' );
+                        wp_enqueue_script( 'wc-gzdp-admin-settings' );
+
+                    }
+                    
                 });
             }
             
