@@ -186,11 +186,27 @@ class Marketkingcore_Public{
 						return apply_filters('marketking_vendor_upload_file_size', 1048576);
 					});
 
+					// clear product standby issue
+					add_action('wp_footer', array($this, 'marketking_set_product_standby_backup'));
+
 
 				}
 
 			});
 
+		}
+	}
+
+	public function marketking_set_product_standby_backup(){
+		$current_id = get_current_user_id();
+		if (marketking()->is_vendor_team_member()){
+			$current_id = marketking()->get_team_member_parent();
+		}
+
+		$has_issue = get_user_meta($current_id, 'marketking_has_standby_issue', true);
+		if ($has_issue === 'yes'){
+			marketking()->set_product_standby();
+			update_user_meta($current_id, 'marketking_has_standby_issue', 'no');
 		}
 	}
 

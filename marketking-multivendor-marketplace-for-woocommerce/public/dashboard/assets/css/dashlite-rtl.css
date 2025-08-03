@@ -42783,9 +42783,9 @@ button#b2bking_category_add_user {
   cursor:pointer;
 }
 #marketking_footer_hidden{
-  display: none;
-  visibility: hidden;
-  overflow: hidden;
+  display: none !important;
+  visibility: hidden !important;
+  overflow: hidden !important;
 }
 .postbox-header{
   border-bottom: 1px solid #e2e2e2;

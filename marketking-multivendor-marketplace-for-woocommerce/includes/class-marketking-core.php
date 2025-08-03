@@ -686,12 +686,15 @@ class Marketkingcore {
 
 
 				$order = $args['order'];
-				$order_id = $order->get_id();
 
-				if (marketking()->is_multivendor_order($order)){
+				if (is_object($order)){
+					$order_id = $order->get_id();
 
-					$template = trailingslashit( dirname( plugin_dir_path( __FILE__ ) ) ) . 'public/templates/email-order-details.php';
+					if (marketking()->is_multivendor_order($order)){
 
+						$template = trailingslashit( dirname( plugin_dir_path( __FILE__ ) ) ) . 'public/templates/email-order-details.php';
+
+					}
 				}
 				
 			//}	
@@ -1054,6 +1057,14 @@ class Marketkingcore {
 	function marketking_filter_edit_order_url($url, $order){
 		if (is_admin()){
 			return $url;
+		}
+
+		$current_id = get_current_user_id();
+		if (marketking()->is_vendor_team_member()){
+			$current_id = marketking()->get_team_member_parent();
+		}
+		if (!marketking()->is_vendor($current_id)){
+			return $url; // only if vendor
 		}
 
 		$order_id = $order->get_id();
@@ -4698,6 +4709,9 @@ class Marketkingcore {
 		    		'post_type'   => 'marketking_message',
 		    		'post_status' => 'publish',
 		    	);
+
+		    	$args = apply_filters('marketking_send_inquiry_args', $args);
+		    	
 		    	$discussionid = wp_insert_post( $args );
 
 		    	// set it as customer query

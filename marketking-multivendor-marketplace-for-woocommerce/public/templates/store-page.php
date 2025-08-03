@@ -335,74 +335,114 @@ if ($store_style === 3){
 
 <div id="marketking_vendor_tab_reviews" class="marketking_tab <?php echo marketking()->marketking_tab_active('reviews');?>">
   <?php
-  	// Reviews
-  	if (defined('MARKETKINGPRO_DIR')){
-	  	if (intval(get_option('marketking_enable_reviews_setting', 1)) === 1){
-	  		$items_per_page = apply_filters('marketking_vendor_reviews_per_page', 5);
-
-	  		$pagenr = get_query_var('pagenr2');
-	  		if (empty($pagenr)){
-	  			$pagenr = 1;
-	  		}
-			// last 10 reviews here
-			$args = array ('post_type' => 'product', 'post_author' => $vendor_id, 'number' => $items_per_page, 'paged' => $pagenr,'type' => 'review');
-		    $comments = get_comments( $args );
-
-		    if (empty($comments)){
-		    	esc_html_e('There are no reviews yet...','marketking-multivendor-marketplace-for-woocommerce');
-		    } else {
-		    	// show review average
-		    	$rating = marketking()->get_vendor_rating($vendor_id);
-		    	// if there's any rating
-		    	if (intval($rating['count'])!==0){
-		    		?>
-		    		<div class="marketking_rating_header">
-			    		<?php
-			    		// show rating
-			    		if (intval($rating['count']) === 1){
-			    			$review = esc_html__('review','marketking-multivendor-marketplace-for-woocommerce');
-			    		} else {
-			    			$review = esc_html__('reviews','marketking-multivendor-marketplace-for-woocommerce');
-			    		}
-			    		echo '<strong>'.esc_html__('Rating:','marketking-multivendor-marketplace-for-woocommerce').'</strong> '.esc_html($rating['rating']).' '.esc_html__('rating from','marketking-multivendor-marketplace-for-woocommerce').' '.esc_html($rating['count']).' '.esc_html($review);
-			    		echo '<br>';
-			    	?>
-			   		</div>
-			    	<?php
-		    	}
-		    }
-		    wp_list_comments( array( 'callback' => 'woocommerce_comments' ), $comments);
-
-		    // display pagination
-
-		    // get total nr
-		    $args = array ('post_type' => 'product', 'post_author' => $vendor_id, 'fields' => 'ids','type' => 'review');
-		    $comments = get_comments( $args );
-		    $totalnr = count($comments); //total nr of reviews
-		    $nrofpages = ceil($totalnr/$items_per_page);
-		    $store_link = marketking()->get_store_link($vendor_id);
-
-
-		    $i = 1;
-		    while($i <= $nrofpages){
-		    	$pagelink = $store_link.'/reviews/'.$i;
-		    	$active = '';
-		    	if ($i === intval($pagenr)){
-		    		$active = 'marketking_review_active_page';
-		    	}
-		    	// display page
-		    	?>
-		    	<a href="<?php echo esc_attr($pagelink);?>" class="marketking_review_pagination_page <?php echo esc_html($active);?>"><?php echo esc_html($i); ?></a>
-		    	<?php
-		    	$i++;
-		    }
-
-
-			?>
-			<?php
-		}
-  	}
-  
+  // Reviews
+  if (defined('MARKETKINGPRO_DIR')){
+      if (intval(get_option('marketking_enable_reviews_setting', 1)) === 1){
+          $items_per_page = apply_filters('marketking_vendor_reviews_per_page', 5);
+          $pagenr = get_query_var('pagenr2');
+          if (empty($pagenr)){
+              $pagenr = 1;
+          }
+          
+          // last 10 reviews here
+          $args = array ('post_type' => 'product', 'post_author' => $vendor_id, 'number' => $items_per_page, 'paged' => $pagenr,'type' => 'review');
+          $comments = get_comments( $args );
+          
+          if (empty($comments)){
+              esc_html_e('There are no reviews yet...','marketking-multivendor-marketplace-for-woocommerce');
+          } else {
+              // show review average
+              $rating = marketking()->get_vendor_rating($vendor_id);
+              // if there's any rating
+              if (intval($rating['count'])!==0){
+                  ?>
+                  <div class="marketking_rating_header">
+                      <?php
+                      // show rating
+                      if (intval($rating['count']) === 1){
+                          $review = esc_html__('review','marketking-multivendor-marketplace-for-woocommerce');
+                      } else {
+                          $review = esc_html__('reviews','marketking-multivendor-marketplace-for-woocommerce');
+                      }
+                      echo '<strong>'.esc_html__('Rating:','marketking-multivendor-marketplace-for-woocommerce').'</strong> '.esc_html($rating['rating']).' '.esc_html__('rating from','marketking-multivendor-marketplace-for-woocommerce').' '.esc_html($rating['count']).' '.esc_html($review);
+                      echo '<br>';
+                      ?>
+                  </div>
+                  <?php
+              }
+          }
+          
+          wp_list_comments( array( 'callback' => 'woocommerce_comments' ), $comments);
+          
+          // display smart pagination
+          // get total nr
+          $args = array ('post_type' => 'product', 'post_author' => $vendor_id, 'fields' => 'ids','type' => 'review');
+          $comments = get_comments( $args );
+          $totalnr = count($comments); //total nr of reviews
+          $nrofpages = ceil($totalnr/$items_per_page);
+          $store_link = marketking()->get_store_link($vendor_id);
+          
+          // Only show pagination if there are multiple pages
+          if ($nrofpages > 1) {
+              $current_page = intval($pagenr);
+              $range = 2; // Number of pages to show on each side of current page
+              
+              echo '<div class="marketking_review_pagination">';
+              
+              // Previous button
+              if ($current_page > 1) {
+                  $prev_link = $store_link.'/reviews/'.($current_page - 1);
+                  echo '<a href="'.esc_attr($prev_link).'" class="marketking_review_pagination_page marketking_review_prev">« '.esc_html__('Previous', 'marketking-multivendor-marketplace-for-woocommerce').'</a>';
+              }
+              
+              // Calculate start and end page numbers to display
+              $start_page = max(1, $current_page - $range);
+              $end_page = min($nrofpages, $current_page + $range);
+              
+              // Show first page if we're not starting from 1
+              if ($start_page > 1) {
+                  $pagelink = $store_link.'/reviews/1';
+                  echo '<a href="'.esc_attr($pagelink).'" class="marketking_review_pagination_page">1</a>';
+                  
+                  // Show ellipsis if there's a gap
+                  if ($start_page > 2) {
+                      echo '<span class="marketking_review_pagination_ellipsis">...</span>';
+                  }
+              }
+              
+              // Show page numbers in range
+              for ($i = $start_page; $i <= $end_page; $i++) {
+                  $pagelink = $store_link.'/reviews/'.$i;
+                  $active = '';
+                  if ($i === $current_page) {
+                      $active = 'marketking_review_active_page';
+                  }
+                  echo '<a href="'.esc_attr($pagelink).'" class="marketking_review_pagination_page '.esc_attr($active).'">'.esc_html($i).'</a>';
+              }
+              
+              // Show last page if we're not ending at the last page
+              if ($end_page < $nrofpages) {
+                  // Show ellipsis if there's a gap
+                  if ($end_page < $nrofpages - 1) {
+                      echo '<span class="marketking_review_pagination_ellipsis">...</span>';
+                  }
+                  
+                  $pagelink = $store_link.'/reviews/'.$nrofpages;
+                  echo '<a href="'.esc_attr($pagelink).'" class="marketking_review_pagination_page">'.esc_html($nrofpages).'</a>';
+              }
+              
+              // Next button
+              if ($current_page < $nrofpages) {
+                  $next_link = $store_link.'/reviews/'.($current_page + 1);
+                  echo '<a href="'.esc_attr($next_link).'" class="marketking_review_pagination_page marketking_review_next">'.esc_html__('Next', 'marketking-multivendor-marketplace-for-woocommerce').' »</a>';
+              }
+              
+              echo '</div>';
+          }
+          ?>
+          <?php
+      }
+  }
   ?>
 </div>
 

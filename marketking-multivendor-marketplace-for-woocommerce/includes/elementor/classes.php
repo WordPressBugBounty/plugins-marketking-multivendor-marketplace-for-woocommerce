@@ -972,6 +972,9 @@ class Elementor_Store_Tabs_Content_Widget extends \Elementor\Widget_Base {
 							echo '<strong>'.esc_html__('Email:','marketking-multivendor-marketplace-for-woocommerce').'</strong> '.esc_html($email).'<br>';
 						}
 				  	}
+
+				  	do_action('marketking_vendor_details_store_page', $vendor_id);
+				  	
 			  	echo '<br>';
 
 			  	

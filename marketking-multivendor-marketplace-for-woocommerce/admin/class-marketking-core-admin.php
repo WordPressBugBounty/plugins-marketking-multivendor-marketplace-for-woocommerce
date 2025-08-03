@@ -554,34 +554,41 @@ class Marketkingcore_Admin{
 	// Add a dropdown to filter coupons by meta
 	function display_admin_shop_coupon_by_meta_filter(){
 	    global $pagenow, $typenow;
+        if ( 'edit.php' === $pagenow && 'shop_coupon' === $typenow ) {
+            $filter_id = 'filter_shop_coupon_by_vendor';
+            $current   = isset( $_GET[ $filter_id ] ) ? sanitize_text_field( $_GET[ $filter_id ] ) : '';
 
-	    if( 'shop_coupon' === $typenow && 'edit.php' === $pagenow ) {
-	        $filter_id = 'filter_shop_coupon_by_vendor';
-	        $current   = isset($_GET[$filter_id])? sanitize_text_field($_GET[$filter_id]) : '';
+            echo '<select name="' . esc_attr( $filter_id ) . '" style="margin-left:8px;">';
+            echo '<option value="">' . esc_html__( 'Filter by vendor…', 'marketking-multivendor-marketplace-for-woocommerce' ) . '</option>';
 
-	        echo '<select name="'.esc_html($filter_id).'">
-	        <option value="">' . esc_html__('Filter by vendor...', 'marketking-multivendor-marketplace-for-woocommerce') . '</option>';
+            // Get vendor list from MarketKing core
+            $options = $this->get_filter_shop_order_vendors_list( 'marketking-multivendor-marketplace-for-woocommerce' );
 
-	        $options = $this->get_filter_shop_order_vendors_list( 'marketking-multivendor-marketplace-for-woocommerce' );
-
-	        foreach ( $options as $key => $label ) {
-	            printf( '<option value="%s"%s>%s</option>', $key, 
-	                $key === $current ? '" selected="selected"' : '', $label );
-	        }
-	        echo '</select>';
-	    }
+            foreach ( $options as $key => $label ) {
+                printf(
+                    '<option value="%s"%s>%s</option>',
+                    esc_attr( $key ),
+                    selected( (string) $current, (string) $key, false ),
+                    esc_html( $label )
+                );
+            }
+            echo '</select>';
+        }
 	}
 
 	// Process the filter dropdown for coupons by MarketKing
 	function process_admin_shop_coupon_marketing_by_meta( $vars ) {
 	    global $pagenow, $typenow;
-	    
 	    $filter_id = 'filter_shop_coupon_by_vendor';
 
-	    if ( $pagenow === 'edit.php' && 'shop_coupon' === $typenow 
-	    && isset( $_GET[$filter_id] ) && ! empty($_GET[$filter_id]) ) {
-	        $vars['author']   = sanitize_text_field($_GET[$filter_id]);
+	    if (
+	        'edit.php' === $pagenow &&
+	        'shop_coupon' === $typenow &&
+	        ! empty( $_GET[ $filter_id ] )
+	    ) {
+	        $vars['author'] = sanitize_text_field( $_GET[ $filter_id ] );
 	    }
+
 	    return $vars;
 	}
 

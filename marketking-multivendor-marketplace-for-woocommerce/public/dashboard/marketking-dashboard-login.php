@@ -673,11 +673,25 @@ if (!defined('ABSPATH')) { exit; }
         // Per Product Shipping
         if (apply_filters('marketking_enable_perproductshipping_integration', true)){
 
-            if (!defined( 'WP_ADMIN' )){
-                define('WP_ADMIN', true);
-            }
-
             if (defined('PER_PRODUCT_SHIPPING_FILE')){
+
+                if (!defined( 'WP_ADMIN' )){
+                   $original_current_screen = isset($GLOBALS['current_screen']) ? $GLOBALS['current_screen'] : null;
+
+                   // Create a mock object that returns true for in_admin()
+                   $mock_screen = new stdClass();
+                   $mock_screen->in_admin = function() { return true; };
+
+                   // Or if you need a proper method (not closure):
+                   class MockCurrentScreen {
+                       public function in_admin() {
+                           return true;
+                       }
+                   }
+
+                   $GLOBALS['current_screen'] = new MockCurrentScreen();
+                }
+                
                 $dir = plugin_dir_path(PER_PRODUCT_SHIPPING_FILE);
                 include_once $dir.'includes/class-wc-shipping-per-product-admin.php';
                 new WC_Shipping_Per_Product_Init;
@@ -703,6 +717,16 @@ if (!defined('ABSPATH')) { exit; }
                       'decimal_separator'    => wc_get_price_decimal_separator(),
                   ) );
                 });
+
+                if (!defined( 'WP_ADMIN' )){
+                    // Restore the original value
+                    if ($original_current_screen !== null) {
+                        $GLOBALS['current_screen'] = $original_current_screen;
+                    } else {
+                        unset($GLOBALS['current_screen']);
+                    }
+                }
+
             }
         }
 
@@ -2174,6 +2198,12 @@ if (!defined('ABSPATH')) { exit; }
                
             } 
         } 
+        // compat fix jetpack
+        if (!function_exists('get_current_screen')){
+            function get_current_screen(){
+                return '';
+            }
+        }
 
         do_action('marketking_dashboard_before_scripts_styles');
 

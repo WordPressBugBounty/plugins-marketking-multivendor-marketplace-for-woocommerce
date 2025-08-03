@@ -3303,12 +3303,13 @@ class Marketkingcore_Helper{
 
 	public static function set_product_standby(){
 
-		$current_id = get_current_user_id();
-		if (marketking()->is_vendor_team_member()){
-			$current_id = marketking()->get_team_member_parent();
-		}
-
 		if (marketking()->get_product_standby() === 'none'){
+
+			$current_id = get_current_user_id();
+			if (marketking()->is_vendor_team_member()){
+				$current_id = marketking()->get_team_member_parent();
+			}
+			
 			// create product
 			$product = new WC_Product_Simple();
 			$product->set_name( 'Product Name' ); // product title
@@ -3316,11 +3317,15 @@ class Marketkingcore_Helper{
 			$product->set_status('hidden');
 			$product->save();
 			$productid = $product->get_id();
-			update_post_meta($productid,'marketking_is_product_standby', 'yes');
 
-			update_option('marketking_product_standby_'.$current_id, $productid);
+			if (intval($productid) > 0){
+				update_post_meta($productid,'marketking_is_product_standby', 'yes');
+				update_option('marketking_product_standby_'.$current_id, $productid);
+			} else {
+				// issue in creating or saving standby product
+				update_user_meta($current_id, 'marketking_has_standby_issue', 'yes');
+			}
 		}
-		
 	}
 
 	public static function get_product_standby(){
