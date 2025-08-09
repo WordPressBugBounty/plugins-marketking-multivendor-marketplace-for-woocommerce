@@ -66,7 +66,7 @@ if (!defined('ABSPATH')) { exit; }
         add_action('wp_print_scripts', function(){
 
             global $wp_scripts;
-            $wp_scripts->queue = apply_filters('marketking_js_queue',array('marketking_dashboard_bundle','marketking_dashboard_scripts','marketking_dashboard_chart','marketking_public_script', 'marketking_dashboard_messages', 'marketking_dashboard_chart_sales', 'dataTablesButtons', 'jszip', 'pdfmake', 'dataTablesButtonsHTML', 'dataTablesButtonsPrint', 'dataTablesButtonsColvis', 'vfsfonts', 'media-editor','media-audiovideo', 'wc-country-select', 'select2', 'selectWoo', 'simplebar'));
+            $wp_scripts->queue = apply_filters('marketking_js_queue',array('marketking_dashboard_bundle','marketking_dashboard_scripts','marketking_dashboard_chart','marketking_public_script', 'marketking_dashboard_messages', 'marketking_dashboard_chart_sales', 'dataTablesButtons', 'jszip', 'pdfmake', 'dataTablesButtonsHTML', 'dataTablesButtonsPrint', 'dataTablesButtonsColvis', 'vfsfonts', 'media-editor','media-audiovideo', 'wc-country-select', 'select2', 'selectWoo', 'simplebar', 'dompurify'));
 
             $currentp = get_query_var('dashpage');
             $b2bkingpages = array('rules','offers','b2bmessaging');
