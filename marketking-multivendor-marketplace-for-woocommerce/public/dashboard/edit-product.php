@@ -491,6 +491,7 @@ For example, if your theme is storefront, you can copy this file under wp-conten
                                                     wp_dropdown_categories( $args );
                                                     ?>
                                                     
+                                                    
                                                 </div>
                                             </div>
                                         </div>

@@ -8,8 +8,8 @@ Author: WebWizards
 Requires at least: 4.8
 Tested up to: 6.8
 Requires PHP: 5.6.20
-Stable tag: 2.0.92
-Version: 2.0.92
+Stable tag: 2.1.00
+Version: 2.1.00
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 MarketKing is the modern, **next-gen multivendor marketplace platform.** Build your dream markeplace with stunning UX and powerful features.
@@ -436,4 +436,7 @@ Changelog: https://woocommerce-multivendor.com/changelog
 = Is WooCommerce necessary for this plugin to work? =
 
 Yes. This plugin requires WooCommerce
+
+= Where do I report security bugs found in this plugin? =
+Please report security bugs found in the source code of the MarketKing plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/39f1c103-e03f-4734-aa45-2593435d8200). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 

@@ -393,6 +393,11 @@ class Marketkingcore_Helper{
 			return true;
 		}
 
+		$custom = apply_filters('vendor_has_panel_custom', null, $panel_slug, $vendor_id);
+		if ($custom !== null) {
+		    return (bool) $custom;
+		}
+
 		if ($vendor_id === 'currentuser'){
 			if (!marketking()->is_vendor_team_member()){
 
@@ -1071,6 +1076,70 @@ class Marketkingcore_Helper{
 		}
 
 		return false;
+	}
+
+	public static function is_express_account_ready($vendor_id){
+		$account_type = get_user_meta($vendor_id, 'stripe_account_type', true);
+		$stripe_user_id = get_user_meta($vendor_id, 'stripe_user_id', true);
+		
+		if ($account_type === 'express' && $stripe_user_id) {
+			try {
+				if( !class_exists("Stripe\Stripe") ) {
+					require_once( MARKETKINGPRO_DIR . 'includes/assets/lib/Stripe/init.php' );
+				}
+				
+				$settings = get_option('woocommerce_marketking_stripe_gateway_settings');
+				$testmode = isset($settings['test_mode']) && $settings['test_mode'] === 'yes';
+				$secret_key = $testmode ? $settings['test_secret_key'] : $settings['secret_key'];
+				
+				$stripe = new \Stripe\StripeClient($secret_key);
+				$account = $stripe->accounts->retrieve($stripe_user_id);
+				
+				// Check if Express account is properly set up
+				return $account && $account->charges_enabled && $account->payouts_enabled;
+			} catch (Exception $e) {
+				return false;
+			}
+		}
+		
+		return false;
+	}
+
+	public static function validate_stripe_account_id($vendor_id){
+		$stripe_user_id = get_user_meta($vendor_id, 'stripe_user_id', true);
+		$account_type = get_user_meta($vendor_id, 'stripe_account_type', true);
+		
+		if (!$stripe_user_id || !$account_type) {
+			return false;
+		}
+		
+		try {
+			if( !class_exists("Stripe\Stripe") ) {
+				require_once( MARKETKINGPRO_DIR . 'includes/assets/lib/Stripe/init.php' );
+			}
+			
+			$settings = get_option('woocommerce_marketking_stripe_gateway_settings');
+			$testmode = isset($settings['test_mode']) && $settings['test_mode'] === 'yes';
+			$secret_key = $testmode ? $settings['test_secret_key'] : $settings['secret_key'];
+			
+			$stripe = new \Stripe\StripeClient($secret_key);
+			$account = $stripe->accounts->retrieve($stripe_user_id);
+			
+			// Check if account exists and is accessible
+			return $account && $account->id;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+
+	public static function clear_invalid_stripe_account($vendor_id){
+		// Clear invalid Stripe account data
+		delete_user_meta($vendor_id, 'vendor_connected');
+		delete_user_meta($vendor_id, 'stripe_user_id');
+		delete_user_meta($vendor_id, 'stripe_account_type');
+		delete_user_meta($vendor_id, 'stripe_mode');
+		delete_user_meta($vendor_id, 'stripe_capabilities');
+		delete_user_meta($vendor_id, 'admin_client_id');
 	}
 
 	public static function get_bank_details($vendor_id, $field){
@@ -2167,100 +2236,117 @@ class Marketkingcore_Helper{
 			return $earnings_number;
 
 		} else if ($admin_earnings === true){
-			// admin earnings
-			if ($vendor_id === 'allvendors'){
-				if ($timeframe === 'last_days'){
-
-					$earnings_number = 0;
-					$earnings = get_posts( array( 
-						'post_type' => 'marketking_earning',
-						'numberposts' => -1,
-						'post_status'    => 'any',
-						'date_query' => array(
-								'after' => date('Y-m-d', strtotime('-'.$days.' days')) 
-							),
-						'fields'    => 'ids',
-					));
-
-				}
-				if ($timeframe === 'fromto'){
-
-					$earnings_number = 0;
-					$earnings = get_posts( array( 
-						'post_type' => 'marketking_earning',
-						'numberposts' => -1,
-						'post_status'    => 'any',
-						'date_query' => array(
-								'after' => $from, 
-								'before' => $to 
-							),
-						'fields'    => 'ids',
-					));
-
-				}
-
-			} else {
-				// specific vendor
-				if ($timeframe === 'fromto'){
-
-					$earnings_number = 0;
-					$earnings = get_posts( array( 
-						'post_type' => 'marketking_earning',
-						'numberposts' => -1,
-						'post_status'    => 'any',
-						'date_query' => array(
-								'after' => $from, 
-								'before' => $to 
-							),
-						'fields'    => 'ids',
-						'meta_key'   => 'vendor_id',
-						'meta_value' => $vendor_id,
-					));
-
-				}
-			}
-
-			if ($reports === true){
-				// organize info by day, month, year to be able to display the charts
-				$timestamps_commissions = array();
-			}
-
-			if (!isset($earnings) || !is_array($earnings)){
-				$earnings = array();
-			}
-
-			foreach ($earnings as $earning_id){
-				$order_id = get_post_meta($earning_id,'order_id', true);
-				$orderobj = wc_get_order($order_id);
-
-				if ($orderobj !== false){
-					$status = $orderobj->get_status();
-					if ($status !== 'refunded' && $status !== 'cancelled'){
-
-						$order_total = marketking()->get_base_currency_price($orderobj->get_total(), $orderobj);
-						$vendor_earnings = get_post_meta($earning_id,'marketking_commission_total', true);
-						
-						$admin_earnings = $order_total-$vendor_earnings;
-						$earnings_number+=$admin_earnings;
-
-
-						if ($reports === true){
-							$date = $orderobj->get_date_created()->getTimestamp()+(get_option('gmt_offset')*3600);
-							if (!isset($timestamps_commissions[$date])){
-								$timestamps_commissions[$date] = $admin_earnings;
-							} else {
-								$timestamps_commissions[$date] += $admin_earnings;
-							}
-						}
-					}
-					
-				}
-			}
-
-			if ($reports === true){
-				return $earnings_number.'***'.serialize($timestamps_commissions);
-			}
-			return $earnings_number;
+		    // admin earnings
+		    if ($vendor_id === 'allvendors'){
+		        if ($timeframe === 'last_days'){
+		            $earnings_number = 0;
+		            $earnings = get_posts( array( 
+		                'post_type' => 'marketking_earning',
+		                'numberposts' => -1,
+		                'post_status'    => 'any',
+		                'date_query' => array(
+		                    'after' => date('Y-m-d', strtotime('-'.$days.' days')),
+		                    'inclusive' => true
+		                ),
+		                'fields'    => 'ids',
+		            ));
+		        }
+		        if ($timeframe === 'fromto'){
+		            $earnings_number = 0;
+		            
+		            // Use a more explicit date query format
+		            $earnings = get_posts( array( 
+		                'post_type' => 'marketking_earning',
+		                'numberposts' => -1,
+		                'post_status'    => 'any',
+		                'date_query' => array(
+		                    array(
+		                        'after'     => array(
+		                            'year'  => date('Y', strtotime($from)),
+		                            'month' => date('m', strtotime($from)),
+		                            'day'   => date('d', strtotime($from)),
+		                        ),
+		                        'before'    => array(
+		                            'year'  => date('Y', strtotime($to)),
+		                            'month' => date('m', strtotime($to)),
+		                            'day'   => date('d', strtotime($to)),
+		                        ),
+		                        'inclusive' => true,
+		                    ),
+		                ),
+		                'fields'    => 'ids',
+		            ));
+		        }
+		    } else {
+		        // specific vendor
+		        if ($timeframe === 'fromto'){
+		            $earnings_number = 0;
+		            
+		            // Use a more explicit date query format
+		            $earnings = get_posts( array( 
+		                'post_type' => 'marketking_earning',
+		                'numberposts' => -1,
+		                'post_status'    => 'any',
+		                'date_query' => array(
+		                    array(
+		                        'after'     => array(
+		                            'year'  => date('Y', strtotime($from)),
+		                            'month' => date('m', strtotime($from)),
+		                            'day'   => date('d', strtotime($from)),
+		                        ),
+		                        'before'    => array(
+		                            'year'  => date('Y', strtotime($to)),
+		                            'month' => date('m', strtotime($to)),
+		                            'day'   => date('d', strtotime($to)),
+		                        ),
+		                        'inclusive' => true,
+		                    ),
+		                ),
+		                'fields'    => 'ids',
+		                'meta_key'   => 'vendor_id',
+		                'meta_value' => $vendor_id,
+		            ));
+		        }
+		    }
+		    
+		    if ($reports === true){
+		        // organize info by day, month, year to be able to display the charts
+		        $timestamps_commissions = array();
+		    }
+		    
+		    if (!isset($earnings) || !is_array($earnings)){
+		        $earnings = array();
+		    }
+		    
+		    foreach ($earnings as $earning_id){
+		        $order_id = get_post_meta($earning_id,'order_id', true);
+		        $orderobj = wc_get_order($order_id);
+		        
+		        if ($orderobj !== false){
+		            $status = $orderobj->get_status();
+		            if ($status !== 'refunded' && $status !== 'cancelled'){
+		                $order_total = marketking()->get_base_currency_price($orderobj->get_total(), $orderobj);
+		                $vendor_earnings = get_post_meta($earning_id,'marketking_commission_total', true);
+		                
+		                $admin_earnings = $order_total-$vendor_earnings;
+		                $earnings_number+=$admin_earnings;
+		                
+		                if ($reports === true){
+		                    $date = $orderobj->get_date_created()->getTimestamp()+(get_option('gmt_offset')*3600);
+		                    if (!isset($timestamps_commissions[$date])){
+		                        $timestamps_commissions[$date] = $admin_earnings;
+		                    } else {
+		                        $timestamps_commissions[$date] += $admin_earnings;
+		                    }
+		                }
+		            }
+		        }
+		    }
+		    
+		    if ($reports === true){
+		        return $earnings_number.'***'.serialize($timestamps_commissions);
+		    }
+		    return $earnings_number;
 		}
 
 

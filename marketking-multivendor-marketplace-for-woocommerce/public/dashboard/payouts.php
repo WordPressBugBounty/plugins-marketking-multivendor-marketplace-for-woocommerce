@@ -11,8 +11,6 @@ For example, if your theme is storefront, you can copy this file under wp-conten
 
 */
 
-
-?><?php
 if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
     if(marketking()->vendor_has_panel('payouts')){
         ?>
@@ -62,9 +60,80 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                                     $is_stripe_connected = true;
                                 }
 
-                                if (isset($_GET['code'])) {
-                                    $code = sanitize_text_field($_GET['code']);
+                                // Handle Express Connect account link return
+                                if (isset($_GET['account']) && apply_filters('marketking_is_allow_stripe_express_api', true)) {
+                                    $account_id = sanitize_text_field($_GET['account']);
                                     
+                                    // Verify the account exists and is properly set up
+                                    try {
+                                        if( !class_exists("Stripe\Stripe") ) {
+                                            require_once( MARKETKINGPRO_DIR . 'includes/assets/lib/Stripe/init.php' );
+                                        }
+                                        
+                                        $stripe = new \Stripe\StripeClient($secret_key);
+                                        $account = $stripe->accounts->retrieve($account_id);
+                                        
+                                        // Check if account is properly set up
+                                        if ($account && $account->id) {
+                                            // Store Express account information
+                                            update_user_meta( $user_id, 'vendor_connected', 1);
+                                            update_user_meta( $user_id, 'stripe_user_id', $account_id);
+                                            update_user_meta( $user_id, 'stripe_account_type', 'express');
+                                            update_user_meta( $user_id, 'stripe_mode', $testmode ? 'test' : 'live');
+                                            update_user_meta( $user_id, 'admin_client_id', $client_id);
+                                            
+                                            // Store account capabilities for future reference
+                                            if (isset($account->capabilities)) {
+                                                update_user_meta( $user_id, 'stripe_capabilities', json_encode($account->capabilities));
+                                            }
+                                            
+                                            ?>                                    
+                                            <div class="alert alert-primary alert-icon"><em class="icon ni ni-check-circle"></em> <strong><?php esc_html_e('You have successfully connected your Stripe Express account.','marketking-multivendor-marketplace-for-woocommerce');?></strong></div>
+                                            <?php
+                                        } else {
+                                            throw new Exception('Account verification failed');
+                                        }
+                                    } catch (Exception $e) {
+                                        ?>                                    
+                                        <div class="alert alert-danger alert-icon"><em class="icon ni ni-cross-circle"></em> <strong><?php esc_html_e('Failed to connect your Stripe Express account. Please try again.','marketking-multivendor-marketplace-for-woocommerce');?></strong></div>
+                                        <?php
+                                    }
+                                } else if (apply_filters('marketking_is_allow_stripe_express_api', true) && !isset($_GET["code"])) {
+                                    // Fallback: Check if user has an Express account that needs to be verified
+                                    $existing_account_id = get_user_meta($user_id, 'stripe_user_id', true);
+                                    $account_type = get_user_meta($user_id, 'stripe_account_type', true);
+                                    
+                                    if ($existing_account_id && $account_type === 'express' && !get_user_meta($user_id, 'vendor_connected', true)) {
+                                        try {
+                                            if( !class_exists("Stripe\Stripe") ) {
+                                                require_once( MARKETKINGPRO_DIR . 'includes/assets/lib/Stripe/init.php' );
+                                            }
+                                            
+                                            $stripe = new \Stripe\StripeClient($secret_key);
+                                            $account = $stripe->accounts->retrieve($existing_account_id);
+                                            
+                                            // Check if Express account is properly set up
+                                            if ($account && $account->id && $account->charges_enabled && $account->payouts_enabled) {
+                                                // Store Express account information
+                                                update_user_meta( $user_id, 'vendor_connected', 1);
+                                                update_user_meta( $user_id, 'stripe_mode', $testmode ? 'test' : 'live');
+                                                update_user_meta( $user_id, 'admin_client_id', $client_id);
+                                                
+                                                // Store account capabilities for future reference
+                                                if (isset($account->capabilities)) {
+                                                    update_user_meta( $user_id, 'stripe_capabilities', json_encode($account->capabilities));
+                                                }
+                                                
+                                                ?>                                    
+                                                <div class="alert alert-primary alert-icon"><em class="icon ni ni-check-circle"></em> <strong><?php esc_html_e('You have successfully connected your Stripe Express account.','marketking-multivendor-marketplace-for-woocommerce');?></strong></div>
+                                                <?php
+                                            }
+                                        } catch (Exception $e) {
+                                            // Silent fail for fallback check
+                                        }
+                                    }
+                                } else if (isset($_GET["code"])) {
+                                    $code = sanitize_text_field($_GET["code"]);  // Added this line - was missing
                                     $token_request_body = array(
                                         'grant_type' => 'authorization_code',
                                         'client_id' => $client_id,
@@ -86,6 +155,7 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                                     if (!isset($resp['error'])) {
                                         update_user_meta( $user_id, 'vendor_connected', 1);
                                         update_user_meta( $user_id, 'admin_client_id', $client_id);
+                                        update_user_meta( $user_id, 'stripe_account_type', 'standard');
                                         if (isset($resp['access_token'])){
                                             update_user_meta( $user_id, 'access_token', $resp['access_token']);
                                         }
@@ -124,7 +194,6 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                                     }
                                 }
                             }
-
                             ?>
                             <div class="nk-block-head nk-block-head-sm">
                                 <div class="nk-block-between">
@@ -192,14 +261,30 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                                                         $is_stripe_connected = false;
                                                         $stripe_user_id = get_user_meta( $user_id, 'stripe_user_id', true );
                                                         $vendor_connected = get_user_meta( $user_id, 'vendor_connected', true );
+                                                        $account_type = get_user_meta( $user_id, 'stripe_account_type', true );
+                                                        
                                                         if( $stripe_user_id && $vendor_connected ) {
                                                             $is_stripe_connected = true;
+                                                            
+                                                            // For Express accounts, check if they're properly set up
+                                                            if ($account_type === 'express') {
+                                                                $is_account_ready = marketking()->is_express_account_ready($user_id);
+                                                                if (!$is_account_ready) {
+                                                                    $is_stripe_connected = false;
+                                                                }
+                                                            }
                                                         }
+                                                        
                                                         if ($is_stripe_connected){
-                                                            echo '('.esc_html($method).' '.esc_html__('selected and connected', 'marketking-multivendor-marketplace-for-woocommerce').')';
+                                                            $account_type_text = ($account_type === 'express') ? ' Express' : '';
+                                                            echo '('.esc_html($method).$account_type_text.' '.esc_html__('selected and connected', 'marketking-multivendor-marketplace-for-woocommerce').')';
 
                                                         } else {
-                                                            echo '('.esc_html($method).' '.esc_html__('not connected yet', 'marketking-multivendor-marketplace-for-woocommerce').')';
+                                                            $status_text = esc_html__('not connected yet', 'marketking-multivendor-marketplace-for-woocommerce');
+                                                            if ($account_type === 'express' && $stripe_user_id && $vendor_connected) {
+                                                                $status_text = esc_html__('Express account needs setup', 'marketking-multivendor-marketplace-for-woocommerce');
+                                                            }
+                                                            echo '('.esc_html($method).' '.$status_text.')';
 
                                                         }
                                                     } else {
@@ -684,13 +769,9 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
                                                             'last_name'     => $the_user->last_name
                                                             )
                                                         ), $user_id );
-                                                        if( apply_filters( 'marketking_is_allow_stripe_express_api', false ) ) { // set it to STANDARD accounts by default
-                                                            //$url = esc_attr(trailingslashit(get_page_link(apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true)))).'expressconnect';
-
-                                                            $authorize_request_body['suggested_capabilities'] = array( 'transfers', 'card_payments' );
-                                                            
-                                                            $url = 'https://connect.stripe.com/express/oauth/authorize?' . http_build_query($authorize_request_body);
-
+                                                        if( apply_filters( 'marketking_is_allow_stripe_express_api', true ) ) { // set it to STANDARD accounts by default
+                                                            // Use Express Connect with account links instead of OAuth
+                                                            $url = esc_attr(trailingslashit(get_page_link(apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true)))).'expressconnect';
                                                         } else {
                                                             $url = 'https://connect.stripe.com/oauth/authorize?' . http_build_query($authorize_request_body);
                                                         }
@@ -758,4 +839,4 @@ if (intval(get_option( 'marketking_enable_payouts_setting', 1 )) === 1){
         }
     }
 }
-?>
+

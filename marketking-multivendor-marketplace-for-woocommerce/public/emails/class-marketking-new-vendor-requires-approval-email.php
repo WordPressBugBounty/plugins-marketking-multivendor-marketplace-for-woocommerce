@@ -5,7 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if (!class_exists('Marketking_New_Vendor_Requires_Approval_Email')) {
     class Marketking_New_Vendor_Requires_Approval_Email extends WC_Email {
 
+        // Declare properties to avoid PHP 8.2+ deprecation warnings
+        public $user_login;
+        public $user_email;
+
         public function __construct() {
+
+            $this->user_login = '';
+            $this->user_email = '';
 
             // set ID, this simply needs to be a unique name
             $this->id = 'marketking_new_vendor_requires_approval_email';
@@ -47,7 +54,7 @@ if (!class_exists('Marketking_New_Vendor_Requires_Approval_Email')) {
             
             $this->object = new WP_User( $customer_id );
             $this->user_login         = stripslashes( $this->object->user_login );
-    		$this->user_email         = stripslashes( $this->object->user_email );
+            $this->user_email         = stripslashes( $this->object->user_email );
 
             $this->subject = apply_filters('marketking_requires_approval_email_heading', $this->subject, $this->user_login);
             // check if customer requires manual approval
@@ -84,9 +91,9 @@ if (!class_exists('Marketking_New_Vendor_Requires_Approval_Email')) {
             }
             wc_get_template( $this->template_plain, array(
                 'email_heading'      => $this->get_heading(),
-    			'additional_content' => $additional_content_checked,
-    			'user_login'         => $this->user_login,
-    			'email'              => $this,
+                'additional_content' => $additional_content_checked,
+                'user_login'         => $this->user_login,
+                'email'              => $this,
             ), $this->template_base, $this->template_base );
             return ob_get_clean();
         }

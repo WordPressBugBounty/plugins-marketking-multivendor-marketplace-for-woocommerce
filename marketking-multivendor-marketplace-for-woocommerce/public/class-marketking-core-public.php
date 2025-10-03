@@ -189,6 +189,14 @@ class Marketkingcore_Public{
 					// clear product standby issue
 					add_action('wp_footer', array($this, 'marketking_set_product_standby_backup'));
 
+					// wolmart
+					add_filter('wolmart_is_vendor_store', function($is_store){
+						if (marketking()->is_vendor_store_page()){
+							return true;
+						}
+						return $is_store;
+					}, 10, 1);
+
 
 				}
 
@@ -866,16 +874,20 @@ class Marketkingcore_Public{
 	            'latest' => 0,
 	        ), 
 	    $atts);
-	    $category = $atts['category'];
-	    $vendors = $atts['vendors'];
-	    if ($atts['group'] === 'all'){
+	    
+	    // Sanitize parameters to prevent XSS
+	    $category = sanitize_text_field($atts['category']);
+	    $vendors = sanitize_text_field($atts['vendors']);
+	    $group = sanitize_text_field($atts['group']);
+	    $latest = absint($atts['latest']);
+	    if ($group === 'all'){
 	        $users = get_users(array(
 	            'meta_key'     => 'marketking_group',
 	            'meta_value'   => 'none',
 	            'meta_compare' => '!=',
 	        ));
 	    } else {
-	        $groups = explode(',', $atts['group']);
+	        $groups = explode(',', $group);
 	        if (count($groups) > 1){
 	            $users_total = array();
 	            foreach ($groups as $group){
@@ -890,7 +902,7 @@ class Marketkingcore_Public{
 	        } else {
 	            $users = get_users(array(
 	                'meta_key'     => 'marketking_group',
-	                'meta_value'   => $atts['group'],
+	                'meta_value'   => $group,
 	                'meta_compare' => '=',
 	            ));
 	        }
@@ -931,19 +943,24 @@ class Marketkingcore_Public{
 	    }
 	    if ($vendors !== 'all'){
 	        $users = array();
-	        $vendors = array_filter(array_unique(explode(',', $vendors)));
-	        foreach ($vendors as $vendor_id){
-	            $user = new WP_User(trim($vendor_id));
-	            array_push($users, $user);
+	        $vendors_array = array_filter(array_unique(explode(',', $vendors)));
+	        foreach ($vendors_array as $vendor_id){
+	            $vendor_id = absint(trim($vendor_id)); // Ensure it's a valid integer
+	            if ($vendor_id > 0) {
+	                $user = new WP_User($vendor_id);
+	                if ($user) {
+	                    array_push($users, $user);
+	                }
+	            }
 	        }
 	    }
 
 	    // Sort by registration date if latest parameter is set
-	    if (!empty($atts['latest']) && is_numeric($atts['latest'])) {
+	    if (!empty($latest) && $latest > 0) {
 	        usort($users, function($a, $b) {
 	            return strtotime($b->user_registered) - strtotime($a->user_registered);
 	        });
-	        $users = array_slice($users, 0, intval($atts['latest']));
+	        $users = array_slice($users, 0, $latest);
 	    }
 
 	    $users = apply_filters('marketking_get_all_vendors_list', $users);
@@ -1455,6 +1472,10 @@ class Marketkingcore_Public{
 	            'profile' => 'yes',
 	        ), 
 	    $atts);
+	    
+	    $messages = in_array($atts['messages'], array('yes', 'no'), true) ? $atts['messages'] : 'yes';
+	    $announcements = in_array($atts['announcements'], array('yes', 'no'), true) ? $atts['announcements'] : 'yes';
+	    $profile = in_array($atts['profile'], array('yes', 'no'), true) ? $atts['profile'] : 'yes';
 
 
 
@@ -1573,7 +1594,7 @@ class Marketkingcore_Public{
     		    <!-- HIDDEN COMMENTS FOR SCRIPTS PURPOSES -->
     		    <em class="icon ni ni-comments ni-comments-hidden"></em>
     		    <?php
-    		    if ($atts['messages'] === 'yes'){
+    		    if ($messages === 'yes'){
 
 	    		    if (defined('MARKETKINGPRO_DIR')){
 	    		        if (intval(get_option( 'marketking_enable_messages_setting', 1 )) === 1){
@@ -1700,7 +1721,7 @@ class Marketkingcore_Public{
     		    ?>
     		    <?php
 
-    		    if ($atts['announcements'] === 'yes'){
+    		    if ($announcements === 'yes'){
 
 	    		    if (defined('MARKETKINGPRO_DIR')){
 	    		        if (intval(get_option( 'marketking_enable_announcements_setting', 1 )) === 1){
@@ -1758,7 +1779,7 @@ class Marketkingcore_Public{
 	    		    }
 	    		}
 
-	    		if ($atts['profile'] === 'yes'){
+	    		if ($profile === 'yes'){
 
 	    		    ?>
 	    		    <li class="dropdown user-dropdown">

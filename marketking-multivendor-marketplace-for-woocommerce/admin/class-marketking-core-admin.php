@@ -456,42 +456,31 @@ class Marketkingcore_Admin{
 	// Admin order pages: order status dropdown
 	function lock_composite_status( $order_statuses ) { 
 	    global $post, $pagenow;
-
 	    if( $pagenow === 'post.php') {
-	        // Get ID
 	        if (isset($_GET['post'])){
-	        	$order_id = sanitize_text_field($_GET['post']);
-
-	        	// Get an instance of the WC_Order object
-	        	$order = wc_get_order( $order_id );
-	        	// TRUE
-	        	if ( $order ) { 
-	        	    // Get current order status
-	        	    $composite = $order->get_meta('marketking_composite');
-	        	    $order_status = $order->get_status();
-
-	        	    if ($order_status === 'composite'){
-	        	    	// New order status
-	        	    	$new_order_statuses = array();
-	        	    	if ($composite === 'yes'){
-	        	    		foreach ($order_statuses as $key => $option ) {
-	        	    		    // Targeting "shop_manager"
-	        	    		    if ($key === 'wc-composite'){
-	        	    		        $new_order_statuses[$key] = $option;
-	        	    		    }
-	        	    		}
-
-	        	    		if( sizeof($new_order_statuses) > 0 ) {
-	        	    		    return $new_order_statuses;
-	        	    		}
-	        	    	}
-	        	    }
-	        	   
-
-	        	    
-	        	}
+	            $order_id = sanitize_text_field($_GET['post']);
+	            
+	            // Get order status directly from post meta
+	            $order_status = get_post_status($order_id);
+	            // Remove 'wc-' prefix if present
+	            $order_status = str_replace('wc-', '', $order_status);
+	            
+	            if ($order_status === 'composite'){
+	                $composite = get_post_meta($order_id, 'marketking_composite', true);
+	                
+	                $new_order_statuses = array();
+	                if ($composite === 'yes'){
+	                    foreach ($order_statuses as $key => $option ) {
+	                        if ($key === 'wc-composite'){
+	                            $new_order_statuses[$key] = $option;
+	                        }
+	                    }
+	                    if( sizeof($new_order_statuses) > 0 ) {
+	                        return $new_order_statuses;
+	                    }
+	                }
+	            }
 	        }
-	        
 	    }
 	    return $order_statuses;
 	}

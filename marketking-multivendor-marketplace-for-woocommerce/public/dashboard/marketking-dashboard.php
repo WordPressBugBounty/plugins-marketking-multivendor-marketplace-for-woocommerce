@@ -250,7 +250,7 @@ if (!defined('ABSPATH')) { exit; }
                         echo marketkingpro()->get_page('shippingzone');
                     }
                 } else if ($page === 'payouts'){
-                    include(apply_filters('marketking_dashboard_template','payouts.php'));
+                   include(apply_filters('marketking_dashboard_template','payouts.php'));
                 } else if ($page === 'team'){
                    if (defined('MARKETKINGPRO_DIR')){
                         echo marketkingpro()->get_page('team');
@@ -358,22 +358,43 @@ if (!defined('ABSPATH')) { exit; }
                         $secret_key = $testmode ? $settings['test_secret_key'] : $settings['secret_key'];
                           
                         $stripe = new \Stripe\StripeClient($secret_key);
-                        $account = $stripe->accounts->create([
-                        'type' => 'express',
-                        'capabilities' => [
-                          'card_payments' => ['requested' => true],
-                          'transfers' => ['requested' => true],
-                        ],
-                        ]);
-                        $account_id = $account->id;
+                        
+                        // Get current user ID
+                        $user_id = get_current_user_id();
+                        
+                        // Check if user already has an Express account
+                        $existing_account_id = get_user_meta($user_id, 'stripe_user_id', true);
+                        $account_type = get_user_meta($user_id, 'stripe_account_type', true);
+                        
+                        if ($existing_account_id && $account_type === 'express') {
+                            // User already has an Express account, create account link for updates
+                            $account_id = $existing_account_id;
+                            $link_type = 'account_update';
+                        } else {
+                            // Create new Express account
+                            $account = $stripe->accounts->create([
+                                'type' => 'express',
+                                'capabilities' => [
+                                    'card_payments' => ['requested' => true],
+                                    'transfers' => ['requested' => true],
+                                ],
+                            ]);
+                            $account_id = $account->id;
+                            $link_type = 'account_onboarding';
+                            
+                            // Store the account ID temporarily for the return flow
+                            update_user_meta($user_id, 'stripe_user_id', $account_id);
+                            update_user_meta($user_id, 'stripe_account_type', 'express');
+                        }
 
-                        $refresh_url = $return_url = esc_attr(trailingslashit(get_page_link(apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true)))).'payouts';
+                        $refresh_url = esc_attr(trailingslashit(get_page_link(apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true)))).'payouts';
+                        $return_url = esc_attr(trailingslashit(get_page_link(apply_filters( 'wpml_object_id', get_option( 'marketking_vendordash_page_setting', 'disabled' ), 'post' , true)))).'payouts?account=' . $account_id;
 
                         $link = $stripe->accountLinks->create([
-                        'account' => $account_id,
-                        'refresh_url' => $refresh_url,
-                        'return_url' => $return_url,
-                        'type' => 'account_onboarding',
+                            'account' => $account_id,
+                            'refresh_url' => $refresh_url,
+                            'return_url' => $return_url,
+                            'type' => $link_type,
                         ]);
 
                         $url = $link->url;
@@ -392,7 +413,7 @@ if (!defined('ABSPATH')) { exit; }
                               <div class="nk-content-body">
                                   <div class="connecting_to_stripe">
                                   <?php
-                                  echo $ex->getMessage();
+                                  echo esc_html($ex->getMessage());
                                   ?>
                               </div>
                           </div>

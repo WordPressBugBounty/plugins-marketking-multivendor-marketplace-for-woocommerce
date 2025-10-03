@@ -656,6 +656,10 @@ class Marketkingcore {
 		// fix for extra shipping order items with multiple vendors
 		add_action('woocommerce_checkout_subscription_created', array($this, 'validate_subscription_shipping_methods'), 20, 1);
 
+		// Add MarketKing Vendors to Quick and Bulk product edit in the backend
+		// Replace usernames with MarketKing store names in the author dropdown
+		add_filter('wp_dropdown_users_args', [$this, 'marketking_filter_author_dropdown_args'], 10, 2);
+		add_filter('wp_dropdown_users', [$this, 'marketking_author_dropdown_replace_names'], 10, 1);
 		
 	}
 
@@ -675,6 +679,87 @@ class Marketkingcore {
 		}
 		
 		return $template;
+	}
+
+	function marketking_filter_author_dropdown_args($query_args, $r) {
+	    global $pagenow;
+
+	    // Only apply on Products list screen (author filter)
+	    if ( ! is_admin() || $pagenow !== 'edit.php' || empty($_GET['post_type']) || $_GET['post_type'] !== 'product' ) {
+	        return $query_args;
+	    }
+
+	    // Only for the post_author dropdown
+	    if ( empty($r['name']) || $r['name'] !== 'post_author' ) {
+	        return $query_args;
+	    }
+
+	    if ( function_exists('marketking') ) {
+	        $vendors = marketking()->get_all_vendors();
+	        if ( ! empty($vendors) ) {
+	            $allowed_user_ids = array_map(function($v){ return (int) $v->ID; }, $vendors);
+
+	            // Show ALL vendors
+	            $query_args['include'] = $allowed_user_ids;
+
+	            // Remove core filters that hide users
+	            unset($query_args['who'], $query_args['has_published_posts'], $query_args['capability'], $query_args['role'], $query_args['role__in']);
+
+	            // Lift or bypass any per-page cap
+	            unset($query_args['offset']);
+	            // Set a very high 'number' and skip counting for speed
+	            $query_args['number'] = 999999; // ensures we don't get truncated
+	            $query_args['count_total'] = false;
+
+	            // Nice ordering
+	            $query_args['orderby'] = 'display_name';
+	            $query_args['order']   = 'ASC';
+
+	            // Make sure a pre-selected author still shows even if not in first chunk
+	            $query_args['include_selected'] = true;
+	        }
+	    }
+
+	    return $query_args;
+	}
+
+	function marketking_author_dropdown_replace_names($output) {
+	    global $pagenow;
+
+	    // Only on Products list screen
+	    if ( ! is_admin() || $pagenow !== 'edit.php' || empty($_GET['post_type']) || $_GET['post_type'] !== 'product' ) {
+	        return $output;
+	    }
+
+	    // Make sure we're targeting the author dropdown
+	    $is_author_dropdown =
+	        (strpos($output, 'name="post_author"') !== false) ||
+	        (strpos($output, "name='post_author'") !== false) ||
+	        (strpos($output, 'name="author"') !== false) ||
+	        (strpos($output, "name='author'") !== false) ||
+	        (strpos($output, 'name="post_author_override"') !== false) ||
+	        (strpos($output, "name='post_author_override'") !== false);
+
+	    if ( ! $is_author_dropdown ) {
+	        return $output;
+	    }
+
+	    if ( function_exists('marketking') ) {
+	        $vendors = marketking()->get_all_vendors();
+	        if ( ! empty($vendors) ) {
+	            foreach ( $vendors as $vendor ) {
+	                $user_id    = (int) $vendor->ID;
+	                $store_name = marketking()->get_store_name_display($user_id);
+	                $escaped    = esc_html($store_name);
+
+	                // Replace the <option> label for this user id, preserving attributes/selected state
+	                $pattern = '/(<option[^>]*\svalue=["\']' . preg_quote((string) $user_id, '/') . '["\'][^>]*>)(.*?)(<\/option>)/i';
+	                $output  = preg_replace($pattern, '$1' . $escaped . '$3', $output);
+	            }
+	        }
+	    }
+
+	    return $output;
 	}
 
 	function marketking_template_order_received($template, $template_name, $args, $template_path, $default_path){
@@ -1676,6 +1761,12 @@ class Marketkingcore {
 		    wp_die();
 		}
 
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		$product_id = sanitize_text_field($_POST['productid']);
 
 		$vendor_id = get_current_user_id();
@@ -1725,18 +1816,33 @@ class Marketkingcore {
 
 		$user_id = get_current_user_id();
 		$stripe_user_id = get_user_meta($user_id, 'stripe_user_id', true);
+		$account_type = get_user_meta($user_id, 'stripe_account_type', true);
 		$settings = get_option('woocommerce_marketking_stripe_gateway_settings');
 
 		$testmode = false;
 
 		if (isset( $settings['test_mode'] )){
-		    if ($settings['test_mode'] === 'yes'){
-		        $testmode = true;
-		    }
+			if ($settings['test_mode'] === 'yes'){
+				$testmode = true;
+			}
 		}
-		
+
 		$client_id = $testmode ? sanitize_text_field( $settings['test_client_id'] ) : sanitize_text_field( $settings['client_id'] );
 		$secret_key = $testmode ? sanitize_text_field( $settings['test_secret_key'] ) : sanitize_text_field( $settings['secret_key'] );
+		
+		// For Express accounts, we don't need to revoke OAuth tokens
+		if ($account_type === 'express') {
+			// Just remove the account data
+			delete_user_meta( $user_id, 'vendor_connected');
+			delete_user_meta( $user_id, 'admin_client_id');
+			delete_user_meta( $user_id, 'stripe_user_id');
+			delete_user_meta( $user_id, 'stripe_account_type');
+			delete_user_meta( $user_id, 'stripe_mode');
+			delete_user_meta( $user_id, 'stripe_capabilities');
+			echo 'Disconnected successfully';
+			return;
+		}
+		
 		$token_request_body = array(
 			'client_id' => $client_id,
 			'stripe_user_id' => $stripe_user_id,
@@ -2425,6 +2531,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		$user_id = get_current_user_id();
 
 		if (!marketking()->is_vendor($user_id) and !marketking()->is_vendor_team_member()){
@@ -2685,6 +2798,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -2783,6 +2903,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -2809,6 +2936,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -2826,6 +2960,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -2842,6 +2983,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		$orderid = sanitize_text_field($_POST['orderid']);
@@ -2895,6 +3042,12 @@ class Marketkingcore {
 		    wp_die();
 		}
 
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		$id = sanitize_text_field($_POST['id']);
 		// check that current user is author of the product
 		$author_id = get_post_field( 'post_author', $id );
@@ -2918,6 +3071,12 @@ class Marketkingcore {
 		    wp_die();
 		}
 
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		$team_member_id = sanitize_text_field($_POST['id']);
 		
 		$parent = get_user_meta($team_member_id,'marketking_parent_vendor', true);
@@ -2927,7 +3086,10 @@ class Marketkingcore {
 				if (marketking()->is_vendor(get_current_user_id())){
 					if (intval($parent) === intval(get_current_user_id())){
 						// delete user
-						wp_delete_user($team_member_id);
+						if (apply_filters('marketking_delete_team_member', true)){
+							wp_delete_user($team_member_id);
+						}
+						do_action('marketking_delete_team_member_action', $team_member_id);
 					}
 				}
 			}
@@ -2941,6 +3103,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		$team_member_id = sanitize_text_field($_POST['id']);
@@ -2989,6 +3157,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		// if no products selected for coupon, abort (cheating attempt)
@@ -3093,6 +3267,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		// xstore compatibility
@@ -3396,6 +3576,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		$start = sanitize_text_field($_POST['start']);
@@ -3702,6 +3888,12 @@ class Marketkingcore {
 		    wp_die();
 		}
 
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		$start = sanitize_text_field($_POST['start']);
 		$length = sanitize_text_field($_POST['length']);
 		$search = sanitize_text_field($_POST['search']['value']);
@@ -3899,6 +4091,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 
@@ -4221,6 +4419,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		$current_id = get_current_user_id();
 		if (marketking()->is_vendor_team_member()){
 			$current_id = marketking()->get_team_member_parent();
@@ -4323,6 +4528,12 @@ class Marketkingcore {
 		    wp_die();
 		}
 
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -4355,6 +4566,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		$id = sanitize_text_field($_POST['id']);
@@ -4774,6 +4991,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -4854,6 +5078,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -4917,6 +5148,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// If nonce verification didn't fail, run further
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
@@ -4939,6 +5177,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		// Capability check
@@ -4989,6 +5233,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -5045,6 +5296,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 		
 		$vendorid = sanitize_text_field($_GET['userid']);
@@ -5117,7 +5374,7 @@ class Marketkingcore {
 			wp_die();
 		}
 		
-		$requested_file = $_REQUEST['attachment'];
+		$requested_file = isset($_REQUEST['attachment']) ? absint($_REQUEST['attachment']) : 0;
 		// If nonce verification didn't fail, run further
 		$file = wp_get_attachment_url( $requested_file );
 
@@ -5152,6 +5409,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		$current_id = get_current_user_id();
@@ -5199,6 +5462,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		$current_id = get_current_user_id();
@@ -5298,6 +5567,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -5337,6 +5613,13 @@ class Marketkingcore {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
 		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
+		}
+
 		// Capability check
 		if (!current_user_can( apply_filters('marketking_backend_capability_needed', 'manage_woocommerce') )){
 			wp_send_json_error( 'Failed capability check.' );
@@ -5399,6 +5682,12 @@ class Marketkingcore {
 		if ( ! check_ajax_referer( 'marketking_security_nonce', 'security' ) ) {
 		  	wp_send_json_error( 'Invalid security token sent.' );
 		    wp_die();
+		}
+
+		// Check if user is logged in
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Authentication required.' );
+			wp_die();
 		}
 
 		// get page here
@@ -5479,8 +5768,47 @@ class Marketkingcore {
 	}
 
 	function marketking_advertised_products_shortcode(){
-		add_shortcode('marketking_advertised_products', array($this, 'marketking_advertised_products_shortcode_content'));
+	    add_shortcode('marketking_advertised_products', array($this, 'marketking_advertised_products_shortcode_content'));
 	}
+
+	function marketking_advertised_products_shortcode_content($atts = array(), $content = null){
+	    $atts = shortcode_atts(
+	        array(
+	            'count' => '12',
+	            'paginate' => 'false',
+	            'orderby' => 'rand'
+	        ), 
+	    $atts);
+	    
+	    // Sanitize and validate the attributes
+	    $count = absint($atts['count']); // Ensure count is a positive integer
+	    if ($count <= 0) {
+	        $count = 12; // Default value if invalid
+	    }
+	    
+	    // Paginate only 'true' or 'false'
+	    $paginate = in_array($atts['paginate'], array('true', 'false'), true) ? $atts['paginate'] : 'false';
+	    
+	    // Orderby only allow specific valid values
+	    $allowed_orderby = array('date', 'id', 'menu_order', 'popularity', 'rand', 'rating', 'title', 'price');
+	    $orderby = in_array($atts['orderby'], $allowed_orderby, true) ? $atts['orderby'] : 'rand';
+	    
+	    $products_advertised = marketking()->get_advertised_product_ids();
+	    shuffle($products_advertised);
+	    $products_advertised_list = implode(',', $products_advertised);
+	    
+	    set_transient('marketking_is_ad_shortcode', 'yes');
+	    ob_start();
+	    
+	    echo do_shortcode(apply_filters('marketking_advertised_products_shortcode','[products limit="' . esc_attr($count) . '" paginate="' . esc_attr($paginate) . '" visibility="visible" cache="false" orderby="' . esc_attr($orderby) . '" ids="' . esc_attr($products_advertised_list) . '"]'));
+	    
+	    $content = ob_get_clean();
+
+	    set_transient('marketking_is_ad_shortcode', 'no');
+	    return $content;
+	}
+
+
 	function marketking_vendor_products_shortcode(){
 		add_shortcode('marketking_vendor_products', array($this, 'marketking_vendor_products_shortcode_content'));
 
@@ -5518,6 +5846,8 @@ class Marketkingcore {
 	    	if (empty($vendor_id)){
 	    		$vendor_id = marketking()->get_vendor_id_in_store_url();
 	    	}
+	    } else {
+	    	$vendor_id = intval($vendor_id);
 	    }
 
 	    ob_start();
@@ -5528,35 +5858,6 @@ class Marketkingcore {
 	    return $content;
 	}
 
-	function marketking_advertised_products_shortcode_content($atts = array(), $content = null){
-		$atts = shortcode_atts(
-	        array(
-	            'count' => '12',
-	            'paginate' => 'false',
-	            'orderby' => 'rand'
-	        ), 
-	    $atts);
-
-	    $count = $atts['count'];
-	    $paginate = $atts['paginate'];
-	    $orderby = $atts['orderby'];
-
-	    $products_advertised = marketking()->get_advertised_product_ids();
-	    shuffle($products_advertised);
-	    $products_advertised_list = implode(',', $products_advertised);
-
-	    set_transient('marketking_is_ad_shortcode', 'yes');
-
-	    ob_start();
-       	
-      	echo do_shortcode(apply_filters('marketking_advertised_products_shortcode','[products limit="'.$count.'" paginate="'.$paginate.'" visibility="visible" cache="false" orderby="'.$orderby.'" ids="'.$products_advertised_list.'"]'));	
-
-	    $content = ob_get_clean();
-
-	    set_transient('marketking_is_ad_shortcode', 'no');
-
-	    return $content;
-	}
 
 	function marketking_vendor_products_shortcode_content($atts = array(), $content = null){
 		$atts = shortcode_atts(
@@ -5578,6 +5879,8 @@ class Marketkingcore {
 	    	if (empty($vendor_id)){
 	    		$vendor_id = marketking()->get_vendor_id_in_store_url();
 	    	}
+	    } else {
+	    	$vendor_id = intval($vendor_id);
 	    }
 
 	    ob_start();
@@ -5622,6 +5925,8 @@ class Marketkingcore {
 	    	if (empty($vendor_id)){
 	    		$vendor_id = marketking()->get_vendor_id_in_store_url();
 	    	}
+	    } else {
+	    	$vendor_id = intval($vendor_id);
 	    }
 
 	    ob_start();
@@ -5650,8 +5955,8 @@ class Marketkingcore {
 	    $atts);
 
 	    $vendor_id = $atts['vendor_id'];
-	    $reviews_per_page = $atts['reviews_per_page'];
-	    $show_pagination = $atts['show_pagination'];
+	    $reviews_per_page = sanitize_text_field($atts['reviews_per_page']);
+	    $show_pagination = sanitize_text_field($atts['show_pagination']);
 
 	    if (empty($vendor_id) || $vendor_id == 0){
 	    	// if current page is product, get vendor of product
@@ -5665,6 +5970,8 @@ class Marketkingcore {
 	    		$vendor_id = marketking()->get_vendor_id_in_store_url();
 	    	}
 
+	    } else {
+	    	$vendor_id = intval($vendor_id);
 	    }
 
 	    ob_start();
@@ -5762,7 +6069,7 @@ class Marketkingcore {
 	    $atts);
 
     	global $marketking_is_b2b_registration_shortcode_option_id;
-	    $marketking_is_b2b_registration_shortcode_option_id = $atts['option'];
+	    $marketking_is_b2b_registration_shortcode_option_id = sanitize_text_field($atts['option']);
 
 		// prevent errors in rest api
 		if (!function_exists('wc_print_notices')){
@@ -6010,8 +6317,15 @@ class Marketkingcore {
 					        if (intval(get_option( 'marketking_enable_stripe_setting', 1 )) === 1){
 								$vendor_connected = intval(get_user_meta( $vendor_id, 'vendor_connected', true ));
 								$vendor_connect_user_id = get_user_meta( $vendor_id, 'stripe_user_id', true );
+								$account_type = get_user_meta( $vendor_id, 'stripe_account_type', true );
 
-								if ($vendor_connected === 1){
+								// For Express accounts, check if they're properly set up
+								$is_account_ready = true;
+								if ($account_type === 'express') {
+									$is_account_ready = marketking()->is_express_account_ready($vendor_id);
+								}
+
+								if ($vendor_connected === 1 && $is_account_ready){
 
 									$suborder->update_meta_data('_marketking_debug_is_single_vendor_order_vendor_connected', 'yes');
 
@@ -6081,8 +6395,40 @@ class Marketkingcore {
 
 								$vendor_connected = intval(get_user_meta( $vendor_id, 'vendor_connected', true ));
 								$vendor_connect_user_id = get_user_meta( $vendor_id, 'stripe_user_id', true );
+								$account_type = get_user_meta( $vendor_id, 'stripe_account_type', true );
 
-								if ($vendor_connected === 1){
+								// For Express accounts, check if they're properly set up
+								$is_account_ready = true;
+								if ($account_type === 'express') {
+									$is_account_ready = marketking()->is_express_account_ready($vendor_id);
+								}
+
+								// Validate the account ID exists and is accessible
+								$valid_account_id = false;
+								if ($vendor_connect_user_id && $account_type) {
+									try {
+										if( !class_exists("Stripe\Stripe") ) {
+											require_once( MARKETKINGPRO_DIR . 'includes/assets/lib/Stripe/init.php' );
+										}
+										
+										$settings = get_option('woocommerce_marketking_stripe_gateway_settings');
+										$testmode = isset($settings['test_mode']) && $settings['test_mode'] === 'yes';
+										$secret_key = $testmode ? $settings['test_secret_key'] : $settings['secret_key'];
+										
+										$stripe = new \Stripe\StripeClient($secret_key);
+										$account = $stripe->accounts->retrieve($vendor_connect_user_id);
+										
+										// Check if account exists and is accessible
+										if ($account && $account->id) {
+											$valid_account_id = true;
+										}
+									} catch (Exception $e) {
+										// Account ID is invalid or inaccessible
+										marketking()->logdata( sprintf( 'Invalid Stripe account ID %s for vendor %d: %s', $vendor_connect_user_id, $vendor_id, $e->getMessage() ), 'error' );
+									}
+								}
+
+								if ($vendor_connected === 1 && $is_account_ready && $valid_account_id){
 
 									$order->update_meta_data('_marketking_debug_is_single_vendor_order_vendor_connected', 'yes');
 
@@ -6104,6 +6450,11 @@ class Marketkingcore {
 								} else {
 
 									$order->update_meta_data('_marketking_debug_is_single_vendor_order_vendor_connected', 'no');
+
+									if (!$valid_account_id && $vendor_connect_user_id) {
+										// Log specific error for invalid account ID
+										marketking()->logdata( sprintf( 'Vendor %d has invalid Stripe account ID %s. Vendor needs to reconnect their Stripe account.', $vendor_id, $vendor_connect_user_id ), 'error' );
+									}
 
 									if ($non_connected === 'yes'){
 										$defertoadmin+=$order->get_total();
